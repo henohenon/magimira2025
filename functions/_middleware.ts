@@ -1,5 +1,3 @@
-import { Response, URL, type PagesFunction } from "@cloudflare/workers-types";
-
 export interface Env {
 	PASS_KEY: string; // Pages の環境変数で設定
 	LOCAL?: string; // .dev.vars に LOCAL=true
