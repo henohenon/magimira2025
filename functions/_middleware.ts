@@ -15,8 +15,6 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
 	const authed =
 		cookies.includes(`k=${env.PASS_KEY}`) || token === env.PASS_KEY;
 
-	console.log("authed", authed, token, cookies);
-
 	if (authed) {
 		const res = await next();
 		if (token)
