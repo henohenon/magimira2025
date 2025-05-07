@@ -10,13 +10,14 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
 	if (env.LOCAL === "true") return next();
 
 	const url = new URL(request.url);
-	const token = url.searchParams.get("k"); // ?k=xxxx で渡す
+	const token = url.searchParams.get("k");
 	const cookies = request.headers.get("cookie") ?? "";
 	const authed =
 		cookies.includes(`k=${env.PASS_KEY}`) || token === env.PASS_KEY;
 
+	console.log("authed", authed, token, cookies);
+
 	if (authed) {
-		// 初回アクセスなら 30 日クッキーをセットして通過
 		const res = await next();
 		if (token)
 			res.headers.set(
@@ -26,7 +27,6 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
 		return res;
 	}
 
-	// まだ未認証ならシンプルな入力フォームを返す
 	return new Response(
 		`
       <form action="/" method="GET">
