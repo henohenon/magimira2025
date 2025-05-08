@@ -4,6 +4,7 @@
     "": {
       "name": "magimira2025",
       "dependencies": {
+        "@babylonjs/core": "^8.7.0",
         "@types/babylonjs": "^2.4.5",
         "babylonjs": "^8.6.1",
         "textalive-app-api": "^0.4.0",
@@ -16,6 +17,8 @@
     },
   },
   "packages": {
+    "@babylonjs/core": ["@babylonjs/core@8.7.0", "", {}, "sha512-6yVCq4lidd6B9xnyL2Ubs6v+IX6tHX3SmoMDUrrrIMYUSW/qPIG1qRWs3+3bD9gvTM8A+UY+tcMPsHkaLVnaRA=="],
+
     "@cloudflare/workers-types": ["@cloudflare/workers-types@4.20250507.0", "", {}, "sha512-fkrq7A6XWgPEmXJDwu9TS/Zw7qho3eGlrOlicKue32Bdul0Ma4Mym4sh7ZeGbayBXxkOx/fHpm5GfhVEtngRWQ=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.25.4", "", { "os": "aix", "cpu": "ppc64" }, "sha512-1VCICWypeQKhVbE9oW/sJaAmjLxhVqacdkvPLEjwlttjfwENRSClS8EjBz0KzRyFSCPDIkuXW34Je/vk7zdB7Q=="],

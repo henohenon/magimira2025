@@ -1,12 +1,14 @@
 import { Player as TextAlivePlayer } from "textalive-app-api";
-import type { IPlayerApp, IChar } from "textalive-app-api";
+import type { IChar } from "textalive-app-api";
+import { createScene } from "./babylon";
 
 const taPlayer = new TextAlivePlayer({ app: { token: import.meta.env.VITE_TEXT_ALIVE_TOKEN } });
+taPlayer.volume = 20;
 
 let initialized = false;
 let lastChar: IChar | null = null;
 taPlayer.addListener({
-    onAppReady: async (app: IPlayerApp) => {
+    onAppReady: async () => {
         await taPlayer.createFromSongUrl("https://piapro.jp/t/ULcJ/20250205120202", {
             video: {
                 // 音楽地図訂正履歴
@@ -39,7 +41,8 @@ taPlayer.addListener({
     }
 });
 
-document.addEventListener("click", () => {
+window.oncontextmenu = (e) => {
+    e.preventDefault();  
     if (!initialized) return;
     if (taPlayer.isPlaying) {
         taPlayer.requestPause();
@@ -47,7 +50,7 @@ document.addEventListener("click", () => {
         taPlayer.requestMediaSeek(0);
         taPlayer.requestPlay();
     }
-});
+};
 
 function newChar(char: IChar) {
     console.log("New char:", char.text, char.startTime, char.endTime);
@@ -60,3 +63,9 @@ function newChar(char: IChar) {
         document.body.removeChild(span);
     }, 2000);
 }
+
+const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
+if (!canvas) {
+    throw new Error("Canvas not found");
+}
+createScene(canvas);
