@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import tailwind from '@tailwindcss/vite';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   root: 'src',
@@ -14,6 +15,7 @@ export default defineConfig({
     }
   },
   plugins: [
-    tailwind()
+    tailwind(),
+    visualizer({ open: true })
   ]
 });
