@@ -10,13 +10,13 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250507.0",
+    "@tailwindcss/vite": "^4.1.5",
+    "@types/babylonjs": "^2.4.5",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   },
   "dependencies": {
     "@babylonjs/core": "^8.7.0",
-    "@types/babylonjs": "^2.4.5",
-    "babylonjs": "^8.6.1",
     "textalive-app-api": "^0.4.0"
   }
 }

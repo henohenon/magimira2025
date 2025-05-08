@@ -28,11 +28,11 @@ import {
       new Vector3(0, 1, 0),
       scene
     );
-    camera.attachControl(canvas, true);
+    // camera.attachControl(canvas, true);
   
     /* 環境光 */
     const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-    light.intensity = 0.8;
+    light.intensity = 0.1;
   
     /* --- 部屋（2.9m × 2.9m × 2.5m）--- */
     const roomSize = 2.9; // 1辺
