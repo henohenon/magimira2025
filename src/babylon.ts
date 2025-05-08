@@ -1,3 +1,4 @@
+import "@babylonjs/loaders";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { Scene } from "@babylonjs/core/scene";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
@@ -24,7 +25,6 @@ export const createScene = (canvas: HTMLCanvasElement): Scene => {
 		new Vector3(0, 1, 0),
 		scene,
 	);
-	// camera.attachControl(canvas, true);
 
 	/* 環境光 */
 	const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);

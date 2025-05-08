@@ -5,6 +5,7 @@
       "name": "magimira2025",
       "dependencies": {
         "@babylonjs/core": "^8.7.0",
+        "@babylonjs/loaders": "^8.7.0",
         "textalive-app-api": "^0.4.0",
       },
       "devDependencies": {
@@ -19,6 +20,8 @@
   },
   "packages": {
     "@babylonjs/core": ["@babylonjs/core@8.7.0", "", {}, "sha512-6yVCq4lidd6B9xnyL2Ubs6v+IX6tHX3SmoMDUrrrIMYUSW/qPIG1qRWs3+3bD9gvTM8A+UY+tcMPsHkaLVnaRA=="],
+
+    "@babylonjs/loaders": ["@babylonjs/loaders@8.7.0", "", { "peerDependencies": { "@babylonjs/core": "^8.0.0", "babylonjs-gltf2interface": "^8.0.0" } }, "sha512-zInwTu07IOK7Iwl783lFxzf27TM5C9HEU/E13FyxlWitM5k2WA8dlUJK4dFdTj8ieD1a3MVDU5PdpwZTXdYpSA=="],
 
     "@cloudflare/workers-types": ["@cloudflare/workers-types@4.20250507.0", "", {}, "sha512-fkrq7A6XWgPEmXJDwu9TS/Zw7qho3eGlrOlicKue32Bdul0Ma4Mym4sh7ZeGbayBXxkOx/fHpm5GfhVEtngRWQ=="],
 
@@ -157,6 +160,8 @@
     "axios": ["axios@1.9.0", "", { "dependencies": { "follow-redirects": "^1.15.6", "form-data": "^4.0.0", "proxy-from-env": "^1.1.0" } }, "sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg=="],
 
     "babylonjs": ["babylonjs@8.6.1", "", {}, "sha512-foSJrYK3X9mp0BlMhhDCGPsPfKEQhMboPK+z+Rf4APU6LSsdNRefeu1RAy4FY7eSS1GTPXQvlsRYwda9Bzta9Q=="],
+
+    "babylonjs-gltf2interface": ["babylonjs-gltf2interface@8.7.0", "", {}, "sha512-/xQR5FBHN8jOUlPziyEQrEnzdmhKX3qx9PpqGNYi2oDQZWsuX9axBbdTI/KmBFKy4p+EF6209WpcZ8O8IvQc/Q=="],
 
     "call-bind-apply-helpers": ["call-bind-apply-helpers@1.0.2", "", { "dependencies": { "es-errors": "^1.3.0", "function-bind": "^1.1.2" } }, "sha512-Sp1ablJ0ivDkSzjcaJdxEunN5/XvksFJ2sMBFfq6x0ryhQV/2b/KwFe21cMpmHtPOSij8K99/wSfoEuTObmuMQ=="],
 
