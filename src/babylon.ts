@@ -1,12 +1,9 @@
-import {
-	Engine,
-	Scene,
-	ArcRotateCamera,
-	HemisphericLight,
-	MeshBuilder,
-	Vector3,
-} from "@babylonjs/core";
-
+import { Engine } from "@babylonjs/core/Engines/engine";
+import { Scene } from "@babylonjs/core/scene";
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
+import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
+import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 // Babylon Inspector（デバッグ用・任意）
 // import "@babylonjs/inspector";
 
