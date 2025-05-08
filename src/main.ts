@@ -20,10 +20,19 @@ mediaBannerPosition: "bottom right" });
 taPlayer.volume = 20;
 
 
-const seekBar = document.querySelector("#seekbar");
+const seekBar = document.querySelector("#seekBar") as HTMLDivElement;
 if (!seekBar) {
     throw new Error("SeekBar not found");
 }
+seekBar.addEventListener("click", (e: MouseEvent) => {
+    e.preventDefault();
+    if (taPlayer) {
+      taPlayer.requestMediaSeek(
+        (taPlayer.video.duration * e.offsetX) / seekBar.clientWidth
+      );
+    }
+});
+
 const paintedSeekBar = seekBar.querySelector("div");
 if (!paintedSeekBar) {
     throw new Error("Painted seekBar not found");
