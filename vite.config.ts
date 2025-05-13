@@ -5,6 +5,8 @@ import { visualizer } from 'rollup-plugin-visualizer';
 export default defineConfig({
   root: 'src',
   envDir: '../',
+  publicDir: '../public',
+  base: './',
   build: {
     outDir: '../dist',
     emptyOutDir: true,
