@@ -1,5 +1,7 @@
-import { Player, type IChar } from "textalive-app-api";
+import { Player } from "textalive-app-api";
 import { events } from "./events";
+import { updatePosition as updateSeekBarPosition } from "./seekbar";
+import { updatePosition as updateRandomCharPosition } from "./randomChar";
 
 
 const mediaElement = document.getElementById("media") as HTMLMediaElement;
@@ -15,26 +17,6 @@ export const player = new Player({
 });
 player.volume = 20;
 
-
-const seekBar = document.querySelector("#seekBar") as HTMLDivElement;
-if (!seekBar) {
-    throw new Error("SeekBar not found");
-}
-seekBar.addEventListener("click", (e: MouseEvent) => {
-    e.preventDefault();
-    if (player) {
-        player.requestMediaSeek(
-            (player.video.duration * e.offsetX) / seekBar.clientWidth,
-        );
-    }
-});
-
-const paintedSeekBar = seekBar.querySelector("div");
-if (!paintedSeekBar) {
-	throw new Error("Painted seekBar not found");
-}
-
-let lastChar: IChar | null = null;
 player.addListener({
 	onAppReady: async () => {
 		await player.createFromSongUrl(
@@ -72,35 +54,7 @@ player.addListener({
 		});
 	},
 	onTimeUpdate: (position: number) => {
-		// よくわからんけど公式に書いてあったのでこの割合
-		const rate =
-			Math.floor(((position * 1000) / player.video.duration) * 10) / 100;
-		paintedSeekBar.style.width = `${rate.toString()}%`;
-
-		if (!player.video.firstChar) {
-			return;
-		}
-
-		let current = lastChar || player.video.firstChar;
-		while (current && current.startTime < position + 500) {
-			if (lastChar !== current) {
-				newChar(current);
-				lastChar = current;
-			}
-			current = current.next;
-		}
+		updateSeekBarPosition(position);
+		updateRandomCharPosition(position);
 	},
 });
-
-function newChar(char: IChar) {
-	console.log("New char:", char.text, char.startTime, char.endTime);
-	const span = document.createElement("span");
-	span.className = "absolute";
-	span.innerText = char.text;
-	span.style.left = `${Math.random() * 100}vw`;
-	span.style.top = `${Math.random() * 100}vh`;
-	document.body.appendChild(span);
-	setTimeout(() => {
-		document.body.removeChild(span);
-	}, 2000);
-}
