@@ -1,0 +1,6 @@
+# .lefthook.yml
+pre-commit:
+  parallel: true
+  commands:
+    typecheck:
+      run: bun run typecheck
