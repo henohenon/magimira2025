@@ -6,7 +6,7 @@ import { events } from "./events";
 // Babylon Inspector（デバッグ用・任意）
 // import "@babylonjs/inspector";
 
-events.on("onSceneDefinition", ({ engine, scene }) => {
+events.on("onSceneDefinition", ({ scene }) => {
 	/* --- どっと式ミクさん --- */
 	AppendSceneAsync("./dotmiku.glb", scene).then(() => {
 		for(const mesh of scene.meshes) {

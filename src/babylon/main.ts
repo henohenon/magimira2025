@@ -6,7 +6,6 @@ import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
-import type { ILoadingScreen } from "@babylonjs/core/Loading/loadingScreen";
 import { events } from "./events";
 import "./mdl";
 import "./room";

@@ -4,7 +4,7 @@ import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
 import { events } from "./events";
 
-events.on("onSceneDefinition", ({ engine, scene }) => {
+events.on("onSceneDefinition", ({ scene }) => {
 	/**
 	 * 約5畳（≒8.2㎡）の部屋に机・椅子・パソコン・扉を配置する基本シーン。
 	 * 適宜寸法やマテリアルを入れ替えて使ってください。
