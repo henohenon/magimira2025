@@ -1,41 +1,14 @@
 import "@babylonjs/loaders";
-import { Engine } from "@babylonjs/core/Engines/engine";
-import { Scene } from "@babylonjs/core/scene";
-import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
-import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
-import { Vector3 } from "@babylonjs/core/Maths/math.vector";
-import { AppendSceneAsync } from "@babylonjs/core/Loading/sceneLoader";
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
-import type { ILoadingScreen } from "@babylonjs/core/Loading/loadingScreen";
-// Babylon Inspector（デバッグ用・任意）
-// import "@babylonjs/inspector";
+import { events } from "./events";
 
-/**
- * 約5畳（≒8.2㎡）の部屋に机・椅子・パソコン・扉を配置する基本シーン。
- * 適宜寸法やマテリアルを入れ替えて使ってください。
- */
-export const createScene = (canvas: HTMLCanvasElement): Scene => {
-	const engine = new Engine(canvas, true);
-	const scene = new Scene(engine);
-	// scene.skipFrustumClipping = true;
-
-	/* カメラ */
-	const camera = new ArcRotateCamera(
-		"camera",
-		-Math.PI / 2,
-		Math.PI / 3,
-		6,
-		new Vector3(0, 1, 0),
-		scene,
-	);
-	// camera.minZ = 0.001;
-	camera.attachControl(canvas, true);
-
-	/* 環境光 */
-	const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-	light.intensity = 1;
+events.on("onSceneDefinition", ({ engine, scene }) => {
+	/**
+	 * 約5畳（≒8.2㎡）の部屋に机・椅子・パソコン・扉を配置する基本シーン。
+	 * 適宜寸法やマテリアルを入れ替えて使ってください。
+	 */
 
 	/* --- 部屋（2.9m × 2.9m × 2.5m）--- */
 	const roomSize = 2.9; // 1辺
@@ -125,41 +98,4 @@ export const createScene = (canvas: HTMLCanvasElement): Scene => {
 		scene,
 	);
 	monitorBase.position.set(0, deskH + 0.05, 0);
-
-	// カスタムローディングスクリーン作成
-	class MyLoadingScreen implements ILoadingScreen {
-		loadingUIBackgroundColor = "transparent";
-		loadingUIText = "Loading...";
-
-		public displayLoadingUI(): void {
-		}
-
-		public hideLoadingUI(): void {
-			console.log("babylonjs loading complete");
-		}
-	}
-
-	// カスタム設定
-	engine.loadingScreen = new MyLoadingScreen();
-	engine.displayLoadingUI();
-
-	/* --- どっと式ミクさん --- */
-	AppendSceneAsync("./dotmiku.glb", scene).then(() => {
-		for(const mesh of scene.meshes) {
-			const mat = mesh.material;
-			if(mat) {
-				// mat.backFaceCulling = false;
-				mat.needDepthPrePass = true;
-				mesh.material = mat;
-			}
-			// mesh.alwaysSelectAsActiveMesh = true;
-		}
-		console.log("GLTF loaded!");
-	});
-
-	/* --- レンダリング開始 --- */
-	engine.runRenderLoop(() => scene.render());
-	window.addEventListener("resize", () => engine.resize());
-
-	return scene;
-};
+});
