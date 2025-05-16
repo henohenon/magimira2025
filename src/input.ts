@@ -1,5 +1,5 @@
 import mitt, { type Emitter } from 'mitt';
-import { player as taPlayer } from './textalive/main';
+import { player as taPlayer } from './text-alive/main';
 
 interface InputData {
     key: string;

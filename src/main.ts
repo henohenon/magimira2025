@@ -1,9 +1,9 @@
 import "./babylon/main";
-import "./textalive/main";
+import "./text-alive/main";
 import "./input";
 
 import { events as babylonEvents } from "./babylon/events";
-import { events as textaliveEvents } from "./textalive/events";
+import { events as textaliveEvents } from "./text-alive/events";
 
 
 let babylonLoaded = false;

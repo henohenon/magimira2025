@@ -1,7 +1,7 @@
 import { Player } from "textalive-app-api";
 import { events } from "./events";
 import { updatePosition as updateSeekBarPosition } from "./seekbar";
-import { updatePosition as updateRandomCharPosition } from "./randomChar";
+import { updatePosition as updateRandomCharPosition } from "./random-char";
 
 
 const mediaElement = document.getElementById("media") as HTMLMediaElement;
