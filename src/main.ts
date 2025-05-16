@@ -1,5 +1,5 @@
 import "./babylon/main";
-import "./text-alive/main";
+import {player} from "./text-alive/main";
 import "./input";
 
 import { events as babylonEvents } from "./babylon/events";
@@ -8,6 +8,7 @@ import { events as inputEvents } from "./input";
 import { playAnimation } from "./babylon/mdl";
 
 inputEvents.on("startInput", (key) => {
+    if(!player.isPlaying) return;
     console.log("startInput", key);
     playAnimation("listening");
 });
