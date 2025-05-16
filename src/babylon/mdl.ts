@@ -3,21 +3,41 @@ import { AppendSceneAsync } from "@babylonjs/core/Loading/sceneLoader";
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
 import { events } from "./events";
-// Babylon Inspector（デバッグ用・任意）
-// import "@babylonjs/inspector";
+import type { AnimationGroup } from "@babylonjs/core/Animations/animationGroup";
 
-events.on("onSceneDefinition", ({ scene }) => {
+let animGroups: AnimationGroup[] = [];
+
+events.on("onSceneDefinition", async ({ scene }) => {
 	/* --- どっと式ミクさん --- */
-	AppendSceneAsync("./dotmiku.glb", scene).then(() => {
-		for(const mesh of scene.meshes) {
-			const mat = mesh.material;
-			if(mat) {
-				// mat.backFaceCulling = false;
-				mat.needDepthPrePass = true;
-				mesh.material = mat;
-			}
-			// mesh.alwaysSelectAsActiveMesh = true;
-		}
-		console.log("GLTF loaded!");
+	await AppendSceneAsync("./dotmiku.glb", scene);
+
+	animGroups = scene.animationGroups;
+	animGroups.forEach((animGroup) => {
+		animGroup.pause();
+		animGroup.loopAnimation = false;
 	});
+
+    scene.meshes.forEach((mesh) => {
+        const mat = mesh.material;
+        if (mat) {
+			// mat.backFaceCulling = false;
+            (mat as any).needDepthPrePass = true;
+            mesh.material = mat;
+        }
+        // mesh.alwaysSelectAsActiveMesh = true;
+    });
+	
+	// const mikuMesh = scene.getMeshByName("__root__");
+    console.log("GLTF loaded!");
 });
+
+export function playAnimation(name: string) {
+	const animGroup = animGroups.find((group) => group.name === name);
+	if (animGroup) {
+		console.log(`Playing animation: ${name}`);
+		animGroup.reset();
+		animGroup.play(false);
+	} else {
+		console.warn(`Animation group "${name}" not found.`);
+	}
+}

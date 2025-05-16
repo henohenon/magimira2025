@@ -36,8 +36,8 @@ const lastKeyData = inputData
 
 const handler = (e: KeyboardEvent) => {
 	// ショートカットのデフォルト動作を全てキャンセル
-	e.preventDefault();
-	e.stopImmediatePropagation();
+	// e.preventDefault();
+	// e.stopImmediatePropagation();
 	console.log("key event:", e);
     startInput(e.key, taPlayer.mediaPosition);
 };

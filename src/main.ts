@@ -4,7 +4,13 @@ import "./input";
 
 import { events as babylonEvents } from "./babylon/events";
 import { events as textaliveEvents } from "./text-alive/events";
+import { events as inputEvents } from "./input";
+import { playAnimation } from "./babylon/mdl";
 
+inputEvents.on("startInput", (key) => {
+    console.log("startInput", key);
+    playAnimation("listening");
+});
 
 let babylonLoaded = false;
 let textaliveLoaded = false;
@@ -25,4 +31,5 @@ function updateLoading() {
         throw new Error("Loading wrapper not found");
     }
     loadingWrapper.classList.add("hidden");
+    playAnimation("startListen");
 }

@@ -8,7 +8,7 @@ import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
 import { events } from "./events";
 import "./mdl";
-import "./room";
+// import "./room";
 
 const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
 if (!canvas) {
