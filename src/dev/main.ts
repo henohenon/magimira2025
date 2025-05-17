@@ -1,5 +1,5 @@
 import "../babylon/main";
-// import { player } from "../text-alive/main";
+import "../text-alive/main";
 
 
 import { events as babylonEvents } from "../babylon/events";
