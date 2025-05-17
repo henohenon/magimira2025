@@ -16,6 +16,8 @@ events.on("onSceneDefinition", async ({ scene }) => {
 		animGroup.pause();
 		animGroup.loopAnimation = false;
 	}
+	const animNames = animGroups.map((group) => group.name);
+	events.emit("onMdlAnimLoaded", animNames);
 
 	for (const mesh of scene.meshes) {
 		const mat = mesh.material;

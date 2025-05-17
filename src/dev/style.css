@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+aside button{
+    @apply w-full px-3 py-2 bg-gray-100 text-gray-800 rounded hover:bg-gray-200 active:bg-gray-300;
+}

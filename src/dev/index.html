@@ -1,50 +1,44 @@
 <!doctype html>
 <html lang="ja" class="h-screen w-screen">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>マジミラ2025</title>
-    <link rel="stylesheet" href="../style.css" />
-  </head>
-  <body class="m-0 w-screen h-screen overflow-hidden">
-    
-    <canvas id="renderCanvas" class="m-0 inset-0 w-screen h-screen -z-10"></canvas>
-    <div id="app" class="absolute inset-0 w-screen h-screen">
-      <div id="init" class="flex justify-center items-center">
-        <button id="startButton" class="px-4 py-2 bg-blue-500 text-white rounded">Start</button>
-      </div>
-      <div id="playing">
-        <div id="meta" class="text-sm">
-          <div id="seekBar" class="h-2 bg-gray-300">
-          <div class="h-full bg-blue-500"></div>
-        </div>
-      </div>
-      <div id="loadingWrapper" class="absolute w-full h-full top-0 left-0 z-10 bg-white/15 backdrop-blur-md flex justify-center items-center">
-        <div id="loadingText" class="text-white">Loading...</div>
-      </div>
-    </div>
-    <div id="media"></div>
-    <script type="module" src="./main.ts"></script>
+    <link rel="stylesheet" href="./style.css" />
+</head>
 
-    <!-- サイドバー -->
+<body class="m-0 w-screen h-screen overflow-hidden flex">
     <aside class="w-64 h-screen bg-gray-800 text-white overflow-y-auto p-4">
         <div class="space-y-2">
-        <details open class="bg-gray-700 rounded">
-            <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">セクション 1</summary>
-            <ul class="pl-6 py-1 space-y-1">
-            <li><a href="#" class="block hover:underline">アイテム A</a></li>
-            <li><a href="#" class="block hover:underline">アイテム B</a></li>
-            </ul>
-        </details>
-
-        <details class="bg-gray-700 rounded">
-            <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">セクション 2</summary>
-            <ul class="pl-6 py-1 space-y-1">
-            <li><a href="#" class="block hover:underline">アイテム C</a></li>
-            <li><a href="#" class="block hover:underline">アイテム D</a></li>
-            </ul>
-        </details>
+            <details class="bg-gray-700 rounded">
+                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">アニメーション</summary>
+                <div class="pl-6 py-1 space-y-1" id="animationList">
+                </div>
+            </details>
         </div>
     </aside>
-  </body>
+
+    <div class="relative flex-1">
+        <canvas id="renderCanvas" class="m-0 inset-0 w-full h-full -z-10"></canvas>
+        <div id="app" class="absolute inset-0 w-full h-full">
+            <div id="init" class="flex justify-center items-center">
+                <button id="startButton" class="px-4 py-2 bg-blue-500 text-white rounded">Start</button>
+            </div>
+            <div id="playing">
+                <div id="meta" class="text-sm">
+                    <div id="seekBar" class="h-2 bg-gray-300">
+                        <div class="h-full bg-blue-500"></div>
+                    </div>
+                </div>
+                <div id="loadingWrapper"
+                    class="absolute w-full h-full top-0 left-0 z-10 bg-white/15 backdrop-blur-md flex justify-center items-center">
+                    <div id="loadingText" class="text-white">Loading...</div>
+                </div>
+            </div>
+            <div id="media"></div>
+            <script type="module" src="./main.ts"></script>
+        </div>
+</body>
+
 </html>

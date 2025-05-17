@@ -8,5 +8,6 @@ type Events = {
         scene: Scene;
     },
     onSceneLoaded: undefined;
+    onMdlAnimLoaded: string[];
 }
 export const events: Emitter<Events> = mitt<Events>();
