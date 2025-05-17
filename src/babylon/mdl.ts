@@ -9,23 +9,23 @@ let animGroups: AnimationGroup[] = [];
 
 events.on("onSceneDefinition", async ({ scene }) => {
 	/* --- どっと式ミクさん --- */
-	await AppendSceneAsync("./dotmiku.glb", scene);
+	await AppendSceneAsync("/dotmiku.glb", scene);
 
 	animGroups = scene.animationGroups;
-	animGroups.forEach((animGroup) => {
+	for(const animGroup of animGroups) {
 		animGroup.pause();
 		animGroup.loopAnimation = false;
-	});
+	}
 
-    scene.meshes.forEach((mesh) => {
-        const mat = mesh.material;
-        if (mat) {
+	for (const mesh of scene.meshes) {
+		const mat = mesh.material;
+		if (mat) {
 			// mat.backFaceCulling = false;
-            (mat as any).needDepthPrePass = true;
-            mesh.material = mat;
-        }
-        // mesh.alwaysSelectAsActiveMesh = true;
-    });
+			mat.needDepthPrePass = true;
+			mesh.material = mat;
+		}
+		// mesh.alwaysSelectAsActiveMesh = true;
+	}
 	
 	// const mikuMesh = scene.getMeshByName("__root__");
     console.log("GLTF loaded!");

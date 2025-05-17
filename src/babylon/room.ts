@@ -6,5 +6,5 @@ import { AppendSceneAsync } from "@babylonjs/core/Loading/sceneLoader";
 
 
 events.on("onSceneDefinition", async ({ scene }) => {
-	await AppendSceneAsync("./room.glb", scene);
+	await AppendSceneAsync("/room.glb", scene);
 });
