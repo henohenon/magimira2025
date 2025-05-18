@@ -1,6 +1,6 @@
 import { Player } from "textalive-app-api";
 import { events } from "./events";
-import { updatePosition as updateSeekBarPosition } from "./seekbar";
+// import { updatePosition as updateSeekBarPosition } from "./seekbar";
 import { updatePosition as updateRandomCharPosition } from "./random-char";
 
 
@@ -54,7 +54,7 @@ player.addListener({
 		});
 	},
 	onTimeUpdate: (position: number) => {
-		updateSeekBarPosition(position);
+		// updateSeekBarPosition(position);
 		updateRandomCharPosition(position);
 	},
 });
