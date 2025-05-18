@@ -30,7 +30,12 @@ textaliveEvents.on("onGameStart", () => {
     if (!playingContainer) {
         throw new Error("Playing container not found");
     }
+    const initContainer = document.getElementById("init");
+    if (!initContainer) {
+        throw new Error("Init container not found");
+    }
     setOpacity(playingContainer, true);
+    setOpacity(initContainer, false);
     playAnimation("startListen");
 });
 
