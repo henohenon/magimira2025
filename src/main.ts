@@ -23,6 +23,16 @@ textaliveEvents.on("onAppReady", () => {
     textaliveLoaded = true;
     updateLoading();
 });
+textaliveEvents.on("onGameStart", () => {
+    if (!babylonLoaded) return;
+    
+    const playingContainer = document.getElementById("playing");
+    if (!playingContainer) {
+        throw new Error("Playing container not found");
+    }
+    setOpacity(playingContainer, true);
+    playAnimation("startListen");
+});
 
 function updateLoading() {
     if (!(babylonLoaded && textaliveLoaded)) return;
@@ -31,6 +41,22 @@ function updateLoading() {
     if (!loadingWrapper) {
         throw new Error("Loading wrapper not found");
     }
-    loadingWrapper.classList.add("hidden");
-    playAnimation("startListen");
+    const textaliveBanner = document.getElementsByClassName("textalive-banner")[0] as HTMLElement;
+    if (!textaliveBanner) {
+        throw new Error("TextAlive banner not found");
+    }
+    setOpacity(loadingWrapper, false);
+    textaliveBanner.classList.add("hidden");
 }
+
+function setOpacity(element: HTMLElement, visible: boolean) {
+    if (visible) {
+        element.classList.remove("opacity-0");
+        element.classList.add("opacity-100");
+        element.classList.remove("pointer-events-none");
+    } else {
+        element.classList.remove("opacity-100");
+        element.classList.add("opacity-0");
+        element.classList.add("pointer-events-none");
+    }
+  }

@@ -12,7 +12,15 @@
       <div id="init" class="flex justify-center items-center">
         <button id="startButton" class="px-4 py-2 bg-blue-500 text-white rounded">Start</button>
       </div>
-      <div id="loadingWrapper" class="absolute w-full h-full top-0 left-0 z-10 bg-white/15 backdrop-blur-md flex justify-center items-center">
+      <div id="playing" class="transition-opacity duration-3000 opacity-0 select-none pointer-events-none">
+        <div id="black-trim" class="absolute w-full h-full top-0 left-0 z-5">
+          <div id="black-trim-top" class="absolute w-full h-15 bg-stone-900"></div>
+          <div id="black-trim-bottom" class="absolute w-full h-25 bottom-0 bg-stone-900 flex justify-center items-center">
+            <h3 class="text-white text-4xl" id="lyricsText"></h3>
+          </div>
+        </div>
+      </div>
+      <div id="loadingWrapper" class="absolute w-full h-full top-0 left-0 z-20 bg-white/15 backdrop-blur-md flex justify-center items-center transition-opacity duration-700 opacity-100 select-none">
         <div class="w-5 h-5 border-4 m-auto mx-3 border-t-transparent border-b-transparent border-white rounded-full animate-spin"></div>
         <div id="loadingText" class="text-white text-2xl">Loading...</div>
       </div>

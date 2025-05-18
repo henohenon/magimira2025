@@ -2,6 +2,7 @@ import { Player } from "textalive-app-api";
 import { events } from "./events";
 // import { updatePosition as updateSeekBarPosition } from "./seekbar";
 import { updatePosition as updateRandomCharPosition } from "./random-char";
+import { updatePosition as updateLyricPosition } from "./bottom-lyrics";
 
 
 const mediaElement = document.getElementById("media") as HTMLMediaElement;
@@ -36,25 +37,24 @@ player.addListener({
 			},
 		);
 		events.emit("onAppReady");
-		const startButton = document.getElementById(
-			"startButton",
-		) as HTMLButtonElement;
+		const startButton = document.getElementById("startButton");
 		if (!startButton) {
 			throw new Error("Start button not found");
 		}
+		console.log("Start button found");
 		startButton.addEventListener("click", () => {
-			if (player.isPlaying) {
-				player.requestPause();
-				startButton.textContent = "play";
-			} else {
+			console.log("Start button clicked");
+			events.emit("onGameStart");
+
+			setTimeout(() => {
 				player.requestMediaSeek(0);
 				player.requestPlay();
-				startButton.textContent = "stop";
-			}
+			}, 3000);
 		});
 	},
 	onTimeUpdate: (position: number) => {
 		// updateSeekBarPosition(position);
 		updateRandomCharPosition(position);
+		updateLyricPosition(position);
 	},
 });
