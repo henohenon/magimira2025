@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body class="m-0 w-screen h-screen overflow-hidden">
-  
     <canvas id="renderCanvas" class="m-0 inset-0 w-full h-full -z-10"></canvas>
     <div id="app" class="absolute inset-0 w-full h-full">
       <div id="init" class="flex justify-center items-center">
@@ -20,7 +19,8 @@
         </div>
       </div>
       <div id="loadingWrapper" class="absolute w-full h-full top-0 left-0 z-10 bg-white/15 backdrop-blur-md flex justify-center items-center">
-        <div id="loadingText" class="text-white">Loading...</div>
+        <div class="w-5 h-5 border-4 m-auto mx-3 border-t-transparent border-b-transparent border-white rounded-full animate-spin"></div>
+        <div id="loadingText" class="text-white text-2xl">Loading...</div>
       </div>
     </div>
     <div id="media"></div>
