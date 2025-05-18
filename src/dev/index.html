@@ -16,11 +16,20 @@
                 <div class="pl-6 py-1 space-y-1" id="animationList">
                 </div>
             </details>
-        </div>
-    </aside>
 
-    <div class="relative flex-1">
-        <canvas id="renderCanvas" class="m-0 inset-0 w-full h-full -z-10"></canvas>
+            <details class="bg-gray-700 rounded">
+                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">カメラ</summary>
+                  <div class="pl-6 py-1 space-y-1" id="cameraList">
+                    <button id="camera-default">デフォルト</button>
+                    <button id="camera-front">正面</button>
+                    <button id="camera-side">横</button>
+                    <button id="camera-top">上部</button>
+                    <button id="camera-free">自由視点</button>
+                </div>
+            </details>
+        </div>
+    </aside>    <div class="relative flex-1">
+        <canvas id="renderCanvas" class="m-0 inset-0 w-full h-full -z-10" touch-action="none"></canvas>
         <div id="app" class="absolute inset-0 w-full h-full">
             <div id="init" class="flex justify-center items-center">
                 <button id="startButton" class="px-4 py-2 bg-blue-500 text-white rounded">Start</button>

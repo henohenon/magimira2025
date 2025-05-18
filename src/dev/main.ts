@@ -1,10 +1,10 @@
 import "../babylon/main";
 import "../text-alive/main";
 
-
 import { events as babylonEvents } from "../babylon/events";
 import { events as textaliveEvents } from "../text-alive/events";
 import { playAnimation } from "../babylon/mdl";
+import { switchCamera } from "../babylon/camera";
 
 
 let babylonLoaded = false;
@@ -45,3 +45,11 @@ babylonEvents.on("onMdlAnimLoaded", (animationNames) => {
         return button;
     });
 });
+
+for(const id of ["default","front","side","top","free"]){
+    const btn = document.getElementById(`camera-${id}`);
+    if (!btn) {
+        throw new Error(`Camera button ${id} not found`);
+    }
+    btn.addEventListener("click", () => switchCamera(id));
+}
