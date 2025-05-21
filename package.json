@@ -21,6 +21,7 @@
     "@babylonjs/core": "^8.7.0",
     "@babylonjs/loaders": "^8.7.0",
     "mitt": "^3.0.1",
+    "prismatix-input": "^0.0.41",
     "textalive-app-api": "^0.4.0"
   }
 }

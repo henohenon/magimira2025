@@ -1,15 +1,23 @@
+import { createStore, type WithGlobal } from "prismatix-input/mitt";
+import type { PRXInputEvent } from "prismatix-input/types";
+import { keyboardBasicInput, type KeyboardInputEvent, type KeyboardInputOptions } from "prismatix-input/pure/keyboard";
+
 import "./babylon/main";
 import {player} from "./text-alive/main";
-import "./input";
-
 import { events as babylonEvents } from "./babylon/events";
 import { events as textaliveEvents } from "./text-alive/events";
-import { events as inputEvents } from "./input";
 import { playAnimation } from "./babylon/mdl";
 
-inputEvents.on("startInput", (key) => {
-    if(!player.isPlaying) return;
-    console.log("startInput", key);
+type Events = WithGlobal<{
+    keyboard: KeyboardInputEvent,
+}>;
+
+const store = createStore<Events>()
+  .addEmitter(keyboardBasicInput, { actions: ["keyboard"], option: { events: 'keydown-first' } as KeyboardInputOptions } )
+  console.log("store", store);
+store.global.subscribe((v: PRXInputEvent) => {
+    console.log("input", v);if
+    (!player.isPlaying) return;
     playAnimation("listening");
 });
 
