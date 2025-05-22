@@ -19,7 +19,6 @@ export function updatePosition(position: number) {
 }
 
 function newChar(char: IChar) {
-    console.log("New char:", char.text, char.startTime, char.endTime);
     const span = document.createElement("span");
     span.className = "absolute";
     span.innerText = char.text;

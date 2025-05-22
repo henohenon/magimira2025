@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+.textalive-banner{
+    @apply transition-opacity duration-3000 opacity-100;
+}
+.textalive-banner.hidden {
+  opacity: 0 !important;
+}
