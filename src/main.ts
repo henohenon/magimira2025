@@ -1,23 +1,27 @@
-import { createStore, type WithGlobal } from "prismatix-input/mitt";
-import type { PRXInputEvent } from "prismatix-input/types";
-import { keyboardBasicInput, type KeyboardInputEvent, type KeyboardInputOptions } from "prismatix-input/pure/keyboard";
+import { createLogStore, type WithGlobal } from "prismatix-input/mitt";
+import { keyboardInput, type KeyboardInputEvent, type KeyboardInputOptions } from "prismatix-input/web-native/keyboard";
 
 import "./babylon/main";
 import {player} from "./text-alive/main";
 import { events as babylonEvents } from "./babylon/events";
 import { events as textaliveEvents } from "./text-alive/events";
 import { playAnimation } from "./babylon/mdl";
+import { pointerInput, type PointerInputOptions } from "prismatix-input/web-native/pointer";
+import type { WithPositionInputEvent } from "prismatix-input/web-native/index";
+import type { PRXInputEvent } from "prismatix-input/events";
 
 type Events = WithGlobal<{
     keyboard: KeyboardInputEvent,
+    pointer: WithPositionInputEvent
 }>;
 
-const store = createStore<Events>()
-  .addEmitter(keyboardBasicInput, { actions: ["keyboard"], option: { events: 'keydown-first' } as KeyboardInputOptions } )
+const store = createLogStore<Events>()
+  .addEmitter(keyboardInput, { outEvents: ["keyboard"], option: { events: ['keydown-norepeat'] } as KeyboardInputOptions } )
+  .addEmitter(pointerInput, { outEvents: ["keyboard"], option: { events: ['pointerdown'] } as PointerInputOptions } )
   console.log("store", store);
 store.global.subscribe((v: PRXInputEvent) => {
-    console.log("input", v);if
-    (!player.isPlaying) return;
+    console.log("input", v);
+    if(!player.isPlaying) return;
     playAnimation("listening");
 });
 
