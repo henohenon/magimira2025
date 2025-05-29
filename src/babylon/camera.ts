@@ -6,7 +6,7 @@ import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
 import { events } from "./events";
 
-const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
+const canvas = document.getElementById("babylon-canvas") as HTMLCanvasElement;
 if (!canvas) {
     throw new Error("Canvas not found");
 }
@@ -86,7 +86,6 @@ events.on("onSceneDefinition", async ({ scene }) => {
         camera.detachControl();
     };
 });
-
 
 
 export function switchCamera(key: string) {
