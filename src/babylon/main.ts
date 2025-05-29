@@ -10,7 +10,7 @@ import "./mdl";
 import "./room";
 import "./camera";
 
-const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
+const canvas = document.getElementById("babylon-canvas") as HTMLCanvasElement;
 if (!canvas) {
   throw new Error("Canvas not found");
 }

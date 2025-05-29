@@ -1,7 +1,7 @@
 import { player } from "./main";
 import type { IPhrase } from "textalive-app-api";
 
-const lyrixText = document.getElementById("lyricsText") as HTMLHeadElement;
+const lyrixText = document.getElementById("lyrics-text") as HTMLHeadElement;
 if (!lyrixText) {
     throw new Error("Lyric text not found");
 }

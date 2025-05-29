@@ -1,38 +1,56 @@
-import { createLogStore, type WithGlobal } from "prismatix-input/mitt";
-import { keyboardInput, type KeyboardInputEvent, type KeyboardInputOptions } from "prismatix-input/web-native/keyboard";
+import mitt from "mitt";
+import { createSubjects } from "prismatix-input/mitt";
+import type {
+    KeyboardInputEvent,
+    KeyboardInputOptions,
+    WithPositionInputEvent,
+    PointerInputOptions
+} from "prismatix-input/web-native";
+import {
+    type CounterInputEvent,
+    type DurationInputEvent,
+    repeatInput,
+    type RepeatInputEvent
+} from "prismatix-input/middleware";
+import { keyboardInput, pointerInput } from "prismatix-input/web-native";
+import { counterMiddleware, startToEndDurationInput } from "prismatix-input/middleware";
+import type {Subject} from "prismatix-input/subject";
 
 import "./babylon/main";
-import {player} from "./text-alive/main";
+import "./text-alive/main";
 import { events as babylonEvents } from "./babylon/events";
 import { events as textaliveEvents } from "./text-alive/events";
 import { playAnimation } from "./babylon/mdl";
-import { pointerInput, type PointerInputOptions } from "prismatix-input/web-native/pointer";
-import type { WithPositionInputEvent } from "prismatix-input/web-native/index";
-import type { PRXInputEvent } from "prismatix-input/events";
+import {addFrequency, subtractLightness} from "./text-alive/circle-spectrum";
 
-type Events = WithGlobal<{
-    keyboard: KeyboardInputEvent,
-    pointer: WithPositionInputEvent
-}>;
 
-const store = createLogStore<Events>()
-  .addEmitter(keyboardInput, { outEvents: ["keyboard"], option: { events: ['keydown-norepeat'] } as KeyboardInputOptions } )
-  .addEmitter(pointerInput, { outEvents: ["keyboard"], option: { events: ['pointerdown'] } as PointerInputOptions } )
-  console.log("store", store);
-store.global.subscribe((v: PRXInputEvent) => {
-    console.log("input", v);
-    if(!player.isPlaying) return;
-    playAnimation("listening");
-});
+type Events = {
+    anyInput: KeyboardInputEvent | WithPositionInputEvent;
+    duration: DurationInputEvent;
+    durationRepeat: DurationInputEvent | RepeatInputEvent;
+    counter: CounterInputEvent;
+};
+
+const emitter = mitt<Events>();
+export const { anyInput, duration, durationRepeat, counter } = createSubjects(emitter, ["anyInput", "durationRepeat", "duration", "counter"]);
+
+pointerInput(anyInput, { events: ["pointerdown", "pointerup"] } as PointerInputOptions);
+keyboardInput(anyInput as Subject<KeyboardInputEvent>, { events: ["keydown-norepeat", "keyup"] } as KeyboardInputOptions);
+startToEndDurationInput(anyInput, [durationRepeat as Subject<DurationInputEvent>, duration], { minDuration: 300 });
+repeatInput(anyInput, durationRepeat as Subject<RepeatInputEvent>)
+counterMiddleware(durationRepeat, counter);
+
 
 let babylonLoaded = false;
 let textaliveLoaded = false;
+
 babylonEvents.on("onSceneLoaded", () => {
     babylonLoaded = true;
     updateLoading();
 });
 textaliveEvents.on("onAppReady", () => {
     textaliveLoaded = true;
+    console.log("TextAlive loaded");
     updateLoading();
 });
 textaliveEvents.on("onGameStart", () => {
@@ -49,12 +67,30 @@ textaliveEvents.on("onGameStart", () => {
     setOpacity(playingContainer, true);
     setOpacity(initContainer, false);
     playAnimation("startListen");
+
+    anyInput.subscribe(() => {
+        addFrequency(50);
+    });
+
+    duration.subscribe(() => {
+        console.log("duration");
+        playAnimation("listening");
+    });
+
+    durationRepeat.subscribe((e) => {
+        if ('repeatCount' in e) {
+            if(e.repeatCount == 0) return;
+        }
+        console.log("counter",e);
+        subtractLightness(0.1);
+    })
 });
 
 function updateLoading() {
     if (!(babylonLoaded && textaliveLoaded)) return;
+    if (!(textaliveLoaded)) return;
     
-    const loadingWrapper = document.getElementById("loadingWrapper");
+    const loadingWrapper = document.getElementById("loading-wrapper");
     if (!loadingWrapper) {
         throw new Error("Loading wrapper not found");
     }
