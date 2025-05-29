@@ -9,8 +9,8 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250522.0",
-    "@tailwindcss/vite": "^4.1.7",
+    "@cloudflare/workers-types": "^4.20250529.0",
+    "@tailwindcss/vite": "^4.1.8",
     "@types/babylonjs": "^2.4.5",
     "lefthook": "^1.11.13",
     "rollup-plugin-visualizer": "^5.14.0",
@@ -18,10 +18,10 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "@babylonjs/core": "^8.9.0",
-    "@babylonjs/loaders": "^8.9.0",
+    "@babylonjs/core": "^8.9.1",
+    "@babylonjs/loaders": "^8.9.1",
     "mitt": "^3.0.1",
-    "prismatix-input": "^0.1.0",
+    "prismatix-input": "^0.1.4",
     "textalive-app-api": "^0.4.0"
   }
 }
