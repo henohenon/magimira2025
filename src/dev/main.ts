@@ -1,6 +1,7 @@
 import { events as babylonEvents } from "../babylon/events";
 import { playAnimation } from "../babylon/mdl";
 import { switchCamera } from "../babylon/camera";
+import { switchLight } from "../babylon/light"; // ← これを追加
 
 const animationList = document.getElementById("animationList");
 if (!animationList) {
@@ -25,4 +26,13 @@ for(const id of ["default","front","side","top","free"]){
         throw new Error(`Camera button ${id} not found`);
     }
     btn.addEventListener("click", () => switchCamera(id));
+}
+
+// ライトボタンのイベントリスナーを追加
+for(const id of ["default","spot","point","hemispheric"]){
+    const btn = document.getElementById(`light-${id}`);
+    if (!btn) {
+        throw new Error(`Light button ${id} not found`);
+    }
+    btn.addEventListener("click", () => switchLight(id));
 }
