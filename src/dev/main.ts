@@ -1,6 +1,7 @@
 import { events as babylonEvents } from "../babylon/events";
 import { playAnimation } from "../babylon/mdl";
 import { switchCamera } from "../babylon/camera";
+import { switchLight } from "../babylon/light"; // ← これを追加
 import { counter, counterInstance, spectrums } from "../main";
 import {
     addFrequency,
@@ -37,6 +38,15 @@ for(const id of ["default","front","side","top","free"]){
         throw new Error(`Camera button ${id} not found`);
     }
     btn.addEventListener("click", () => switchCamera(id));
+}
+
+// ライトボタンのイベントリスナーを追加
+for(const id of ["default","spot","point","hemispheric"]){
+    const btn = document.getElementById(`light-${id}`);
+    if (!btn) {
+        throw new Error(`Light button ${id} not found`);
+    }
+    btn.addEventListener("click", () => switchLight(id));
 }
 
 // Counter slider and input field setup
@@ -85,9 +95,9 @@ const circleSpectrumLineCountInput = document.getElementById("circle-spectrum-li
 const circleSpectrumMinRadiusSlider = document.getElementById("circle-spectrum-min-radius") as HTMLInputElement;
 const circleSpectrumMaxRadiusSlider = document.getElementById("circle-spectrum-max-radius") as HTMLInputElement;
 
-if (!circleSpectrumEnableCheckbox || !circleSpectrumLightnessSlider || !circleSpectrumLightnessInput || 
-    !circleSpectrumOpacitySlider || !circleSpectrumOpacityInput || !circleSpectrumHueOffsetSlider || 
-    !circleSpectrumHueOffsetInput || !circleSpectrumHueDeltaInput || !circleSpectrumLineCountInput || 
+if (!circleSpectrumEnableCheckbox || !circleSpectrumLightnessSlider || !circleSpectrumLightnessInput ||
+    !circleSpectrumOpacitySlider || !circleSpectrumOpacityInput || !circleSpectrumHueOffsetSlider ||
+    !circleSpectrumHueOffsetInput || !circleSpectrumHueDeltaInput || !circleSpectrumLineCountInput ||
     !circleSpectrumMinRadiusSlider || !circleSpectrumMaxRadiusSlider) {
     throw new Error("Circle spectrum controls not found");
 }
@@ -104,9 +114,9 @@ const horizontalSpectrumHueDeltaInput = document.getElementById("horizontal-spec
 const horizontalSpectrumLineCountInput = document.getElementById("horizontal-spectrum-line-count") as HTMLInputElement;
 const horizontalSpectrumHeightInput = document.getElementById("horizontal-spectrum-height") as HTMLInputElement;
 
-if (!horizontalSpectrumEnableCheckbox || !horizontalSpectrumLightnessSlider || !horizontalSpectrumLightnessInput || 
-    !horizontalSpectrumOpacitySlider || !horizontalSpectrumOpacityInput || !horizontalSpectrumHueOffsetSlider || 
-    !horizontalSpectrumHueOffsetInput || !horizontalSpectrumHueDeltaInput || !horizontalSpectrumLineCountInput || 
+if (!horizontalSpectrumEnableCheckbox || !horizontalSpectrumLightnessSlider || !horizontalSpectrumLightnessInput ||
+    !horizontalSpectrumOpacitySlider || !horizontalSpectrumOpacityInput || !horizontalSpectrumHueOffsetSlider ||
+    !horizontalSpectrumHueOffsetInput || !horizontalSpectrumHueDeltaInput || !horizontalSpectrumLineCountInput ||
     !horizontalSpectrumHeightInput) {
     throw new Error("Horizontal spectrum controls not found");
 }
@@ -123,9 +133,9 @@ const verticalSpectrumHueDeltaInput = document.getElementById("vertical-spectrum
 const verticalSpectrumLineCountInput = document.getElementById("vertical-spectrum-line-count") as HTMLInputElement;
 const verticalSpectrumWidthInput = document.getElementById("vertical-spectrum-width") as HTMLInputElement;
 
-if (!verticalSpectrumEnableCheckbox || !verticalSpectrumLightnessSlider || !verticalSpectrumLightnessInput || 
-    !verticalSpectrumOpacitySlider || !verticalSpectrumOpacityInput || !verticalSpectrumHueOffsetSlider || 
-    !verticalSpectrumHueOffsetInput || !verticalSpectrumHueDeltaInput || !verticalSpectrumLineCountInput || 
+if (!verticalSpectrumEnableCheckbox || !verticalSpectrumLightnessSlider || !verticalSpectrumLightnessInput ||
+    !verticalSpectrumOpacitySlider || !verticalSpectrumOpacityInput || !verticalSpectrumHueOffsetSlider ||
+    !verticalSpectrumHueOffsetInput || !verticalSpectrumHueDeltaInput || !verticalSpectrumLineCountInput ||
     !verticalSpectrumWidthInput) {
     throw new Error("Vertical spectrum controls not found");
 }
