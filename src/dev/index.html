@@ -36,6 +36,155 @@
                     <button id="light-point">ポイントライト</button>
                     <button id="light-hemispheric">環境光</button>
                 </div>
+            </details>            <details class="bg-gray-700 rounded">
+                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">Addposition</summary>
+                <div class="pl-6 py-1 space-y-1">
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Key</label>
+                        <input type="text" id="add-pos-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" placeholder="キー名">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">X</label>
+                        <input type="number" id="add-pos-x" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Y</label>
+                        <input type="number" id="add-pos-y" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Z</label>
+                        <input type="number" id="add-pos-z" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
+                    </div>
+                    <div class="mb-2">
+                        <button id="add-pos-button" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded">Addposition</button>
+                    </div>
+                </div>
+            </details>
+
+            <details class="bg-gray-700 rounded">
+                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">Setposition</summary>
+                <div class="pl-6 py-1 space-y-1">
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Key</label>
+                        <input type="text" id="set-pos-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" placeholder="キー名">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">X</label>
+                        <input type="number" id="set-pos-x" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Y</label>
+                        <input type="number" id="set-pos-y" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Z</label>
+                        <input type="number" id="set-pos-z" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
+                    </div>
+                    <div class="mb-2">
+                        <button id="set-pos-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Setposition</button>
+                    </div>
+                </div>
+            </details>            <details class="bg-gray-700 rounded">
+                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">Addrotation</summary>
+                <div class="pl-6 py-1 space-y-1">
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Key</label>
+                        <input type="text" id="add-rot-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" placeholder="キー名">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">X (Alpha)</label>
+                        <input type="number" id="add-rot-x" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.1">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Y (Beta)</label>
+                        <input type="number" id="add-rot-y" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.1">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Z (Radius)</label>
+                        <input type="number" id="add-rot-z" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
+                    </div>
+                    <div class="mb-2">
+                        <button id="add-rot-button" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded">Addrotation</button>
+                    </div>
+                </div>
+            </details>
+
+            <details class="bg-gray-700 rounded">
+                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">Setrotation</summary>
+                <div class="pl-6 py-1 space-y-1">
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Key</label>
+                        <input type="text" id="set-rot-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" placeholder="キー名">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">X (Alpha)</label>
+                        <input type="number" id="set-rot-x" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.1">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Y (Beta)</label>
+                        <input type="number" id="set-rot-y" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.1">
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">Z (Radius)</label>
+                        <input type="number" id="set-rot-z" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
+                    </div>
+                    <div class="mb-2">
+                        <button id="set-rot-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Setrotation</button>
+                    </div>
+                </div>
+            </details>
+
+            <details class="bg-gray-700 rounded">
+                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">カメラ座標確認</summary>
+                <div class="pl-6 py-1 space-y-1">
+                    <div class="mb-2">
+                        <label class="block text-gray-400 text-xs mb-1">カメラキー</label>
+                        <select id="camera-info-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm">
+                            <option value="default">デフォルト</option>
+                            <option value="front">正面</option>
+                            <option value="side">横</option>
+                            <option value="top">上部</option>
+                            <option value="free">自由視点</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <button id="get-camera-info" class="w-full bg-gray-600 hover:bg-gray-500 text-white py-2 rounded">座標を確認</button>
+                    </div>
+                    <div id="camera-position-info" class="mb-2 p-2 bg-gray-900 rounded">
+                        <p class="text-xs text-gray-400 mb-1">位置情報:</p>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-xs text-gray-300">X: </span>
+                            <span id="camera-pos-x-info" class="text-xs text-white">-</span>
+                        </div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-xs text-gray-300">Y: </span>
+                            <span id="camera-pos-y-info" class="text-xs text-white">-</span>
+                        </div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-xs text-gray-300">Z: </span>
+                            <span id="camera-pos-z-info" class="text-xs text-white">-</span>
+                        </div>
+                    </div>
+                    <div id="camera-rotation-info" class="mb-2 p-2 bg-gray-900 rounded">
+                        <p class="text-xs text-gray-400 mb-1">回転情報:</p>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-xs text-gray-300">Alpha: </span>
+                            <span id="camera-rot-alpha-info" class="text-xs text-white">-</span>
+                        </div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-xs text-gray-300">Beta: </span>
+                            <span id="camera-rot-beta-info" class="text-xs text-white">-</span>
+                        </div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-xs text-gray-300">Radius: </span>
+                            <span id="camera-rot-radius-info" class="text-xs text-white">-</span>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="text-xs text-gray-400">アクティブカメラ: </label>
+                        <span id="active-camera-info" class="text-xs text-white">-</span>
+                    </div>
+                </div>
             </details>
         </div>
     </aside>    
