@@ -78,13 +78,15 @@ events.on("onSceneDefinition", async ({ scene }) => {
 	cameraFree.angularSensibilityY = 500;
     cameraFree.attachControl(canvas, true);
 	cameras.free = cameraFree;
-    
-    activeCamera = cameras.default;
+      activeCamera = cameras.default;
     _scene.activeCamera = activeCamera;
 
     for(const camera of Object.values(cameras)) {
         camera.detachControl();
     };
+    
+    // 初期状態を保存
+    saveInitialCameraStates();
 });
 
 
@@ -319,4 +321,62 @@ export function getActiveCamera(): string | null {
 		}
 	}
 	return null;
+}
+
+// 初期状態の保存
+interface CameraInitialState {
+    alpha: number;
+    beta: number;
+    radius: number;
+    target: Vector3;
+}
+
+const initialCameraStates: { [key: string]: CameraInitialState } = {};
+
+// 初期状態を保存する関数
+function saveInitialCameraStates() {
+    for (const [key, camera] of Object.entries(cameras)) {
+        const arcCamera = camera as ArcRotateCamera;
+        initialCameraStates[key] = {
+            alpha: arcCamera.alpha,
+            beta: arcCamera.beta,
+            radius: arcCamera.radius,
+            target: arcCamera.target.clone()
+        };
+    }
+    console.log('Initial camera states saved');
+}
+
+// 全カメラを初期状態に戻す関数
+export function resetAllCamerasToInitial() {
+    for (const [key, initialState] of Object.entries(initialCameraStates)) {
+        const camera = cameras[key] as ArcRotateCamera;
+        if (camera && initialState) {
+            camera.alpha = initialState.alpha;
+            camera.beta = initialState.beta;
+            camera.radius = initialState.radius;
+            camera.setTarget(initialState.target.clone());
+        }
+    }
+    console.log('All cameras reset to initial state');
+    return true;
+}
+
+// 特定のカメラを初期状態に戻す関数
+export function resetCameraToInitial(key: string) {
+    const camera = cameras[key] as ArcRotateCamera;
+    const initialState = initialCameraStates[key];
+    
+    if (!camera || !initialState) {
+        console.warn(`Camera "${key}" or its initial state not found`);
+        return false;
+    }
+    
+    camera.alpha = initialState.alpha;
+    camera.beta = initialState.beta;
+    camera.radius = initialState.radius;
+    camera.setTarget(initialState.target.clone());
+    
+    console.log(`Camera ${key} reset to initial state`);
+    return true;
 }

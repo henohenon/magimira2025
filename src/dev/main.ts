@@ -1,3 +1,4 @@
+// filepath: c:\Users\gomaa\magimira2025\src\dev\main.ts
 import { events as babylonEvents } from "../babylon/events";
 import { playAnimation } from "../babylon/mdl";
 import {
@@ -10,6 +11,7 @@ import {
     getCameraRotation,
     getActiveCamera
 } from "../babylon/camera";
+import { switchLight, setLightEnabled, setLightColor, setLightIntensity, setLightingPreset, restoreDefaultSettings } from "../babylon/light";
 import { switchLight } from "../babylon/light";
 import { switchCamera } from "../babylon/camera";
 import { switchLight } from "../babylon/light"; // ← これを追加
@@ -114,13 +116,13 @@ function validateCameraKey(key: string): boolean {
 addPosButton.addEventListener('click', () => {
     const key = addPosKeyInput.value.trim();
     if (!validateCameraKey(key)) return;
-
+    
     const x = parseFloat(addPosXInput.value);
     const y = parseFloat(addPosYInput.value);
     const z = parseFloat(addPosZInput.value);
-
+    
     const result = addCameraPosition(key, x, y, z);
-
+    
     if (result) {
         // 成功時はフォームをリセット
         addPosXInput.value = '0';
@@ -249,7 +251,7 @@ function updateCameraInfo() {
 // カメラ情報取得ボタンのイベントリスナー
 getCameraInfoBtn.addEventListener('click', updateCameraInfo);
 
-// カメラ切り替えボタンのイベントハンドラを修正して、切り替え後に情報を更新
+// カメラ切り替えボタンのハンドラを修正して、切り替え後に情報を更新
 for(const id of ["default", "front", "side", "top", "free"]) {
     const btn = document.getElementById(`camera-${id}`);
     if (btn) {
@@ -269,6 +271,129 @@ for(const id of ["default", "front", "side", "top", "free"]) {
 
 // カメラ情報の初期表示
 updateCameraInfo();
+
+// LightsetIntensity セクションの設定
+const lightIntensityKeySelect = document.getElementById('light-intensity-key') as HTMLSelectElement;
+const lightIntensitySlider = document.getElementById('light-intensity-slider') as HTMLInputElement;
+const lightIntensityValue = document.getElementById('light-intensity-value') as HTMLSpanElement;
+const lightIntensityApply = document.getElementById('light-intensity-apply') as HTMLButtonElement;
+
+if (lightIntensityKeySelect && lightIntensitySlider && lightIntensityValue && lightIntensityApply) {
+    // スライダーの値表示を更新
+    function updateIntensityDisplay() {
+        lightIntensityValue.textContent = lightIntensitySlider.value;
+    }
+
+    // 明るさを適用する関数
+    function applyLightIntensity() {
+        const intensity = parseFloat(lightIntensitySlider.value);
+        const lightKey = lightIntensityKeySelect.value;
+        setLightIntensity(intensity, lightKey);
+
+        // 視覚的フィードバック
+        lightIntensityApply.classList.add('bg-green-600');
+        lightIntensityApply.textContent = '適用済み';
+        setTimeout(() => {
+            lightIntensityApply.classList.remove('bg-green-600');
+            lightIntensityApply.textContent = '適用';
+        }, 1000);
+    }
+
+    // スライダーの変更イベント（表示更新 + リアルタイム適用）
+    lightIntensitySlider.addEventListener('input', () => {
+        updateIntensityDisplay();
+        applyLightIntensity(); // リアルタイム適用
+    });
+
+    // 適用ボタンのイベントハンドラ
+    lightIntensityApply.addEventListener('click', applyLightIntensity);
+      // ライトキー選択変更時：現在のライトの明るさをスライダーに反映
+    lightIntensityKeySelect.addEventListener('change', () => {
+        // 選択したライトの現在の明るさを取得してスライダーに反映
+        applyLightIntensity();
+    });
+
+    // 初期表示更新
+    updateIntensityDisplay();
+}
+
+// ライティングプリセットボタンの設定
+const presetButtons = {
+    default: document.getElementById('preset-default'),
+    day: document.getElementById('preset-day'),
+    night: document.getElementById('preset-night'),
+    sunset: document.getElementById('preset-sunset'),
+    dawn: document.getElementById('preset-dawn')
+};
+
+// プリセットボタンのイベントハンドラ
+Object.entries(presetButtons).forEach(([preset, button]) => {
+    if (button) {
+        button.addEventListener('click', () => {
+            if (preset === 'default') {
+                // デフォルトに戻す場合
+                restoreDefaultSettings();
+            } else {
+                // 通常のプリセット適用
+                setLightingPreset(preset);
+            }
+
+            // 視覚的フィードバック効果を追加
+            button.classList.add('preset-applied');
+            setTimeout(() => {
+                button.classList.remove('preset-applied');
+            }, 600);
+
+            console.log(`Applied ${preset} lighting preset`);
+        });
+    }
+});
+
+// 初期位置・回転リセットボタンのイベントハンドラ
+const resetPosButton = document.getElementById('reset-pos-button');
+const resetRotButton = document.getElementById('reset-rot-button');
+
+if (resetPosButton) {
+    resetPosButton.addEventListener('click', async () => {
+        try {
+            const cameraModule = await import('../babylon/camera.js');
+            const success = cameraModule.resetAllCamerasToInitial();
+
+            if (success) {
+                // 視覚的フィードバック
+                resetPosButton.classList.add('bg-green-600');
+                setTimeout(() => {
+                    resetPosButton.classList.remove('bg-green-600');
+                }, 600);
+
+                console.log('All cameras reset to initial position');
+            }
+        } catch (error) {
+            console.error('Error resetting camera positions:', error);
+        }
+    });
+}
+
+if (resetRotButton) {
+    resetRotButton.addEventListener('click', async () => {
+        try {
+            const cameraModule = await import('../babylon/camera.js');
+            const success = cameraModule.resetAllCamerasToInitial();
+
+            if (success) {
+                // 視覚的フィードバック
+                resetRotButton.classList.add('bg-green-600');
+                setTimeout(() => {
+                    resetRotButton.classList.remove('bg-green-600');
+                }, 600);
+
+                console.log('All cameras reset to initial rotation');
+            }
+        } catch (error) {
+            console.error('Error resetting camera rotations:', error);
+        }
+    });
+}
 
 
 // Counter slider and input field setup
