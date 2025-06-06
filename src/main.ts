@@ -23,6 +23,8 @@ import { events as textaliveEvents } from "./text-alive/events";
 import { playAnimation } from "./babylon/mdl";
 import {addFrequency, type Spectrum} from "./text-alive/spectrum";
 import { circleSpectrum } from "./text-alive/spectrum/circle-spectrum";
+import { horizontalSpectrum } from "./text-alive/spectrum/horizontal-spectrum";
+import { verticalSpectrum } from "./text-alive/spectrum/vertical-spectrum";
 
 
 type Events = {
@@ -33,7 +35,9 @@ type Events = {
 };
 
 export const spectrums: Record<string, Spectrum> = {
-    "circle": circleSpectrum()
+    "circle": circleSpectrum(),
+    "horizontal": horizontalSpectrum(),
+    "vertical": verticalSpectrum()
 };
 
 const emitter = mitt<Events>();
@@ -61,7 +65,7 @@ textaliveEvents.on("onAppReady", () => {
 });
 textaliveEvents.on("onGameStart", () => {
     if (!babylonLoaded) return;
-    
+
     const playingContainer = document.getElementById("playing");
     if (!playingContainer) {
         throw new Error("Playing container not found");
@@ -92,7 +96,7 @@ textaliveEvents.on("onGameStart", () => {
 function updateLoading() {
     if (!(babylonLoaded && textaliveLoaded)) return;
     if (!(textaliveLoaded)) return;
-    
+
     const loadingWrapper = document.getElementById("loading-wrapper");
     if (!loadingWrapper) {
         throw new Error("Loading wrapper not found");

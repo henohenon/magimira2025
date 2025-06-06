@@ -89,7 +89,7 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
     updateFrequency();
     beforeDraw(canvasContext, centerX, centerY);
     for (let i = 0; i < lineCounts; i++) {
-      const freqValue = frequency[i] || 0;
+      const freqValue = frequency[i] / 256 || 0;
       const lineRate = i / lineCounts;
       canvasContext.strokeStyle = `hsla(${hueOffset + (i / lineCounts) * hueDelta}, 100%, ${currentLightness}%, ${currentOpacity})`;
       drawLine(canvasContext, centerX, centerY, freqValue, lineRate);
@@ -123,3 +123,5 @@ const clamp = (value: number, min: number, max: number): number => {
 }
 
 export * from "./circle-spectrum.ts";
+export * from "./horizontal-spectrum.ts";
+export * from "./vertical-spectrum.ts";

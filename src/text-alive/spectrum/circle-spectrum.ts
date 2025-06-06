@@ -18,9 +18,9 @@ export const circleSpectrum = (): CircleSpectrum => {
     maxRadiusRatio = clamp(maxRadius, 0, Number.POSITIVE_INFINITY);
   };
 
-  const setRadius = (max: number, min: number) => {
-    setMinRadius(max);
-    setMaxRadius(min);
+  const setRadius = (min: number, max: number) => {
+    setMinRadius(min);
+    setMaxRadius(max);
   };
 
   let minRadius = 0;
