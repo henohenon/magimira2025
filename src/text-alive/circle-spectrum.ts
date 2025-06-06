@@ -19,7 +19,7 @@ const frequencyTarget = new Uint8Array(frequency.length) as Uint8Array;
 const frequencyDelta: number[] = new Array(frequency.length).fill(0);
 console.log(frequency, frequencyTarget, frequencyDelta);
 
-let lightness = 100;
+let currentLightness = 100;
 
 const updateFrequency = () => {
   for (let i = 0; i < frequency.length; i++) {
@@ -48,8 +48,8 @@ export const addFrequency = (strength: number) => {
   updateFrequencyDelta(idx);
 }
 
-export const subtractLightness = (strength: number = 1)=> {
-  lightness = clamp(lightness - strength, 50, 100);
+export const setLightness = (lightness: number)=> {
+  currentLightness = clamp(lightness, 50, 100);
 }
 
 function drawCircleSpectrum() {
@@ -75,7 +75,7 @@ function drawCircleSpectrum() {
     const endY = centerY + Math.sin(angle) * (radius * 0.5 + lineLength);
 
     const hue = 240 - (value / 255) * 240;
-    canvasContext.strokeStyle = `hsl(${hue}, 100%, ${lightness}%)`;
+    canvasContext.strokeStyle = `hsl(${hue}, 100%, ${currentLightness}%)`;
 
     canvasContext.beginPath();
     canvasContext.moveTo(startX, startY);

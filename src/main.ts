@@ -6,14 +6,14 @@ import type {
     WithPositionInputEvent,
     PointerInputOptions
 } from "prismatix-input/web-native";
-import {
-    type CounterInputEvent,
-    type DurationInputEvent,
-    repeatInput,
-    type RepeatInputEvent
+import type {
+    CounterInputEvent,
+    DurationInputEvent,
+    RepeatInputEvent,
+    CounterMiddleware
 } from "prismatix-input/middleware";
 import { keyboardInput, pointerInput } from "prismatix-input/web-native";
-import { counterMiddleware, startToEndDurationInput } from "prismatix-input/middleware";
+import { counterMiddleware, repeatInput, startToEndDurationInput } from "prismatix-input/middleware";
 import type {Subject} from "prismatix-input/subject";
 
 import "./babylon/main";
@@ -21,7 +21,7 @@ import "./text-alive/main";
 import { events as babylonEvents } from "./babylon/events";
 import { events as textaliveEvents } from "./text-alive/events";
 import { playAnimation } from "./babylon/mdl";
-import {addFrequency, subtractLightness} from "./text-alive/circle-spectrum";
+import {addFrequency, setLightness} from "./text-alive/circle-spectrum";
 
 
 type Events = {
@@ -34,11 +34,12 @@ type Events = {
 const emitter = mitt<Events>();
 export const { anyInput, duration, durationRepeat, counter } = createSubjects(emitter, ["anyInput", "durationRepeat", "duration", "counter"]);
 
-pointerInput(anyInput, { events: ["pointerdown", "pointerup"] } as PointerInputOptions);
-keyboardInput(anyInput as Subject<KeyboardInputEvent>, { events: ["keydown-norepeat", "keyup"] } as KeyboardInputOptions);
+const inputArea = document.getElementById("input-area");
+pointerInput(anyInput, { events: ["pointerdown", "pointerup"], target: inputArea } as PointerInputOptions);
+keyboardInput(anyInput as Subject<KeyboardInputEvent>, { events: ["keydown-norepeat", "keyup"], target: inputArea as EventTarget } as KeyboardInputOptions);
 startToEndDurationInput(anyInput, [durationRepeat as Subject<DurationInputEvent>, duration], { minDuration: 300 });
 repeatInput(anyInput, durationRepeat as Subject<RepeatInputEvent>)
-counterMiddleware(durationRepeat, counter);
+export const counterInstance  = counterMiddleware(durationRepeat, counter) as CounterMiddleware;
 
 
 let babylonLoaded = false;
@@ -70,19 +71,16 @@ textaliveEvents.on("onGameStart", () => {
 
     anyInput.subscribe(() => {
         addFrequency(50);
+        counterInstance.set(counterInstance.get() + 1);
     });
 
     duration.subscribe(() => {
         console.log("duration");
         playAnimation("listening");
     });
-
-    durationRepeat.subscribe((e) => {
-        if ('repeatCount' in e) {
-            if(e.repeatCount == 0) return;
-        }
-        console.log("counter",e);
-        subtractLightness(0.1);
+    counter.subscribe((e) => {
+        console.log("counter", e);
+        setLightness(100 - e.count/2);
     })
 });
 
