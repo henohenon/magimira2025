@@ -1,18 +1,13 @@
 import { events as babylonEvents } from "../babylon/events";
 import { playAnimation } from "../babylon/mdl";
 import { switchCamera } from "../babylon/camera";
-import { counter, counterInstance } from "../main";
-import { 
-    addFrequency, 
-    setLightness, 
-    setOpacity, 
-    setHueOffset, 
-    setHueDelta, 
-    setLineCounts, 
-    setEnable,
-    setMinRadius,
-    setMaxRadius,
-} from "../text-alive/circle-spectrum";
+import { counter, counterInstance, spectrums } from "../main";
+import {
+    addFrequency,
+    type CircleSpectrum,
+} from "../text-alive/spectrum";
+
+const circleSpectrum = spectrums["circle"] as CircleSpectrum;
 
 const animationList = document.getElementById("animationList");
 if (!animationList) {
@@ -88,74 +83,74 @@ if (!spectrumEnableCheckbox || !spectrumLightnessSlider || !spectrumLightnessInp
 }
 
 // Initialize circle spectrum with default values
-setEnable(spectrumEnableCheckbox.checked);
-setLightness(parseInt(spectrumLightnessSlider.value));
+circleSpectrum.setEnable(spectrumEnableCheckbox.checked);
+circleSpectrum.setLightness(parseInt(spectrumLightnessSlider.value));
 spectrumLightnessInput.value = spectrumLightnessSlider.value;
-setOpacity(parseInt(spectrumOpacitySlider.value) / 100);
+circleSpectrum.setOpacity(parseInt(spectrumOpacitySlider.value) / 100);
 spectrumOpacityInput.value = spectrumOpacitySlider.value;
-setHueOffset(parseInt(spectrumHueOffsetSlider.value));
+circleSpectrum.setHueOffset(parseInt(spectrumHueOffsetSlider.value));
 spectrumHueOffsetInput.value = spectrumHueOffsetSlider.value;
-setHueDelta(parseInt(spectrumHueDeltaInput.value));
-setLineCounts(parseInt(spectrumLineCountInput.value));
-setMinRadius(parseFloat(spectrumMinRadiusSlider.value));
-setMaxRadius(parseFloat(spectrumMaxRadiusSlider.value));
+circleSpectrum.setHueDelta(parseInt(spectrumHueDeltaInput.value));
+circleSpectrum.setLineCounts(parseInt(spectrumLineCountInput.value));
+circleSpectrum.setMinRadius(parseFloat(spectrumMinRadiusSlider.value));
+circleSpectrum.setMaxRadius(parseFloat(spectrumMaxRadiusSlider.value));
 
 // Add event listeners for circle spectrum controls
 spectrumEnableCheckbox.addEventListener("change", () => {
-    setEnable(spectrumEnableCheckbox.checked);
+    circleSpectrum.setEnable(spectrumEnableCheckbox.checked);
 });
 
 spectrumLightnessSlider.addEventListener("input", () => {
     const value = parseFloat(spectrumLightnessSlider.value);
     spectrumLightnessInput.value = value.toString();
-    setLightness(value);
+    circleSpectrum.setLightness(value);
 });
 
 spectrumOpacitySlider.addEventListener("input", () => {
     const value = parseFloat(spectrumOpacitySlider.value);
     spectrumOpacityInput.value = value.toString();
-    setOpacity(value / 100);
+    circleSpectrum.setOpacity(value / 100);
 });
 
 spectrumHueOffsetSlider.addEventListener("input", () => {
     const value = parseFloat(spectrumHueOffsetSlider.value);
     spectrumHueOffsetInput.value = value.toString();
-    setHueOffset(value);
+    circleSpectrum.setHueOffset(value);
 });
 
 spectrumHueDeltaInput.addEventListener("change", () => {
-    setHueDelta(parseFloat(spectrumHueDeltaInput.value));
+    circleSpectrum.setHueDelta(parseFloat(spectrumHueDeltaInput.value));
 });
 
 spectrumLineCountInput.addEventListener("change", () => {
-    setLineCounts(parseInt(spectrumLineCountInput.value));
+    circleSpectrum.setLineCounts(parseInt(spectrumLineCountInput.value));
 });
 
 spectrumMinRadiusSlider.addEventListener("change", () => {
-    setMinRadius(parseFloat(spectrumMinRadiusSlider.value));
+    circleSpectrum.setMinRadius(parseFloat(spectrumMinRadiusSlider.value));
 });
 
 spectrumMaxRadiusSlider.addEventListener("change", () => {
-    setMaxRadius(parseFloat(spectrumMaxRadiusSlider.value));
+    circleSpectrum.setMaxRadius(parseFloat(spectrumMaxRadiusSlider.value));
 });
 
 // Add event listeners for the new input fields
 spectrumLightnessInput.addEventListener("change", () => {
     const value = parseInt(spectrumLightnessInput.value);
     spectrumLightnessSlider.value = value.toString();
-    setLightness(value);
+    circleSpectrum.setLightness(value);
 });
 
 spectrumOpacityInput.addEventListener("change", () => {
     const value = parseInt(spectrumOpacityInput.value);
     spectrumOpacitySlider.value = value.toString();
-    setOpacity(value / 100);
+    circleSpectrum.setOpacity(value / 100);
 });
 
 spectrumHueOffsetInput.addEventListener("change", () => {
     const value = parseInt(spectrumHueOffsetInput.value);
     spectrumHueOffsetSlider.value = value.toString();
-    setHueOffset(value);
+    circleSpectrum.setHueOffset(value);
 });
 
 spectrumAddFrequencyButton.addEventListener("click", () => {

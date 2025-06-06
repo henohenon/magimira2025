@@ -21,7 +21,8 @@ import "./text-alive/main";
 import { events as babylonEvents } from "./babylon/events";
 import { events as textaliveEvents } from "./text-alive/events";
 import { playAnimation } from "./babylon/mdl";
-import {addFrequency, setLightness} from "./text-alive/circle-spectrum";
+import {addFrequency, type Spectrum} from "./text-alive/spectrum";
+import { circleSpectrum } from "./text-alive/spectrum/circle-spectrum";
 
 
 type Events = {
@@ -29,6 +30,10 @@ type Events = {
     duration: DurationInputEvent;
     durationRepeat: DurationInputEvent | RepeatInputEvent;
     counter: CounterInputEvent;
+};
+
+export const spectrums: Record<string, Spectrum> = {
+    "circle": circleSpectrum()
 };
 
 const emitter = mitt<Events>();
@@ -80,7 +85,7 @@ textaliveEvents.on("onGameStart", () => {
     });
     counter.subscribe((e) => {
         console.log("counter", e);
-        setLightness(100 - e.count/2);
+        // setLightness(100 - e.count/2);
     })
 });
 
