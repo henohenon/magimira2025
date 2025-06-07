@@ -402,7 +402,8 @@ export function setLightingPreset(preset: string): boolean {
     // 全てのライトを一旦リセット
     Object.values(lights).forEach(light => light.intensity = 0);
     
-    switch (preset) {        case 'day':
+    switch (preset) {
+        case 'day':
             // 昼間：非常に明るく鮮やかな快晴の日差し
             const dayHemiLight = lights.hemispheric as HemisphericLight;
             dayHemiLight.intensity = 2.5; // より明るく
@@ -418,7 +419,8 @@ export function setLightingPreset(preset: string): boolean {
             const dayPointLight = lights.point as PointLight;
             dayPointLight.intensity = 0.8; // より明るく
             dayPointLight.diffuse = new Color3(0.8, 0.9, 1.0); // 青空の散乱光
-            break;        case 'night':
+            break;
+        case 'night':
             // 夜間：暗く神秘的な月夜
             const nightHemiLight = lights.hemispheric as HemisphericLight;
             nightHemiLight.intensity = 0.08; // さらに暗く
@@ -434,7 +436,8 @@ export function setLightingPreset(preset: string): boolean {
             const nightSpotLight = lights.spot as SpotLight;
             nightSpotLight.intensity = 0.1; // 非常に微弱
             nightSpotLight.diffuse = new Color3(0.2, 0.25, 0.5); // 淡い星の光
-            break;case 'sunset':
+            break;
+        case 'sunset':
             // 夕焼け：劇的で美しい黄金の夕日
             const sunsetHemiLight = lights.hemispheric as HemisphericLight;
             sunsetHemiLight.intensity = 1.2; // もっと明るく
@@ -450,7 +453,8 @@ export function setLightingPreset(preset: string): boolean {
             const sunsetPointLight = lights.point as PointLight;
             sunsetPointLight.intensity = 0.7;
             sunsetPointLight.diffuse = new Color3(1.0, 0.5, 0.2); // 暖かい金色の散乱光
-            break;        case 'dawn':
+            break;
+        case 'dawn':
             // 朝焼け：幻想的で美しい薔薇色の夜明け
             const dawnHemiLight = lights.hemispheric as HemisphericLight;
             dawnHemiLight.intensity = 1.3; // より明るく
@@ -467,7 +471,6 @@ export function setLightingPreset(preset: string): boolean {
             dawnPointLight.intensity = 0.6;
             dawnPointLight.diffuse = new Color3(0.9, 0.8, 1.0); // 薄紫の朝霧光
             break;
-            
         default:
             console.warn(`Unknown lighting preset: ${preset}`);
             return false;
