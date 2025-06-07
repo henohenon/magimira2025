@@ -1,9 +1,5 @@
-﻿import { type Ripple } from "./index.ts";
-
-// Helper function to clamp values
-const clamp = (value: number, min: number, max: number): number => {
-  return Math.min(Math.max(value, min), max);
-};
+﻿import {addRipple, type Ripple} from "./index.ts";
+import {clamp} from "../../util.ts";
 
 export interface CircleRipple extends Ripple {
   setMaxRadius(maxRadius: number): void;
@@ -40,21 +36,21 @@ export const createCircleRipple = (x: number, y: number, strength: number): Circ
 
   const update = () => {
     if (!isActive) return false;
-    
+
     radius += growthSpeed;
     opacity -= fadeSpeed;
-    
+
     if (opacity <= 0 || radius >= maxRadius) {
       isActive = false;
       return false;
     }
-    
+
     return true;
   };
 
   const draw = (ctx: CanvasRenderingContext2D) => {
     if (!isActive) return;
-    
+
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.strokeStyle = `hsla(${hue}, 100%, 70%, ${opacity})`;
@@ -62,7 +58,7 @@ export const createCircleRipple = (x: number, y: number, strength: number): Circ
     ctx.stroke();
   };
 
-  return {
+  const ripple = {
     update,
     draw,
     setMaxRadius,
@@ -70,4 +66,6 @@ export const createCircleRipple = (x: number, y: number, strength: number): Circ
     setFadeSpeed,
     setLineWidth
   };
+  addRipple(ripple)
+  return ripple;
 };
