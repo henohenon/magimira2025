@@ -12,6 +12,7 @@
     "@cloudflare/workers-types": "^4.20250606.0",
     "@tailwindcss/vite": "^4.1.8",
     "@types/babylonjs": "^2.4.5",
+    "biome": "^0.3.3",
     "lefthook": "^1.11.13",
     "rollup-plugin-visualizer": "^5.14.0",
     "typescript": "~5.8.3",
