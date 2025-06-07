@@ -34,7 +34,7 @@ export const circleSpectrum = (): CircleSpectrum => {
       (ctx, centerX, centerY, frequency, lineRate) => {
         const angle = lineRate * Math.PI * 2;
 
-        const lineLength = (frequency / 255) * (maxRadiusRatio - minRadiusRatio);
+        const lineLength = frequency * (maxRadiusRatio - minRadiusRatio);
 
         const startX = centerX + Math.cos(angle) * minRadius;
         const startY = centerY + Math.sin(angle) * minRadius;
