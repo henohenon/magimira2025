@@ -1,4 +1,3 @@
-// filepath: c:\Users\gomaa\magimira2025\src\dev\main.ts
 import { events as babylonEvents } from "../babylon/events";
 import { playAnimation } from "../babylon/mdl";
 import {
@@ -11,10 +10,14 @@ import {
     getCameraRotation,
     getActiveCamera
 } from "../babylon/camera";
-import { switchLight, setLightEnabled, setLightColor, setLightIntensity, setLightingPreset, restoreDefaultSettings } from "../babylon/light";
-import { switchLight } from "../babylon/light";
-import { switchCamera } from "../babylon/camera";
-import { switchLight } from "../babylon/light"; // ← これを追加
+import {
+    switchLight,
+    setLightEnabled,
+    setLightColor,
+    setLightIntensity,
+    setLightingPreset,
+    restoreDefaultSettings
+} from "../babylon/light";
 import { counter, counterInstance, spectrums } from "../main";
 import {
     addFrequency,
@@ -61,6 +64,71 @@ for(const id of ["default","spot","point","hemispheric"]){
     }
     btn.addEventListener("click", () => switchLight(id));
 }
+
+// LightsetEnableセクションの設定
+const lightEnableKeySelect = document.getElementById('light-enable-key') as HTMLSelectElement;
+const lightToggle = document.getElementById('light-toggle') as HTMLInputElement;
+
+// 要素の存在確認
+if (!lightEnableKeySelect || !lightToggle) {
+    throw new Error('LightsetEnable セクションの要素が見つかりません');
+}
+
+// トグルスイッチの初期状態を設定（デフォルトでオン）
+lightToggle.checked = true;
+
+// ライトキー選択とトグルスイッチのイベントハンドラ
+lightToggle.addEventListener('change', () => {
+    const isEnabled = lightToggle.checked;
+    const lightKey = lightEnableKeySelect.value;
+    setLightEnabled(isEnabled, lightKey);
+});
+
+// ライトキー選択変更時のイベントハンドラ
+lightEnableKeySelect.addEventListener('change', () => {
+    const isEnabled = lightToggle.checked;
+    const lightKey = lightEnableKeySelect.value;
+    setLightEnabled(isEnabled, lightKey);
+});
+
+// LightsetColorセクションの設定
+const lightColorKeySelect = document.getElementById('light-color-key') as HTMLSelectElement;
+const lightColorPicker = document.getElementById('light-color-picker') as HTMLInputElement;
+const lightColorApply = document.getElementById('light-color-apply') as HTMLButtonElement;
+const colorPresets = document.querySelectorAll('.color-preset');
+
+// 要素の存在確認
+if (!lightColorKeySelect || !lightColorPicker || !lightColorApply) {
+    throw new Error('LightsetColor セクションの要素が見つかりません');
+}
+
+// ライトの色を適用する関数
+function applyLightColor() {
+    const selectedColor = lightColorPicker.value;
+    const lightKey = lightColorKeySelect.value;
+    setLightColor(selectedColor, lightKey);
+}
+
+// 適用ボタンのイベントハンドラ
+lightColorApply.addEventListener('click', applyLightColor);
+
+// カラーピッカーの変更イベント（即時反映）
+lightColorPicker.addEventListener('input', applyLightColor);
+
+// ライトキー選択変更時のイベントハンドラ
+lightColorKeySelect.addEventListener('change', applyLightColor);
+
+// プリセットカラーボタンのイベントハンドラ
+colorPresets.forEach(preset => {
+    preset.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const presetColor = target.getAttribute('data-color');
+        if (presetColor) {
+            lightColorPicker.value = presetColor;
+            applyLightColor();
+        }
+    });
+});
 
 // Addposition/Setposition セクションのイベントリスナーを追加
 const addPosButton = document.getElementById('add-pos-button');
@@ -116,13 +184,13 @@ function validateCameraKey(key: string): boolean {
 addPosButton.addEventListener('click', () => {
     const key = addPosKeyInput.value.trim();
     if (!validateCameraKey(key)) return;
-    
+
     const x = parseFloat(addPosXInput.value);
     const y = parseFloat(addPosYInput.value);
     const z = parseFloat(addPosZInput.value);
-    
+
     const result = addCameraPosition(key, x, y, z);
-    
+
     if (result) {
         // 成功時はフォームをリセット
         addPosXInput.value = '0';
