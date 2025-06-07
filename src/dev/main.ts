@@ -336,21 +336,65 @@ spectrumAddFrequencyButton.addEventListener("click", () => {
     addFrequency(strength);
 });
 
-const addRippleButton = document.getElementById("add-ripple") as HTMLButtonElement;
-const ripplePositionXInput = document.getElementById("ripple-position-x") as HTMLInputElement;
-const ripplePositionYInput = document.getElementById("ripple-position-y") as HTMLInputElement;
-const rippleStrengthInput = document.getElementById("ripple-strength-input") as HTMLInputElement;
+// Circle Ripple Controls
+const addCircleRippleButton = document.getElementById("add-circle-ripple") as HTMLButtonElement;
+const circleRipplePositionXInput = document.getElementById("circle-ripple-position-x") as HTMLInputElement;
+const circleRipplePositionYInput = document.getElementById("circle-ripple-position-y") as HTMLInputElement;
+const circleRippleStrengthInput = document.getElementById("circle-ripple-strength") as HTMLInputElement;
+const circleRippleMaxRadiusInput = document.getElementById("circle-ripple-max-radius") as HTMLInputElement;
+const circleRippleGrowthSpeedInput = document.getElementById("circle-ripple-growth-speed") as HTMLInputElement;
+const circleRippleFadeSpeedInput = document.getElementById("circle-ripple-fade-speed") as HTMLInputElement;
+const circleRippleLineWidthInput = document.getElementById("circle-ripple-line-width") as HTMLInputElement;
 
-if (!addRippleButton || !ripplePositionXInput || !ripplePositionYInput || !rippleStrengthInput) {
+// Square Ripple Controls
+const addSquareRippleButton = document.getElementById("add-square-ripple") as HTMLButtonElement;
+const squareRipplePositionXInput = document.getElementById("square-ripple-position-x") as HTMLInputElement;
+const squareRipplePositionYInput = document.getElementById("square-ripple-position-y") as HTMLInputElement;
+const squareRippleStrengthInput = document.getElementById("square-ripple-strength") as HTMLInputElement;
+const squareRippleMaxSizeInput = document.getElementById("square-ripple-max-size") as HTMLInputElement;
+const squareRippleGrowthSpeedInput = document.getElementById("square-ripple-growth-speed") as HTMLInputElement;
+const squareRippleFadeSpeedInput = document.getElementById("square-ripple-fade-speed") as HTMLInputElement;
+const squareRippleLineWidthInput = document.getElementById("square-ripple-line-width") as HTMLInputElement;
+
+if (!addCircleRippleButton || !circleRipplePositionXInput || !circleRipplePositionYInput || !circleRippleStrengthInput ||
+    !circleRippleMaxRadiusInput || !circleRippleGrowthSpeedInput || !circleRippleFadeSpeedInput || !circleRippleLineWidthInput ||
+    !addSquareRippleButton || !squareRipplePositionXInput || !squareRipplePositionYInput || !squareRippleStrengthInput ||
+    !squareRippleMaxSizeInput || !squareRippleGrowthSpeedInput || !squareRippleFadeSpeedInput || !squareRippleLineWidthInput) {
     throw new Error("Ripple controls not found");
 }
 
-ripplePositionXInput.value = (window.innerWidth / 2).toString();
-ripplePositionYInput.value = (window.innerHeight / 2).toString();
+// Set default positions to center of screen
+circleRipplePositionXInput.value = (window.innerWidth / 2).toString();
+circleRipplePositionYInput.value = (window.innerHeight / 2).toString();
+squareRipplePositionXInput.value = (window.innerWidth / 2).toString();
+squareRipplePositionYInput.value = (window.innerHeight / 2).toString();
 
-addRippleButton.addEventListener("click", () => {
-    const x = parseInt(ripplePositionXInput.value);
-    const y = parseInt(ripplePositionYInput.value);
-    const strength = parseFloat(rippleStrengthInput.value);
-    addRipple(x, y, strength);
+// Circle Ripple Event Listener
+addCircleRippleButton.addEventListener("click", () => {
+    const x = parseInt(circleRipplePositionXInput.value);
+    const y = parseInt(circleRipplePositionYInput.value);
+    const strength = parseFloat(circleRippleStrengthInput.value);
+    const ripple = addRipple(x, y, strength, 'circle');
+
+    if ('setMaxRadius' in ripple) {
+        ripple.setMaxRadius(parseFloat(circleRippleMaxRadiusInput.value));
+        ripple.setGrowthSpeed(parseFloat(circleRippleGrowthSpeedInput.value));
+        ripple.setFadeSpeed(parseFloat(circleRippleFadeSpeedInput.value));
+        ripple.setLineWidth(parseFloat(circleRippleLineWidthInput.value));
+    }
+});
+
+// Square Ripple Event Listener
+addSquareRippleButton.addEventListener("click", () => {
+    const x = parseInt(squareRipplePositionXInput.value);
+    const y = parseInt(squareRipplePositionYInput.value);
+    const strength = parseFloat(squareRippleStrengthInput.value);
+    const ripple = addRipple(x, y, strength, 'square');
+
+    if ('setMaxSize' in ripple) {
+        ripple.setMaxSize(parseFloat(squareRippleMaxSizeInput.value));
+        ripple.setGrowthSpeed(parseFloat(squareRippleGrowthSpeedInput.value));
+        ripple.setFadeSpeed(parseFloat(squareRippleFadeSpeedInput.value));
+        ripple.setLineWidth(parseFloat(squareRippleLineWidthInput.value));
+    }
 });

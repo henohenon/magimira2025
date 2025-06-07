@@ -217,22 +217,75 @@
             </details>
 
             <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">リップルエフェクト</summary>
+                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">円形リップルエフェクト</summary>
                 <div class="pl-6 py-1 space-y-3">
                     <div>
-                        <button id="add-ripple" class="px-3 py-2 bg-blue-500 text-white rounded w-full">リップルを追加</button>
+                        <button id="add-circle-ripple" class="px-3 py-2 bg-blue-500 text-white rounded w-full">円形リップルを追加</button>
                     </div>
                     <div>
-                        <label for="ripple-position-x" class="block text-sm font-medium text-gray-300">X位置</label>
-                        <input type="number" id="ripple-position-x" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                        <label for="circle-ripple-position-x" class="block text-sm font-medium text-gray-300">X位置</label>
+                        <input type="number" id="circle-ripple-position-x" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
                     </div>
                     <div>
-                        <label for="ripple-position-y" class="block text-sm font-medium text-gray-300">Y位置</label>
-                        <input type="number" id="ripple-position-y" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                        <label for="circle-ripple-position-y" class="block text-sm font-medium text-gray-300">Y位置</label>
+                        <input type="number" id="circle-ripple-position-y" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
                     </div>
                     <div>
-                        <label for="ripple-strength-input" class="block text-sm font-medium text-gray-300">強度</label>
-                        <input type="number" step="0.1" id="ripple-strength-input" value="50" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
+                        <label for="circle-ripple-strength" class="block text-sm font-medium text-gray-300">強度</label>
+                        <input type="number" step="0.1" id="circle-ripple-strength" value="50" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                    <div>
+                        <label for="circle-ripple-max-radius" class="block text-sm font-medium text-gray-300">最大半径</label>
+                        <input type="number" step="1" id="circle-ripple-max-radius" value="300" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                    <div>
+                        <label for="circle-ripple-growth-speed" class="block text-sm font-medium text-gray-300">成長速度</label>
+                        <input type="number" step="0.1" id="circle-ripple-growth-speed" value="2" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                    <div>
+                        <label for="circle-ripple-fade-speed" class="block text-sm font-medium text-gray-300">フェード速度</label>
+                        <input type="number" step="0.001" id="circle-ripple-fade-speed" value="0.02" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                    <div>
+                        <label for="circle-ripple-line-width" class="block text-sm font-medium text-gray-300">線の幅</label>
+                        <input type="number" step="0.1" id="circle-ripple-line-width" value="2" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                </div>
+            </details>
+
+            <details class="bg-gray-700 rounded">
+                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">四角形リップルエフェクト</summary>
+                <div class="pl-6 py-1 space-y-3">
+                    <div>
+                        <button id="add-square-ripple" class="px-3 py-2 bg-blue-500 text-white rounded w-full">四角形リップルを追加</button>
+                    </div>
+                    <div>
+                        <label for="square-ripple-position-x" class="block text-sm font-medium text-gray-300">X位置</label>
+                        <input type="number" id="square-ripple-position-x" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                    <div>
+                        <label for="square-ripple-position-y" class="block text-sm font-medium text-gray-300">Y位置</label>
+                        <input type="number" id="square-ripple-position-y" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                    <div>
+                        <label for="square-ripple-strength" class="block text-sm font-medium text-gray-300">強度</label>
+                        <input type="number" step="0.1" id="square-ripple-strength" value="50" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                    <div>
+                        <label for="square-ripple-max-size" class="block text-sm font-medium text-gray-300">最大サイズ</label>
+                        <input type="number" step="1" id="square-ripple-max-size" value="300" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                    <div>
+                        <label for="square-ripple-growth-speed" class="block text-sm font-medium text-gray-300">成長速度</label>
+                        <input type="number" step="0.1" id="square-ripple-growth-speed" value="2" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                    <div>
+                        <label for="square-ripple-fade-speed" class="block text-sm font-medium text-gray-300">フェード速度</label>
+                        <input type="number" step="0.001" id="square-ripple-fade-speed" value="0.02" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
+                    </div>
+                    <div>
+                        <label for="square-ripple-line-width" class="block text-sm font-medium text-gray-300">線の幅</label>
+                        <input type="number" step="0.1" id="square-ripple-line-width" value="2" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
                     </div>
                 </div>
             </details>
