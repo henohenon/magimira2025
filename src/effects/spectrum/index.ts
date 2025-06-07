@@ -1,4 +1,5 @@
 import { spectrums } from "../../main.ts";
+import { clamp } from "../../util.ts";
 
 // Define the maximum number of lines for the spectrum
 const lineMaxCounts = 40;
@@ -102,9 +103,6 @@ export interface Spectrum {
   drawSpectrum(ctx: CanvasRenderingContext2D, centerX: number, centerY: number): void;
 }
 
-const clamp = (value: number, min: number, max: number): number => {
-  return Math.min(Math.max(value, min), max);
-}
 
 export * from "./circle-spectrum.ts";
 export * from "./horizontal-spectrum.ts";

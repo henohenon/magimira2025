@@ -8,7 +8,7 @@ import {
     type HorizontalSpectrum,
     type VerticalSpectrum,
 } from "../effects/spectrum";
-import { addRipple } from "../effects";
+import {createCircleRipple, createSquareRipple} from "../effects/ripple";
 
 const circleSpectrum = spectrums["circle"] as CircleSpectrum;
 const horizontalSpectrum = spectrums["horizontal"] as HorizontalSpectrum;
@@ -374,7 +374,7 @@ addCircleRippleButton.addEventListener("click", () => {
     const x = parseInt(circleRipplePositionXInput.value);
     const y = parseInt(circleRipplePositionYInput.value);
     const strength = parseFloat(circleRippleStrengthInput.value);
-    const ripple = addRipple(x, y, strength, 'circle');
+    const ripple = createCircleRipple(x, y, strength);
 
     if ('setMaxRadius' in ripple) {
         ripple.setMaxRadius(parseFloat(circleRippleMaxRadiusInput.value));
@@ -389,7 +389,7 @@ addSquareRippleButton.addEventListener("click", () => {
     const x = parseInt(squareRipplePositionXInput.value);
     const y = parseInt(squareRipplePositionYInput.value);
     const strength = parseFloat(squareRippleStrengthInput.value);
-    const ripple = addRipple(x, y, strength, 'square');
+    const ripple = createSquareRipple(x, y, strength);
 
     if ('setMaxSize' in ripple) {
         ripple.setMaxSize(parseFloat(squareRippleMaxSizeInput.value));
