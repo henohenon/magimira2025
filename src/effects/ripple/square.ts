@@ -1,9 +1,5 @@
-﻿import { type Ripple } from "./index.ts";
-
-// Helper function to clamp values
-const clamp = (value: number, min: number, max: number): number => {
-  return Math.min(Math.max(value, min), max);
-};
+﻿import {addRipple, type Ripple} from "./index.ts";
+import {clamp} from "../../util.ts";
 
 export interface SquareRipple extends Ripple {
   setMaxSize(maxSize: number): void;
@@ -40,21 +36,21 @@ export const createSquareRipple = (x: number, y: number, strength: number): Squa
 
   const update = () => {
     if (!isActive) return false;
-    
+
     size += growthSpeed;
     opacity -= fadeSpeed;
-    
+
     if (opacity <= 0 || size >= maxSize) {
       isActive = false;
       return false;
     }
-    
+
     return true;
   };
 
   const draw = (ctx: CanvasRenderingContext2D) => {
     if (!isActive) return;
-    
+
     ctx.beginPath();
     // Draw a square centered at (x, y) with width and height of size*2
     ctx.rect(x - size, y - size, size * 2, size * 2);
@@ -63,12 +59,14 @@ export const createSquareRipple = (x: number, y: number, strength: number): Squa
     ctx.stroke();
   };
 
-  return {
+  const ripple = {
     update,
     draw,
     setMaxSize,
     setGrowthSpeed,
     setFadeSpeed,
-    setLineWidth
-  };
+    setLineWidth,
+  }
+  addRipple(ripple);
+  return ripple;
 };
