@@ -21,10 +21,10 @@ import "./text-alive/main";
 import { events as babylonEvents } from "./babylon/events";
 import { events as textaliveEvents } from "./text-alive/events";
 import { playAnimation } from "./babylon/mdl";
-import {addFrequency, type Spectrum} from "./text-alive/spectrum";
-import { circleSpectrum } from "./text-alive/spectrum/circle-spectrum";
-import { horizontalSpectrum } from "./text-alive/spectrum/horizontal-spectrum";
-import { verticalSpectrum } from "./text-alive/spectrum/vertical-spectrum";
+import {addFrequency, type Spectrum} from "./effects/spectrum";
+import { circleSpectrum } from "./effects/spectrum/circle-spectrum";
+import { horizontalSpectrum } from "./effects/spectrum/horizontal-spectrum";
+import { verticalSpectrum } from "./effects/spectrum/vertical-spectrum";
 
 
 type Events = {

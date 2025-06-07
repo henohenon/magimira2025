@@ -7,7 +7,7 @@ import {
     type CircleSpectrum,
     type HorizontalSpectrum,
     type VerticalSpectrum,
-} from "../text-alive/spectrum";
+} from "../effects/spectrum";
 
 const circleSpectrum = spectrums["circle"] as CircleSpectrum;
 const horizontalSpectrum = spectrums["horizontal"] as HorizontalSpectrum;

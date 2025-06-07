@@ -1,18 +1,5 @@
 import { spectrums } from "../../main.ts";
 
-const canvas = document.getElementById('spectram-canvas') as HTMLCanvasElement;
-if (!canvas) {
-  throw new Error("Canvas not found");
-}
-const canvasContext = canvas.getContext('2d') as CanvasRenderingContext2D;
-
-const resizeCanvas = () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-};
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
 // Define the maximum number of lines for the spectrum
 const lineMaxCounts = 40;
 let frequency = new Uint8Array(lineMaxCounts);
@@ -44,13 +31,10 @@ export const addFrequency = (strength: number) => {
   updateFrequencyDelta(idx);
 }
 
-export const drawFrequencySpectrum = () => {
+export const drawFrequencySpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => {
   updateFrequency();
-  canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
   Object.values(spectrums).forEach(spectrum => {
-    spectrum.drawSpectrum(centerX, centerY);
+    spectrum.drawSpectrum(ctx, centerX, centerY);
   });
 }
 
@@ -84,15 +68,15 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
   const setEnable = (enable: boolean)=> {
     isEnabled = enable;
   }
-  const drawSpectrum = (centerX: number, centerY: number) => {
+  const drawSpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => {
     if(!isEnabled) return;
     updateFrequency();
-    beforeDraw(canvasContext, centerX, centerY);
+    beforeDraw(ctx, centerX, centerY);
     for (let i = 0; i < lineCounts; i++) {
       const freqValue = frequency[i] / 256 || 0;
       const lineRate = i / lineCounts;
-      canvasContext.strokeStyle = `hsla(${hueOffset + (i / lineCounts) * hueDelta}, 100%, ${currentLightness}%, ${currentOpacity})`;
-      drawLine(canvasContext, centerX, centerY, freqValue, lineRate);
+      ctx.strokeStyle = `hsla(${hueOffset + (i / lineCounts) * hueDelta}, 100%, ${currentLightness}%, ${currentOpacity})`;
+      drawLine(ctx, centerX, centerY, freqValue, lineRate);
     }
   }
 
@@ -115,7 +99,7 @@ export interface Spectrum {
   setHue(offset: number, delta: number): void;
   setLineCounts(count: number): void;
   setEnable(enable: boolean): void;
-  drawSpectrum(centerX: number, centerY: number): void;
+  drawSpectrum(ctx: CanvasRenderingContext2D, centerX: number, centerY: number): void;
 }
 
 const clamp = (value: number, min: number, max: number): number => {
