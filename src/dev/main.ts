@@ -340,26 +340,32 @@ spectrumAddFrequencyButton.addEventListener("click", () => {
 const addCircleRippleButton = document.getElementById("add-circle-ripple") as HTMLButtonElement;
 const circleRipplePositionXInput = document.getElementById("circle-ripple-position-x") as HTMLInputElement;
 const circleRipplePositionYInput = document.getElementById("circle-ripple-position-y") as HTMLInputElement;
-const circleRippleStrengthInput = document.getElementById("circle-ripple-strength") as HTMLInputElement;
-const circleRippleMaxRadiusInput = document.getElementById("circle-ripple-max-radius") as HTMLInputElement;
-const circleRippleGrowthSpeedInput = document.getElementById("circle-ripple-growth-speed") as HTMLInputElement;
-const circleRippleFadeSpeedInput = document.getElementById("circle-ripple-fade-speed") as HTMLInputElement;
-const circleRippleLineWidthInput = document.getElementById("circle-ripple-line-width") as HTMLInputElement;
+const circleRippleLifetimeInput = document.getElementById("circle-ripple-lifetime") as HTMLInputElement;
+const circleRippleRadiusDeltaInput = document.getElementById("circle-ripple-radius-delta") as HTMLInputElement;
+const circleRippleDefaultRadiusInput = document.getElementById("circle-ripple-default-radius") as HTMLInputElement;
+const circleRippleOpacityDeltaInput = document.getElementById("circle-ripple-opacity-delta") as HTMLInputElement;
+const circleRippleDefaultOpacityInput = document.getElementById("circle-ripple-default-opacity") as HTMLInputElement;
+const circleRippleHueInput = document.getElementById("circle-ripple-hue") as HTMLInputElement;
 
 // Square Ripple Controls
 const addSquareRippleButton = document.getElementById("add-square-ripple") as HTMLButtonElement;
 const squareRipplePositionXInput = document.getElementById("square-ripple-position-x") as HTMLInputElement;
 const squareRipplePositionYInput = document.getElementById("square-ripple-position-y") as HTMLInputElement;
-const squareRippleStrengthInput = document.getElementById("square-ripple-strength") as HTMLInputElement;
-const squareRippleMaxSizeInput = document.getElementById("square-ripple-max-size") as HTMLInputElement;
-const squareRippleGrowthSpeedInput = document.getElementById("square-ripple-growth-speed") as HTMLInputElement;
-const squareRippleFadeSpeedInput = document.getElementById("square-ripple-fade-speed") as HTMLInputElement;
-const squareRippleLineWidthInput = document.getElementById("square-ripple-line-width") as HTMLInputElement;
+const squareRippleLifetimeInput = document.getElementById("square-ripple-lifetime") as HTMLInputElement;
+const squareRippleSizeDeltaInput = document.getElementById("square-ripple-size-delta") as HTMLInputElement;
+const squareRippleDefaultSizeInput = document.getElementById("square-ripple-default-size") as HTMLInputElement;
+const squareRippleOpacityDeltaInput = document.getElementById("square-ripple-opacity-delta") as HTMLInputElement;
+const squareRippleDefaultOpacityInput = document.getElementById("square-ripple-default-opacity") as HTMLInputElement;
+const squareRippleHueInput = document.getElementById("square-ripple-hue") as HTMLInputElement;
+const squareRippleAngleInput = document.getElementById("square-ripple-angle") as HTMLInputElement;
 
-if (!addCircleRippleButton || !circleRipplePositionXInput || !circleRipplePositionYInput || !circleRippleStrengthInput ||
-    !circleRippleMaxRadiusInput || !circleRippleGrowthSpeedInput || !circleRippleFadeSpeedInput || !circleRippleLineWidthInput ||
-    !addSquareRippleButton || !squareRipplePositionXInput || !squareRipplePositionYInput || !squareRippleStrengthInput ||
-    !squareRippleMaxSizeInput || !squareRippleGrowthSpeedInput || !squareRippleFadeSpeedInput || !squareRippleLineWidthInput) {
+if (!addCircleRippleButton || !circleRipplePositionXInput || !circleRipplePositionYInput ||
+    !circleRippleLifetimeInput || !circleRippleRadiusDeltaInput || !circleRippleDefaultRadiusInput ||
+    !circleRippleOpacityDeltaInput || !circleRippleDefaultOpacityInput || !circleRippleHueInput ||
+    !addSquareRippleButton || !squareRipplePositionXInput || !squareRipplePositionYInput ||
+    !squareRippleLifetimeInput || !squareRippleSizeDeltaInput || !squareRippleDefaultSizeInput ||
+    !squareRippleOpacityDeltaInput || !squareRippleDefaultOpacityInput || !squareRippleHueInput ||
+    !squareRippleAngleInput) {
     throw new Error("Ripple controls not found");
 }
 
@@ -373,28 +379,42 @@ squareRipplePositionYInput.value = (window.innerHeight / 2).toString();
 addCircleRippleButton.addEventListener("click", () => {
     const x = parseInt(circleRipplePositionXInput.value);
     const y = parseInt(circleRipplePositionYInput.value);
-    const strength = parseFloat(circleRippleStrengthInput.value);
-    const ripple = createCircleRipple(x, y, strength);
+    const lifeTime = parseInt(circleRippleLifetimeInput.value);
+    const radiusDelta = parseFloat(circleRippleRadiusDeltaInput.value);
+    const defaultRadius = parseFloat(circleRippleDefaultRadiusInput.value);
+    const opacityDelta = parseFloat(circleRippleOpacityDeltaInput.value);
+    const defaultOpacity = parseFloat(circleRippleDefaultOpacityInput.value);
+    const hue = parseFloat(circleRippleHueInput.value);
 
-    if ('setMaxRadius' in ripple) {
-        ripple.setMaxRadius(parseFloat(circleRippleMaxRadiusInput.value));
-        ripple.setGrowthSpeed(parseFloat(circleRippleGrowthSpeedInput.value));
-        ripple.setFadeSpeed(parseFloat(circleRippleFadeSpeedInput.value));
-        ripple.setLineWidth(parseFloat(circleRippleLineWidthInput.value));
-    }
+    createCircleRipple(x, y, {
+        lifeTime: lifeTime,
+        radiusDelta: radiusDelta,
+        defaultRadius: defaultRadius,
+        opacityDelta: opacityDelta,
+        defaultOpacity: defaultOpacity,
+        hue: hue
+    });
 });
 
 // Square Ripple Event Listener
 addSquareRippleButton.addEventListener("click", () => {
     const x = parseInt(squareRipplePositionXInput.value);
     const y = parseInt(squareRipplePositionYInput.value);
-    const strength = parseFloat(squareRippleStrengthInput.value);
-    const ripple = createSquareRipple(x, y, strength);
+    const lifeTime = parseInt(squareRippleLifetimeInput.value);
+    const sizeDelta = parseFloat(squareRippleSizeDeltaInput.value);
+    const defaultSize = parseFloat(squareRippleDefaultSizeInput.value);
+    const opacityDelta = parseFloat(squareRippleOpacityDeltaInput.value);
+    const defaultOpacity = parseFloat(squareRippleDefaultOpacityInput.value);
+    const hue = parseFloat(squareRippleHueInput.value);
+    const angleDegrees = parseFloat(squareRippleAngleInput.value);
 
-    if ('setMaxSize' in ripple) {
-        ripple.setMaxSize(parseFloat(squareRippleMaxSizeInput.value));
-        ripple.setGrowthSpeed(parseFloat(squareRippleGrowthSpeedInput.value));
-        ripple.setFadeSpeed(parseFloat(squareRippleFadeSpeedInput.value));
-        ripple.setLineWidth(parseFloat(squareRippleLineWidthInput.value));
-    }
+    createSquareRipple(x, y, {
+        lifeTime: lifeTime,
+        sizeDelta: sizeDelta,
+        defaultSize: defaultSize,
+        opacityDelta: opacityDelta,
+        defaultOpacity: defaultOpacity,
+        hue: hue,
+        angle: angleDegrees * Math.PI / 180 // Convert degrees to radians
+    });
 });

@@ -10,7 +10,8 @@ export const addRipple = (ripple: Ripple) => {
 }
 
 export const drawRipples = (ctx: CanvasRenderingContext2D) => {
-  // Update ripples and remove inactive ones
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'round';
   for (let i = ripples.length - 1; i >= 0; i--) {
     const isActive = ripples[i].update();
     if (!isActive) {

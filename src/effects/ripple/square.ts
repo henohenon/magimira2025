@@ -1,71 +1,51 @@
 ﻿import {addRipple, type Ripple} from "./index.ts";
-import {clamp} from "../../util.ts";
 
-export interface SquareRipple extends Ripple {
-  setMaxSize(maxSize: number): void;
-  setGrowthSpeed(speed: number): void;
-  setFadeSpeed(speed: number): void;
-  setLineWidth(width: number): void;
+export interface SquareRippleConfig {
+  lifeTime?: number;
+  sizeDelta?: number;
+  defaultSize?: number;
+  opacityDelta?: number;
+  defaultOpacity?: number;
+  hue?: number;
+  angle?: number;
 }
 
-export const createSquareRipple = (x: number, y: number, strength: number): SquareRipple => {
-  let size = 0;
-  let maxSize = 300;
-  let opacity = 1;
-  let growthSpeed = 2 + strength / 50;
-  let fadeSpeed = 0.02 + strength / 1000;
-  let lineWidth = 2 + strength / 50;
-  let isActive = true;
-  let hue = Math.random() * 360;
-
-  const setMaxSize = (newMaxSize: number) => {
-    maxSize = clamp(newMaxSize, 50, 1000);
-  };
-
-  const setGrowthSpeed = (speed: number) => {
-    growthSpeed = clamp(speed, 0.5, 10);
-  };
-
-  const setFadeSpeed = (speed: number) => {
-    fadeSpeed = clamp(speed, 0.001, 0.1);
-  };
-
-  const setLineWidth = (width: number) => {
-    lineWidth = clamp(width, 0.5, 10);
-  };
+export const createSquareRipple = (x: number, y: number, config: SquareRippleConfig = {}): Ripple => {
+  const lifeTime = config.lifeTime || 100;
+  const sizeDelta = config.sizeDelta || 1;
+  let size = config.defaultSize || 10;
+  const opacityDelta = config.opacityDelta || 0.05;
+  let opacity = config.defaultOpacity || 1;
+  const hue = config.hue || 0;
+  const angle = config.angle || 0;
+  let time = 0;
 
   const update = () => {
-    if (!isActive) return false;
 
-    size += growthSpeed;
-    opacity -= fadeSpeed;
+    size += sizeDelta;
+    opacity += opacityDelta;
 
-    if (opacity <= 0 || size >= maxSize) {
-      isActive = false;
-      return false;
-    }
+    time++;
 
-    return true;
+    return time < lifeTime;
   };
 
   const draw = (ctx: CanvasRenderingContext2D) => {
-    if (!isActive) return;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
 
     ctx.beginPath();
-    // Draw a square centered at (x, y) with width and height of size*2
-    ctx.rect(x - size, y - size, size * 2, size * 2);
+    ctx.rect(-size, -size, size * 2, size * 2);
     ctx.strokeStyle = `hsla(${hue}, 100%, 70%, ${opacity})`;
-    ctx.lineWidth = lineWidth;
     ctx.stroke();
+
+    ctx.restore();
   };
 
   const ripple = {
     update,
-    draw,
-    setMaxSize,
-    setGrowthSpeed,
-    setFadeSpeed,
-    setLineWidth,
+    draw
   }
   addRipple(ripple);
   return ripple;
