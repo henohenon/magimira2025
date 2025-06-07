@@ -1,9 +1,9 @@
-import "./spectrum/circle-spectrum.ts";
+import "../effects/spectrum/circle-spectrum.ts";
 import { Player } from "textalive-app-api";
 import { events } from "./events";
 import { updatePosition as updateRandomCharPosition } from "./random-char";
 import { updatePosition as updateLyricPosition } from "./bottom-lyrics";
-import {drawFrequencySpectrum} from "./spectrum";
+import {drawFrequencySpectrum} from "../effects/spectrum";
 
 
 const mediaElement = document.getElementById("media") as HTMLMediaElement;
