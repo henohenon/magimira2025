@@ -78,13 +78,15 @@ events.on("onSceneDefinition", async ({ scene }) => {
 	cameraFree.angularSensibilityY = 500;
     cameraFree.attachControl(canvas, true);
 	cameras.free = cameraFree;
-    
-    activeCamera = cameras.default;
+      activeCamera = cameras.default;
     _scene.activeCamera = activeCamera;
 
     for(const camera of Object.values(cameras)) {
         camera.detachControl();
     };
+    
+    // 初期状態を保存
+    saveInitialCameraStates();
 });
 
 
@@ -151,4 +153,230 @@ export function switchCamera(key: string) {
 			}
 		}
 	}
+}
+
+// カメラの位置に指定された値を加算する関数
+export function addCameraPosition(key: string, x: number, y: number, z: number) {
+	// キーが存在し、かつ値が数値の場合のみ処理を続行
+	if (!cameras[key] || isNaN(x) || isNaN(y) || isNaN(z)) {
+		console.warn(`Invalid camera key or position values: ${key}, x=${x}, y=${y}, z=${z}`);
+		return false;
+	}
+
+	const camera = cameras[key];
+	const currentTarget = camera.target;
+	
+	// 相対的に移動（現在の位置に加算）
+	const newTarget = new Vector3(
+		currentTarget.x + x,
+		currentTarget.y + y,
+		currentTarget.z + z
+	);
+	
+	// カメラのターゲット（注視点）を更新
+	camera.setTarget(newTarget);
+	
+	// 現在アクティブなカメラの場合は、シーンのカメラも更新
+	if (_scene.activeCamera === camera) {
+		_scene.activeCamera = camera;
+	}
+	
+	console.log(`Camera ${key} position adjusted by: x=${x}, y=${y}, z=${z}`);
+	return true;
+}
+
+// X軸方向のみ位置調整
+export function addCameraPositionX(key: string, x: number) {
+	return addCameraPosition(key, x, 0, 0);
+}
+
+// Y軸方向のみ位置調整
+export function addCameraPositionY(key: string, y: number) {
+	return addCameraPosition(key, 0, y, 0);
+}
+
+// Z軸方向のみ位置調整
+export function addCameraPositionZ(key: string, z: number) {
+	return addCameraPosition(key, 0, 0, z);
+}
+
+// カメラの位置を直接設定する関数
+export function setCameraPosition(key: string, x: number, y: number, z: number) {
+	if (!cameras[key] || isNaN(x) || isNaN(y) || isNaN(z)) {
+		console.warn(`Invalid camera key or position values: ${key}, x=${x}, y=${y}, z=${z}`);
+		return false;
+	}
+
+	const camera = cameras[key];
+	
+	// 位置を直接設定
+	const newTarget = new Vector3(x, y, z);
+	camera.setTarget(newTarget);
+	
+	// 現在アクティブなカメラの場合は、シーンのカメラも更新
+	if (_scene.activeCamera === camera) {
+		_scene.activeCamera = camera;
+	}
+	
+	console.log(`Camera ${key} position set to: x=${x}, y=${y}, z=${z}`);
+	return true;
+}
+
+// カメラの回転を調整する関数（アルファ、ベータ、半径を変更）
+export function addCameraRotation(key: string, alpha: number, beta: number, radius: number) {
+	if (!cameras[key] || isNaN(alpha) || isNaN(beta) || isNaN(radius)) {
+		console.warn(`Invalid camera key or rotation values: ${key}, alpha=${alpha}, beta=${beta}, radius=${radius}`);
+		return false;
+	}
+
+	const camera = cameras[key] as ArcRotateCamera;
+	
+	// 現在の値に加算
+	camera.alpha += alpha;
+	camera.beta += beta;
+	camera.radius += radius;
+	
+	// 値の範囲を制限（必要に応じて）
+	if (camera.beta < 0.1) camera.beta = 0.1;
+	if (camera.beta > Math.PI - 0.1) camera.beta = Math.PI - 0.1;
+	if (camera.radius < 1) camera.radius = 1;
+	
+	console.log(`Camera ${key} rotation adjusted by: alpha=${alpha}, beta=${beta}, radius=${radius}`);
+	return true;
+}
+
+// アルファ（水平角）のみ調整
+export function addCameraRotationX(key: string, alpha: number) {
+	return addCameraRotation(key, alpha, 0, 0);
+}
+
+// ベータ（垂直角）のみ調整
+export function addCameraRotationY(key: string, beta: number) {
+	return addCameraRotation(key, 0, beta, 0);
+}
+
+// 半径（距離）のみ調整
+export function addCameraRotationZ(key: string, radius: number) {
+	return addCameraRotation(key, 0, 0, radius);
+}
+
+// カメラの回転を直接設定する関数
+export function setCameraRotation(key: string, alpha: number, beta: number, radius: number) {
+	if (!cameras[key] || isNaN(alpha) || isNaN(beta) || isNaN(radius)) {
+		console.warn(`Invalid camera key or rotation values: ${key}, alpha=${alpha}, beta=${beta}, radius=${radius}`);
+		return false;
+	}
+
+	const camera = cameras[key] as ArcRotateCamera;
+	
+	// 値を直接設定
+	camera.alpha = alpha;
+	camera.beta = beta;
+	camera.radius = radius;
+	
+	// 値の範囲を制限（必要に応じて）
+	if (camera.beta < 0.1) camera.beta = 0.1;
+	if (camera.beta > Math.PI - 0.1) camera.beta = Math.PI - 0.1;
+	if (camera.radius < 1) camera.radius = 1;
+	
+	console.log(`Camera ${key} rotation set to: alpha=${alpha}, beta=${beta}, radius=${radius}`);
+	return true;
+}
+
+// カメラの現在位置を取得する関数
+export function getCameraPosition(key: string): { x: number, y: number, z: number } | null {
+	if (!cameras[key]) {
+		console.warn(`カメラ "${key}" が見つかりません`);
+		return null;
+	}
+
+	const camera = cameras[key];
+	return {
+		x: camera.target.x,
+		y: camera.target.y,
+		z: camera.target.z
+	};
+}
+
+// カメラの現在の回転情報を取得する関数
+export function getCameraRotation(key: string): { alpha: number, beta: number, radius: number } | null {
+	if (!cameras[key]) {
+		console.warn(`カメラ "${key}" が見つかりません`);
+		return null;
+	}
+
+	const camera = cameras[key] as ArcRotateCamera;
+	return {
+		alpha: camera.alpha,
+		beta: camera.beta,
+		radius: camera.radius
+	};
+}
+
+// 現在アクティブなカメラのキーを取得する関数
+export function getActiveCamera(): string | null {
+	for (const [key, camera] of Object.entries(cameras)) {
+		if (camera === activeCamera) {
+			return key;
+		}
+	}
+	return null;
+}
+
+// 初期状態の保存
+interface CameraInitialState {
+    alpha: number;
+    beta: number;
+    radius: number;
+    target: Vector3;
+}
+
+const initialCameraStates: { [key: string]: CameraInitialState } = {};
+
+// 初期状態を保存する関数
+function saveInitialCameraStates() {
+    for (const [key, camera] of Object.entries(cameras)) {
+        const arcCamera = camera as ArcRotateCamera;
+        initialCameraStates[key] = {
+            alpha: arcCamera.alpha,
+            beta: arcCamera.beta,
+            radius: arcCamera.radius,
+            target: arcCamera.target.clone()
+        };
+    }
+    console.log('Initial camera states saved');
+}
+
+// 全カメラを初期状態に戻す関数
+export function resetAllCamerasToInitial() {
+    for (const [key, initialState] of Object.entries(initialCameraStates)) {
+        const camera = cameras[key] as ArcRotateCamera;
+        if (camera && initialState) {
+            camera.alpha = initialState.alpha;
+            camera.beta = initialState.beta;
+            camera.radius = initialState.radius;
+            camera.setTarget(initialState.target.clone());
+        }
+    }
+    console.log('All cameras reset to initial state');
+    return true;
+}
+
+// 特定のカメラを初期状態に戻す関数
+export function resetCameraToInitial(key: string) {
+    const camera = cameras[key] as ArcRotateCamera;
+    const initialState = initialCameraStates[key];
+    
+    if (!camera || !initialState) {
+        console.warn(`Camera "${key}" or its initial state not found`);
+        return false;
+    }
+    
+    camera.alpha = initialState.alpha;
+    camera.beta = initialState.beta;
+    camera.radius = initialState.radius;
+    camera.setTarget(initialState.target.clone());
+    
+    console.log(`Camera ${key} reset to initial state`);
+    return true;
 }

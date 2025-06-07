@@ -1,9 +1,9 @@
-import "./spectrum/circle-spectrum.ts";
+import "../effects/spectrum/circle-spectrum.ts";
 import { Player } from "textalive-app-api";
 import { events } from "./events";
 import { updatePosition as updateRandomCharPosition } from "./random-char";
 import { updatePosition as updateLyricPosition } from "./bottom-lyrics";
-import {drawFrequencySpectrum} from "./spectrum";
+import {updateEffects} from "../effects";
 
 
 const mediaElement = document.getElementById("media") as HTMLMediaElement;
@@ -60,6 +60,6 @@ player.addListener({
 		//const data = analyser.getByteFrequencyData();
 		//console.log(data.slice(0, 10));  // 最初の10個だけ表示（毎フレーム出すと重いので）
 		updateLyricPosition(position);
-		drawFrequencySpectrum();
+		updateEffects();
 	},
 });

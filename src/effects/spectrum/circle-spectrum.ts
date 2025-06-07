@@ -1,9 +1,5 @@
 import { createSpectrum, type Spectrum } from "./index.ts";
-
-// Helper function to clamp values
-const clamp = (value: number, min: number, max: number): number => {
-  return Math.min(Math.max(value, min), max);
-};
+import { clamp } from "../../util.ts";
 
 export const circleSpectrum = (): CircleSpectrum => {
   let minRadiusRatio = 0.5;
@@ -34,7 +30,7 @@ export const circleSpectrum = (): CircleSpectrum => {
       (ctx, centerX, centerY, frequency, lineRate) => {
         const angle = lineRate * Math.PI * 2;
 
-        const lineLength = (frequency / 255) * (maxRadiusRatio - minRadiusRatio);
+        const lineLength = frequency * (maxRadiusRatio - minRadiusRatio);
 
         const startX = centerX + Math.cos(angle) * minRadius;
         const startY = centerY + Math.sin(angle) * minRadius;
