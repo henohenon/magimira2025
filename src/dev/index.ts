@@ -15,7 +15,7 @@ import {
     setLightingPreset,
     restoreDefaultSettings
 } from "../babylon/light";
-import { counter, counterInstance, spectrums } from "../main";
+import { counter, counterInstance, spectrums } from "../";
 import {
     addFrequency,
     type CircleSpectrum,

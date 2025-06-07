@@ -16,15 +16,13 @@ import { keyboardInput, pointerInput } from "prismatix-input/web-native";
 import { counterMiddleware, repeatInput, startToEndDurationInput } from "prismatix-input/middleware";
 import type {Subject} from "prismatix-input/subject";
 
-import "./babylon/main";
-import "./text-alive/main";
+import "./babylon";
+import "./text-alive";
 import { events as babylonEvents } from "./babylon/events";
 import { events as textaliveEvents } from "./text-alive/events";
 import { playAnimation } from "./babylon/mdl";
 import {addFrequency, type Spectrum} from "./effects/spectrum";
-import { circleSpectrum } from "./effects/spectrum/circle-spectrum";
-import { horizontalSpectrum } from "./effects/spectrum/horizontal-spectrum";
-import { verticalSpectrum } from "./effects/spectrum/vertical-spectrum";
+import { circleSpectrum, verticalSpectrum, horizontalSpectrum } from "./effects/spectrum";
 
 
 type Events = {

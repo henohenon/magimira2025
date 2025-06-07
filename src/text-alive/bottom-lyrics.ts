@@ -1,4 +1,4 @@
-import { player } from "./main";
+import { player } from "./";
 import type { IPhrase } from "textalive-app-api";
 
 const lyrixText = document.getElementById("lyrics-text") as HTMLHeadElement;

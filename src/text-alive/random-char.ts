@@ -1,5 +1,5 @@
 import  type{ IChar } from "textalive-app-api";
-import { player } from "./main";
+import { player } from "./";
 
 let lastChar: IChar | null = null;
 

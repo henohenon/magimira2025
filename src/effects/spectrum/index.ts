@@ -1,4 +1,4 @@
-import { spectrums } from "../../main.ts";
+import { spectrums } from "../../";
 import { clamp } from "../../util.ts";
 
 // Define the maximum number of lines for the spectrum
@@ -34,9 +34,9 @@ export const addFrequency = (strength: number) => {
 
 export const drawFrequencySpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => {
   updateFrequency();
-  Object.values(spectrums).forEach(spectrum => {
+  for (const spectrum of Object.values(spectrums)) {
     spectrum.drawSpectrum(ctx, centerX, centerY);
-  });
+  }
 }
 
 export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => void, drawLine: (ctx: CanvasRenderingContext2D, centerX: number, centerY: number, frequency: number, lineRate: number) => void) => {
