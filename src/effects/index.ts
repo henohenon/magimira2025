@@ -1,4 +1,5 @@
 ﻿import {drawFrequencySpectrum} from "./spectrum";
+import {drawRipples} from "./ripple";
 
 const canvas = document.getElementById('spectram-canvas') as HTMLCanvasElement;
 if (!canvas) {
@@ -18,4 +19,8 @@ export const updateEffects = () => {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     drawFrequencySpectrum(canvasContext, centerX, centerY);
+    drawRipples(canvasContext);
 }
+
+// Export ripple functions for external use
+export {addRipple} from "./ripple";
