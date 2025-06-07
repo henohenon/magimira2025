@@ -1,14 +1,14 @@
 import "@babylonjs/loaders";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { Scene } from "@babylonjs/core/scene";
-import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
-import { Vector3 } from "@babylonjs/core/Maths/math.vector";
+
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
 import { events } from "./events";
 import "./mdl";
 import "./room";
 import "./camera";
+import "./light";
 
 const canvas = document.getElementById("babylon-canvas") as HTMLCanvasElement;
 if (!canvas) {
@@ -23,8 +23,9 @@ engine.hideLoadingUI();
 
 
 /* 環境光 */
-const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-light.intensity = 1;
+// const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene); // ← 初期ライト設定をlight.tsに移動したのでコメントアウトまたは削除
+// light.intensity = 1; // ← 初期ライト設定をlight.tsに移動したのでコメントアウトまたは削除
+
 
 scene.executeWhenReady(()=>{
 	events.emit("onSceneLoaded");
