@@ -8,6 +8,7 @@ import {
     type HorizontalSpectrum,
     type VerticalSpectrum,
 } from "../effects/spectrum";
+import { addRipple } from "../effects";
 
 const circleSpectrum = spectrums["circle"] as CircleSpectrum;
 const horizontalSpectrum = spectrums["horizontal"] as HorizontalSpectrum;
@@ -329,9 +330,27 @@ verticalSpectrumWidthInput.addEventListener("change", () => {
     verticalSpectrum.setWidth(parseFloat(verticalSpectrumWidthInput.value));
 });
 
-// Add frequency button
 spectrumAddFrequencyButton.addEventListener("click", () => {
     // Add a random frequency with strength 50-200
     const strength = 50 + Math.floor(Math.random() * 150);
     addFrequency(strength);
+});
+
+const addRippleButton = document.getElementById("add-ripple") as HTMLButtonElement;
+const ripplePositionXInput = document.getElementById("ripple-position-x") as HTMLInputElement;
+const ripplePositionYInput = document.getElementById("ripple-position-y") as HTMLInputElement;
+const rippleStrengthInput = document.getElementById("ripple-strength-input") as HTMLInputElement;
+
+if (!addRippleButton || !ripplePositionXInput || !ripplePositionYInput || !rippleStrengthInput) {
+    throw new Error("Ripple controls not found");
+}
+
+ripplePositionXInput.value = (window.innerWidth / 2).toString();
+ripplePositionYInput.value = (window.innerHeight / 2).toString();
+
+addRippleButton.addEventListener("click", () => {
+    const x = parseInt(ripplePositionXInput.value);
+    const y = parseInt(ripplePositionYInput.value);
+    const strength = parseFloat(rippleStrengthInput.value);
+    addRipple(x, y, strength);
 });
