@@ -1,8 +1,6 @@
-// filepath: c:\Users\gomaa\magimira2025\src\dev\main.ts
 import { events as babylonEvents } from "../babylon/events";
 import { playAnimation } from "../babylon/mdl";
 import {
-    switchCamera,
     addCameraPosition,
     setCameraPosition,
     addCameraRotation,
@@ -11,10 +9,12 @@ import {
     getCameraRotation,
     getActiveCamera
 } from "../babylon/camera";
-import { switchLight, setLightEnabled, setLightColor, setLightIntensity, setLightingPreset, restoreDefaultSettings } from "../babylon/light";
-import { switchLight } from "../babylon/light";
-import { switchCamera } from "../babylon/camera";
-import { switchLight } from "../babylon/light"; // ← これを追加
+import {
+    switchLight,
+    setLightIntensity,
+    setLightingPreset,
+    restoreDefaultSettings
+} from "../babylon/light";
 import { counter, counterInstance, spectrums } from "../main";
 import {
     addFrequency,
@@ -50,7 +50,7 @@ for(const id of ["default","front","side","top","free"]){
     if (!btn) {
         throw new Error(`Camera button ${id} not found`);
     }
-    btn.addEventListener("click", () => switchCamera(id));
+    btn.addEventListener("click", () => switchLight(id));
 }
 
 // ライトボタンのイベントリスナーを追加
@@ -116,13 +116,13 @@ function validateCameraKey(key: string): boolean {
 addPosButton.addEventListener('click', () => {
     const key = addPosKeyInput.value.trim();
     if (!validateCameraKey(key)) return;
-    
+
     const x = parseFloat(addPosXInput.value);
     const y = parseFloat(addPosYInput.value);
     const z = parseFloat(addPosZInput.value);
-    
+
     const result = addCameraPosition(key, x, y, z);
-    
+
     if (result) {
         // 成功時はフォームをリセット
         addPosXInput.value = '0';
@@ -307,7 +307,7 @@ if (lightIntensityKeySelect && lightIntensitySlider && lightIntensityValue && li
 
     // 適用ボタンのイベントハンドラ
     lightIntensityApply.addEventListener('click', applyLightIntensity);
-      // ライトキー選択変更時：現在のライトの明るさをスライダーに反映
+    // ライトキー選択変更時：現在のライトの明るさをスライダーに反映
     lightIntensityKeySelect.addEventListener('change', () => {
         // 選択したライトの現在の明るさを取得してスライダーに反映
         applyLightIntensity();
@@ -394,7 +394,6 @@ if (resetRotButton) {
         }
     });
 }
-
 
 // Counter slider and input field setup
 const counterSlider = document.getElementById("counter-slider") as HTMLInputElement;
