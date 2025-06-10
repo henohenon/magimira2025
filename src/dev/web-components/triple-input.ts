@@ -107,6 +107,18 @@
       this.input3.valueAsNumber = newValue;
     }
   }
+
+  public subscribe(cb: (value1: number, value2: number, value3: number) => void) {
+    this.input1?.addEventListener('change', () => {
+      cb(this.value1, this.value2, this.value3);
+    })
+    this.input2?.addEventListener('change', () => {
+      cb(this.value1, this.value2, this.value3);
+    })
+    this.input3?.addEventListener('change', () => {
+      cb(this.value1, this.value2, this.value3);
+    });
+  }
 }
 
 // Register the custom element

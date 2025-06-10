@@ -64,6 +64,12 @@
     this.checkbox.checked = value;
     this.updateChecked();
   }
+
+  public subscribe(cb: (checked: boolean) => void) {
+    this.checkbox?.addEventListener('change', () => {
+      cb(this.checked);
+    });
+  }
 }
 
 // Register the custom element

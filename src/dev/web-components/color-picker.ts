@@ -213,8 +213,8 @@
   }
   
   // Getters and setters
-  get value(): string {
-    return this.colorInput?.value || '#ff0000';
+  get value(): string | undefined {
+    return this.colorInput?.value || undefined;
   }
   
   set value(newValue: string) {
@@ -225,7 +225,7 @@
   }
   
   get hue(): number {
-    return this.hueInput ? parseFloat(this.hueInput.value) : 0;
+    return this.hueInput ? parseFloat(this.hueInput.value) : NaN;
   }
   
   set hue(newValue: number) {
@@ -236,7 +236,7 @@
   }
   
   get saturation(): number {
-    return this.saturationInput ? parseFloat(this.saturationInput.value) : 0;
+    return this.saturationInput ? parseFloat(this.saturationInput.value) : NaN;
   }
   
   set saturation(newValue: number) {
@@ -247,7 +247,7 @@
   }
   
   get lightness(): number {
-    return this.lightnessInput ? parseFloat(this.lightnessInput.value) : 0;
+    return this.lightnessInput ? parseFloat(this.lightnessInput.value) : NaN;
   }
   
   set lightness(newValue: number) {
@@ -255,6 +255,17 @@
       this.lightnessInput.value = newValue.toString();
       this.updateFromHSL();
     }
+  }
+
+  public subscribe(cb: (color: string | undefined, hsl: { h: number, s: number, l: number }) => void) {
+    this.addEventListener('change', () => {
+      if (!this.colorInput || !this.hueInput || !this.saturationInput || !this.lightnessInput) return;
+      cb(this.value, {
+        h: this.hue,
+        s: this.saturation,
+        l: this.lightness
+      });
+    });
   }
 }
 

@@ -1,4 +1,5 @@
 ﻿class Accordion extends HTMLElement {
+  details: HTMLDetailsElement | null = null;
   connectedCallback() {
     const summary = this.getAttribute('summary') ?? "summary_undefined";
     const defaultOpen = this.hasAttribute('open');
@@ -17,6 +18,13 @@
     // .content に元の子要素を戻す
     const content = this.querySelector('.content');
     children.forEach(child => content?.appendChild(child));
+
+    // 初期化
+    this.details = this.querySelector('details');
+  }
+
+  public close(){
+    this.details?.removeAttribute('open');
   }
 }
 

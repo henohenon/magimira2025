@@ -48,6 +48,12 @@
     if (!this.select) return;
     this.select.value = newValue;
   }
+
+  public subscribe(cb: (value: string | undefined) => void) {
+    this.select?.addEventListener('change', () => {
+      cb(this.value);
+    });
+  }
 }
 
 // Register the custom element

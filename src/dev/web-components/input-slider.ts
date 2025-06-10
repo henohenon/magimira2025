@@ -72,6 +72,11 @@
       this.inputField.valueAsNumber = newValue;
     }
   }
+  public subscribe(cb: (value: number) => void) {
+    this.inputField?.addEventListener('change', () => {
+      cb(this.value);
+    });
+  }
 }
 
 // Register the custom element

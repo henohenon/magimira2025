@@ -72,6 +72,15 @@
       this.inputField2.valueAsNumber = newValue;
     }
   }
+
+  public subscribe(cb: (value1: number, value2: number) => void) {
+    this.inputField1?.addEventListener('change', () => {
+      cb(this.value1, this.value2);
+    });
+    this.inputField2?.addEventListener('change', () => {
+      cb(this.value1, this.value2);
+    });
+  }
 }
 
 // Register the custom element
