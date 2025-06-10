@@ -1,6 +1,6 @@
-import "./animation-controls";
-import "./camera-controls";
-import "./light-controls";
-import "./counter-controls";
-import "./spectrum-controls";
-import "./ripple-controls";
+import "./controls/animation.ts";
+import "./controls/camera.ts";
+import "./controls/light.ts";
+import "./controls/counter.ts";
+import "./controls/spectrum.ts";
+import "./controls/ripple.ts";

@@ -1,4 +1,4 @@
-﻿import {createCircleRipple, createSquareRipple} from "../effects/ripple";
+﻿import {createCircleRipple, createSquareRipple} from "../../effects/ripple";
 
 // Circle Ripple Controls
 const addCircleRippleButton = document.getElementById("add-circle-ripple") as HTMLButtonElement;

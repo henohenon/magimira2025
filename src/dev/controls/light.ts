@@ -3,7 +3,7 @@
     setLightIntensity,
     setLightingPreset,
     restoreDefaultSettings
-} from "../babylon/light";
+} from "../../babylon/light.ts";
 
 // Light type buttons
 for(const id of ["default","spot","point","hemispheric"]){
