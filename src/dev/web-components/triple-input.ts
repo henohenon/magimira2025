@@ -6,9 +6,9 @@
   connectedCallback() {
     // Store all attributes as variables first
     const label = this.getAttribute('label') ?? "label_undefined";
-    const value1 = this.getAttribute('value1') ?? "";
-    const value2 = this.getAttribute('value2') ?? "";
-    const value3 = this.getAttribute('value3') ?? "";
+    const value1 = this.getAttribute('value1') ?? "0";
+    const value2 = this.getAttribute('value2') ?? "0";
+    const value3 = this.getAttribute('value3') ?? "0";
     // Use shared properties like double-input
     const min = this.getAttribute('min');
     const max = this.getAttribute('max');
@@ -25,7 +25,7 @@
         <label class="block text-gray-400 text-xs mb-1">${label}</label>
         <div class="flex space-x-2">
           <div class="flex-1">
-            ${label1 ? `<label class="block text-gray-400 text-xs mb-1">${label1}</label>` : ''}
+            ${label1 ? `<label class="block text-gray-400 text-xs">${label1}</label>` : ''}
             <input 
               type="number" 
               class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm 
@@ -39,7 +39,7 @@
             >
           </div>
           <div class="flex-1">
-            ${label2 ? `<label class="block text-gray-400 text-xs mb-1">${label2}</label>` : ''}
+            ${label2 ? `<label class="block text-gray-400 text-xs">${label2}</label>` : ''}
             <input 
               type="number" 
               class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm 
@@ -53,7 +53,7 @@
             >
           </div>
           <div class="flex-1">
-            ${label3 ? `<label class="block text-gray-400 text-xs mb-1">${label3}</label>` : ''}
+            ${label3 ? `<label class="block text-gray-400 text-xs">${label3}</label>` : ''}
             <input 
               type="number" 
               class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm 

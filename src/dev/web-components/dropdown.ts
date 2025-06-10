@@ -7,11 +7,11 @@
     const name = this.getAttribute('name') ?? "";
     
     let options: string[] = [];
-    const optionsAttr = this.getAttribute('data-options');
+    const optionsStr = this.getAttribute('data-options');
     
-    if (optionsAttr) {
+    if (optionsStr) {
       try {
-        options = JSON.parse(optionsAttr);
+        options = optionsStr.split(",").map(s => s.trim());
       } catch (e) {
         console.error('Invalid options format for dropdown', e);
       }

@@ -12,595 +12,153 @@
 <body class="m-0 w-screen h-screen overflow-hidden flex">
     <aside class="w-64 h-screen bg-gray-800 text-white overflow-y-auto p-4">
         <div class="space-y-2">
-            <dev-accordion summary="ha" open>
-                <number-input label="fa"></number-input>
-                <input-slider></input-slider>
-                <dev-accordion summary="ha" open>
-                    <number-input label="fa"></number-input>
-                    <input-slider></input-slider>
+            <button>close all</button>
+            <dev-accordion summary="text-alive" open>
+                <button>start</button>
+                <button>pause/unpause</button>
+                <input-slider label="volume" min="0" max="100" step="1" value="100"></input-slider>
+                <input-slider label="time" min="0" max="100" step="1" value="100"></input-slider>
+            </dev-accordion>
+            <dev-accordion summary="animation">
+                <div class="pl-6 py-1 space-y-1" id="animationList"></div>
+            </dev-accordion>
+            <dev-accordion summary="camera">
+                <drop-down label="select active camera" data-options="default, front, side, top, free" value="default"></drop-down>
+                <triple-input label="addPosition"></triple-input>
+                <button id="addPositionButton">AddPosition</button>
+                <triple-input label="setPosition"></triple-input>
+                <button id="setPositionButton">SetPosition</button>
+                <triple-input label="addRotation"></triple-input>
+                <button id="addRotationButton">AddRotation</button>
+                <triple-input label="setRotation"></triple-input>
+                <button id="setRotationButton">SetRotation</button>
+                <div id="camera-position-info" class="mb-2 p-2 bg-gray-900 rounded">
+                    <p class="text-xs text-gray-400 mb-1">位置情報:</p>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-300">X: </span>
+                        <span id="camera-pos-x-info" class="text-xs text-white">-</span>
+                    </div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-300">Y: </span>
+                        <span id="camera-pos-y-info" class="text-xs text-white">-</span>
+                    </div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-300">Z: </span>
+                        <span id="camera-pos-z-info" class="text-xs text-white">-</span>
+                    </div>
+                </div>
+                <div id="camera-rotation-info" class="mb-2 p-2 bg-gray-900 rounded">
+                    <p class="text-xs text-gray-400 mb-1">回転情報:</p>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-300">Alpha: </span>
+                        <span id="camera-rot-alpha-info" class="text-xs text-white">-</span>
+                    </div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-300">Beta: </span>
+                        <span id="camera-rot-beta-info" class="text-xs text-white">-</span>
+                    </div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-300">Radius: </span>
+                        <span id="camera-rot-radius-info" class="text-xs text-white">-</span>
+                    </div>
+                </div>
+            </dev-accordion>
+            <dev-accordion summary="light">
+                <dev-accordion summary="default light">
+                    <toggle-switch label="light enable"></toggle-switch>
+                    <color-picker label="light color"></color-picker>
+                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <triple-input label="add light position"></triple-input>
+                    <button id="addDefaultLightPositionButton">AddLightPosition</button>
+                    <triple-input label="set light position"></triple-input>
+                    <button id="setDefaultLightPositionButton">SetLightPosition</button>
                 </dev-accordion>
-                <toggle-switch></toggle-switch>
-                <double-input></double-input>
-                <triple-input></triple-input>
-                <drop-down data-options="[0, 1, 2]"></drop-down>
+                <dev-accordion summary="spot light">
+                    <toggle-switch label="light enable"></toggle-switch>
+                    <color-picker label="light color"></color-picker>
+                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <triple-input label="add light position"></triple-input>
+                    <button id="addSpotLightPositionButton">AddLightPosition</button>
+                    <triple-input label="set light position"></triple-input>
+                    <button id="setSpotLightPositionButton">SetLightPosition</button>
+                </dev-accordion>
+                <dev-accordion summary="point light">
+                    <toggle-switch label="light enable"></toggle-switch>
+                    <color-picker label="light color"></color-picker>
+                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <triple-input label="add light position"></triple-input>
+                    <button id="addPointLightPositionButton">AddLightPosition</button>
+                </dev-accordion>
+                <dev-accordion summary="hemispheric light">
+                    <toggle-switch label="light enable"></toggle-switch>
+                    <color-picker label="light color"></color-picker>
+                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                </dev-accordion>
+                <dev-accordion summary="light preset">
+                    <button id="preset-default" class="">
+                        🔄 デフォルトに戻す
+                    </button>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="preset-day" class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white py-2 px-3 rounded shadow-md transition-all">☀️ 昼間<br><span class="text-xs opacity-80">明るく自然な光</span></button>
+                        <button id="preset-night" class="bg-gradient-to-r from-blue-900 to-indigo-900 hover:from-blue-800 hover:to-indigo-800 text-white py-2 px-3 rounded shadow-md transition-all">🌙 夜間<br><span class="text-xs opacity-80">神秘的な月明かり</span></button>
+                        <button id="preset-sunset" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-2 px-3 rounded shadow-md transition-all">🌅 夕焼け<br><span class="text-xs opacity-80">ドラマチックな夕日</span></button>
+                        <button id="preset-dawn" class="bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white py-2 px-3 rounded shadow-md transition-all">🌄 朝焼け<br><span class="text-xs opacity-80">希望の朝光</span></button>
+                    </div>
+                </dev-accordion>
             </dev-accordion>
-
-            <dev-accordion summary="Web Components Demo" open>
-                <toggle-switch label="Toggle Switch" checked></toggle-switch>
-                <drop-down 
-                    label="Dropdown Menu" 
-                    placeholder="Select an option"
-                    data-options='[
-                        {"value": "option1", "label": "Option 1"},
-                        {"value": "option2", "label": "Option 2"},
-                        {"value": "option3", "label": "Option 3"}
-                    ]'
-                ></drop-down>
-                <double-input 
-                    label="Double Input" 
-                    value1="10" 
-                    value2="20"
-                    label1="Width" 
-                    label2="Height"
-                ></double-input>
-                <triple-input 
-                    label="Triple Input (XYZ)" 
-                    value1="1" 
-                    value2="2" 
-                    value3="3"
-                    label1="X" 
-                    label2="Y" 
-                    label3="Z"
-                ></triple-input>
-                <color-picker 
-                    label="Color Picker" 
-                    value="#3366ff"
-                ></color-picker>
+            <dev-accordion summary="spectrum">
+                <dev-accordion summary="circle spectrum">
+                    <toggle-switch label="enable"></toggle-switch>
+                    <color-picker label="color"></color-picker>
+                    <input-slider label="color delta" min="0" max="255" step="1" value="0"></input-slider>
+                    <input-slider label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                    <input-slider label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                    <number-input label="min radius" min="0" step="0.01" value="0.5"></number-input>
+                    <number-input label="max-radius" step="1" value="200"></number-input>
+                </dev-accordion>
+                <dev-accordion summary="vertical spectrum">
+                    <toggle-switch label="enable"></toggle-switch>
+                    <color-picker label="color"></color-picker>
+                    <input-slider label="color delta" min="0" max="255" step="1" value="0"></input-slider>
+                    <input-slider label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                    <input-slider label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                    <number-input label="height" min="0" step="1" value="300"></number-input>
+                </dev-accordion>
+                <dev-accordion summary="horizontal spectrum">
+                    <toggle-switch label="enable"></toggle-switch>
+                    <color-picker label="color"></color-picker>
+                    <input-slider label="color delta" min="0" max="255" step="1" value="0"></input-slider>
+                    <input-slider label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                    <input-slider label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                    <number-input label="width" min="0" step="1" value="300"></number-input>
+                </dev-accordion>
+                <button>周波数を追加</button>
             </dev-accordion>
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">アニメーション</summary>
-                <div class="pl-6 py-1 space-y-1" id="animationList">
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">カメラ</summary>
-                  <div class="pl-6 py-1 space-y-1" id="cameraList">
-                    <button id="camera-default">デフォルト</button>
-                    <button id="camera-front">正面</button>
-                    <button id="camera-side">横</button>
-                    <button id="camera-top">上部</button>
-                    <button id="camera-free">自由視点</button>
-                </div>
-            </details>
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">ライト</summary>
-                <div class="pl-6 py-1 space-y-1" id="lightList">
-                    <button id="light-default">デフォルト</button>
-                    <button id="light-spot">スポットライト</button>
-                    <button id="light-point">ポイントライト</button>
-                    <button id="light-hemispheric">環境光</button>
-                </div>
-            </details>
-              <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">LightsetEnable</summary>
-                <div class="pl-6 py-1 space-y-1">
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">ライトキー</label>
-                        <select id="light-enable-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm">
-                            <option value="default">デフォルト</option>
-                            <option value="spot">スポットライト</option>
-                            <option value="point">ポイントライト</option>
-                            <option value="hemispheric">環境光</option>
-                        </select>
-                    </div>
-                    <div class="flex justify-between items-center mb-2 bg-gray-600 p-2 rounded">
-                        <span class="text-sm">ライト オン/オフ</span>
-                        <label class="switch">
-                            <input type="checkbox" id="light-toggle" checked>
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">LightsetColor</summary>
-                <div class="pl-6 py-1 space-y-1">
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">ライトキー</label>
-                        <select id="light-color-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm">
-                            <option value="default">デフォルト</option>
-                            <option value="spot">スポットライト</option>
-                            <option value="point">ポイントライト</option>
-                            <option value="hemispheric">環境光</option>
-                        </select>
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">色を選択</label>
-                        <div class="flex space-x-2">
-                            <input type="color" id="light-color-picker" class="w-12 h-8 border-none cursor-pointer" value="#FFFFFF">
-                            <button id="light-color-apply" class="flex-grow bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded">適用</button>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-4 gap-1 mt-2">
-                        <button class="color-preset w-full h-6 rounded" data-color="#FFFFFF" style="background-color: #FFFFFF;"></button>
-                        <button class="color-preset w-full h-6 rounded" data-color="#FF0000" style="background-color: #FF0000;"></button>
-                        <button class="color-preset w-full h-6 rounded" data-color="#00FF00" style="background-color: #00FF00;"></button>
-                        <button class="color-preset w-full h-6 rounded" data-color="#0000FF" style="background-color: #0000FF;"></button>
-                        <button class="color-preset w-full h-6 rounded" data-color="#FFFF00" style="background-color: #FFFF00;"></button>
-                        <button class="color-preset w-full h-6 rounded" data-color="#FF00FF" style="background-color: #FF00FF;"></button>
-                        <button class="color-preset w-full h-6 rounded" data-color="#00FFFF" style="background-color: #00FFFF;"></button>                        <button class="color-preset w-full h-6 rounded" data-color="#FFA500" style="background-color: #FFA500;"></button>
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">LightsetIntensity</summary>
-                <div class="pl-6 py-1 space-y-1">
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">ライトキー</label>
-                        <select id="light-intensity-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm">
-                            <option value="default">デフォルト</option>
-                            <option value="spot">スポットライト</option>
-                            <option value="point">ポイントライト</option>
-                            <option value="hemispheric">環境光</option>
-                        </select>
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">明るさ</label>
-                        <div class="flex items-center space-x-2">
-                            <input type="range" id="light-intensity-slider" class="flex-grow" min="0" max="2" step="0.1" value="0.7">
-                            <span id="light-intensity-value" class="text-white text-sm min-w-[3rem]">0.7</span>
-                        </div>
-                    </div>
-                    <button id="light-intensity-apply" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">適用</button>
-                </div>
-            </details>
-              <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">ライティングプリセット</summary>
-                <div class="pl-6 py-1 space-y-2">
-                    <p class="text-gray-400 text-xs mb-2">雰囲気のあるライティング設定 - 4つの基本プリセット</p>
-                    <!-- デフォルトに戻すボタン -->
-                    <button id="preset-default" class="w-full mb-3 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white py-2 px-3 rounded shadow-md transition-all">
-                        🔄 デフォルトに戻す<br><span class="text-xs opacity-80">初期設定に復元</span>
-                    </button>                    <div class="grid grid-cols-2 gap-2">
-                        <button id="preset-day" class="lighting-preset-button bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white py-2 px-3 rounded shadow-md transition-all">☀️ 昼間<br><span class="text-xs opacity-80">明るく自然な光</span></button>
-                        <button id="preset-night" class="lighting-preset-button bg-gradient-to-r from-blue-900 to-indigo-900 hover:from-blue-800 hover:to-indigo-800 text-white py-2 px-3 rounded shadow-md transition-all">🌙 夜間<br><span class="text-xs opacity-80">神秘的な月明かり</span></button>
-                        <button id="preset-sunset" class="lighting-preset-button bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-2 px-3 rounded shadow-md transition-all">🌅 夕焼け<br><span class="text-xs opacity-80">ドラマチックな夕日</span></button>
-                        <button id="preset-dawn" class="lighting-preset-button bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white py-2 px-3 rounded shadow-md transition-all">🌄 朝焼け<br><span class="text-xs opacity-80">希望の朝光</span></button>
-                    </div>
-                </div>
-            </details><details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">Addposition</summary>
-                <div class="pl-6 py-1 space-y-1">
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Key</label>
-                        <input type="text" id="add-pos-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" placeholder="キー名">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">X</label>
-                        <input type="number" id="add-pos-x" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Y</label>
-                        <input type="number" id="add-pos-y" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Z</label>
-                        <input type="number" id="add-pos-z" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
-                    </div>
-                    <div class="mb-2">
-                        <button id="add-pos-button" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded">Addposition</button>
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">Setposition</summary>
-                <div class="pl-6 py-1 space-y-1">
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Key</label>
-                        <input type="text" id="set-pos-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" placeholder="キー名">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">X</label>
-                        <input type="number" id="set-pos-x" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Y</label>
-                        <input type="number" id="set-pos-y" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Z</label>
-                        <input type="number" id="set-pos-z" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
-                    </div>                    <div class="mb-2">
-                        <button id="set-pos-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Setposition</button>
-                    </div>
-                    <div class="mb-2">
-                        <button id="reset-pos-button" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 rounded">🔄 初期位置に戻す</button>
-                    </div>
-                </div>
-            </details>            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">Addrotation</summary>
-                <div class="pl-6 py-1 space-y-1">
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Key</label>
-                        <input type="text" id="add-rot-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" placeholder="キー名">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">X (Alpha)</label>
-                        <input type="number" id="add-rot-x" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.1">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Y (Beta)</label>
-                        <input type="number" id="add-rot-y" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.1">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Z (Radius)</label>
-                        <input type="number" id="add-rot-z" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
-                    </div>
-                    <div class="mb-2">
-                        <button id="add-rot-button" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded">Addrotation</button>
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">Setrotation</summary>
-                <div class="pl-6 py-1 space-y-1">
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Key</label>
-                        <input type="text" id="set-rot-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" placeholder="キー名">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">X (Alpha)</label>
-                        <input type="number" id="set-rot-x" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.1">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Y (Beta)</label>
-                        <input type="number" id="set-rot-y" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.1">
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">Z (Radius)</label>
-                        <input type="number" id="set-rot-z" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm" value="0" step="0.5">
-                    </div>                    <div class="mb-2">
-                        <button id="set-rot-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Setrotation</button>
-                    </div>
-                    <div class="mb-2">
-                        <button id="reset-rot-button" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 rounded">🔄 初期角度に戻す</button>
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">カメラ座標確認</summary>
-                <div class="pl-6 py-1 space-y-1">
-                    <div class="mb-2">
-                        <label class="block text-gray-400 text-xs mb-1">カメラキー</label>
-                        <select id="camera-info-key" class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm">
-                            <option value="default">デフォルト</option>
-                            <option value="front">正面</option>
-                            <option value="side">横</option>
-                            <option value="top">上部</option>
-                            <option value="free">自由視点</option>
-                        </select>
-                    </div>
-                    <div class="mb-2">
-                        <button id="get-camera-info" class="w-full bg-gray-600 hover:bg-gray-500 text-white py-2 rounded">座標を確認</button>
-                    </div>
-                    <div id="camera-position-info" class="mb-2 p-2 bg-gray-900 rounded">
-                        <p class="text-xs text-gray-400 mb-1">位置情報:</p>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-xs text-gray-300">X: </span>
-                            <span id="camera-pos-x-info" class="text-xs text-white">-</span>
-                        </div>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-xs text-gray-300">Y: </span>
-                            <span id="camera-pos-y-info" class="text-xs text-white">-</span>
-                        </div>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-xs text-gray-300">Z: </span>
-                            <span id="camera-pos-z-info" class="text-xs text-white">-</span>
-                        </div>
-                    </div>
-                    <div id="camera-rotation-info" class="mb-2 p-2 bg-gray-900 rounded">
-                        <p class="text-xs text-gray-400 mb-1">回転情報:</p>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-xs text-gray-300">Alpha: </span>
-                            <span id="camera-rot-alpha-info" class="text-xs text-white">-</span>
-                        </div>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-xs text-gray-300">Beta: </span>
-                            <span id="camera-rot-beta-info" class="text-xs text-white">-</span>
-                        </div>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-xs text-gray-300">Radius: </span>
-                            <span id="camera-rot-radius-info" class="text-xs text-white">-</span>
-                        </div>
-                    </div>
-                    <div class="mb-2">
-                        <label class="text-xs text-gray-400">アクティブカメラ: </label>
-                        <span id="active-camera-info" class="text-xs text-white">-</span>
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">カウンター</summary>
-                <div class="pl-6 py-1 space-y-3">
-                    <div>
-                        <label for="counter-slider" class="block text-sm font-medium text-gray-300">カウンター値</label>
-                        <input type="range" id="counter-slider" min="0" max="100" value="0" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>0</span>
-                            <span>50</span>
-                            <span>100</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="counter-input" class="block text-sm font-medium text-gray-300">カウンター値を入力</label>
-                        <input type="number" id="counter-input" min="0" max="100" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">サークルスペクトラム</summary>
-                <div class="pl-6 py-1 space-y-3">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="circle-spectrum-enable" checked class="mr-2 h-4 w-4">
-                        <label for="circle-spectrum-enable" class="text-sm font-medium text-gray-300">有効</label>
-                    </div>
-                    <div>
-                        <label for="circle-spectrum-lightness" class="block text-sm font-medium text-gray-300">明るさ</label>
-                        <input type="range" id="circle-spectrum-lightness" min="50" max="100" value="100" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>50</span>
-                            <span>75</span>
-                            <span>100</span>
-                        </div>
-                        <input type="number" step="0.01" id="circle-spectrum-lightness-input" min="50" max="100" value="100" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-spectrum-opacity" class="block text-sm font-medium text-gray-300">不透明度</label>
-                        <input type="range" id="circle-spectrum-opacity" min="0" max="100" value="100" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>0</span>
-                            <span>50</span>
-                            <span>100</span>
-                        </div>
-                        <input type="number" step="0.01" id="circle-spectrum-opacity-input" min="0" max="100" value="100" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-spectrum-hue-offset" class="block text-sm font-medium text-gray-300">色相オフセット</label>
-                        <input type="range" id="circle-spectrum-hue-offset" min="0" max="360" value="0" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>0</span>
-                            <span>180</span>
-                            <span>360</span>
-                        </div>
-                        <input type="number" step="0.01" id="circle-spectrum-hue-offset-input" min="0" max="360" value="0" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-spectrum-hue-delta" class="block text-sm font-medium text-gray-300">色相幅</label>
-                        <input type="number" step="0.1" id="circle-spectrum-hue-delta" value = "240" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-spectrum-line-count" class="block text-sm font-medium text-gray-300">ライン数</label>
-                        <input type="number" id="circle-spectrum-line-count" min="3" max="39" value="39" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-spectrum-min-radius" class="block text-sm font-medium text-gray-300">最小半径</label>
-                        <input type="number" step="0.01" id="circle-spectrum-min-radius" min="0" max="5" value="0.5" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-spectrum-max-radius" class="block text-sm font-medium text-gray-300">最大半径</label>
-                        <input type="number" step="0.1" id="circle-spectrum-max-radius" min="0" value="200" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">水平スペクトラム</summary>
-                <div class="pl-6 py-1 space-y-3">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="horizontal-spectrum-enable" checked class="mr-2 h-4 w-4">
-                        <label for="horizontal-spectrum-enable" class="text-sm font-medium text-gray-300">有効</label>
-                    </div>
-                    <div>
-                        <label for="horizontal-spectrum-lightness" class="block text-sm font-medium text-gray-300">明るさ</label>
-                        <input type="range" id="horizontal-spectrum-lightness" min="50" max="100" value="100" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>50</span>
-                            <span>75</span>
-                            <span>100</span>
-                        </div>
-                        <input type="number" step="0.01" id="horizontal-spectrum-lightness-input" min="50" max="100" value="100" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="horizontal-spectrum-opacity" class="block text-sm font-medium text-gray-300">不透明度</label>
-                        <input type="range" id="horizontal-spectrum-opacity" min="0" max="100" value="100" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>0</span>
-                            <span>50</span>
-                            <span>100</span>
-                        </div>
-                        <input type="number" step="0.01" id="horizontal-spectrum-opacity-input" min="0" max="100" value="100" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="horizontal-spectrum-hue-offset" class="block text-sm font-medium text-gray-300">色相オフセット</label>
-                        <input type="range" id="horizontal-spectrum-hue-offset" min="0" max="360" value="0" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>0</span>
-                            <span>180</span>
-                            <span>360</span>
-                        </div>
-                        <input type="number" step="0.01" id="horizontal-spectrum-hue-offset-input" min="0" max="360" value="0" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="horizontal-spectrum-hue-delta" class="block text-sm font-medium text-gray-300">色相幅</label>
-                        <input type="number" step="0.1" id="horizontal-spectrum-hue-delta" value = "240" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="horizontal-spectrum-line-count" class="block text-sm font-medium text-gray-300">ライン数</label>
-                        <input type="number" id="horizontal-spectrum-line-count" min="3" max="39" value="39" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="horizontal-spectrum-height" class="block text-sm font-medium text-gray-300">高さ</label>
-                        <input type="number" step="1" id="horizontal-spectrum-height" min="10" max="500" value="300" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">垂直スペクトラム</summary>
-                <div class="pl-6 py-1 space-y-3">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="vertical-spectrum-enable" checked class="mr-2 h-4 w-4">
-                        <label for="vertical-spectrum-enable" class="text-sm font-medium text-gray-300">有効</label>
-                    </div>
-                    <div>
-                        <label for="vertical-spectrum-lightness" class="block text-sm font-medium text-gray-300">明るさ</label>
-                        <input type="range" id="vertical-spectrum-lightness" min="50" max="100" value="100" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>50</span>
-                            <span>75</span>
-                            <span>100</span>
-                        </div>
-                        <input type="number" step="0.01" id="vertical-spectrum-lightness-input" min="50" max="100" value="100" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="vertical-spectrum-opacity" class="block text-sm font-medium text-gray-300">不透明度</label>
-                        <input type="range" id="vertical-spectrum-opacity" min="0" max="100" value="100" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>0</span>
-                            <span>50</span>
-                            <span>100</span>
-                        </div>
-                        <input type="number" step="0.01" id="vertical-spectrum-opacity-input" min="0" max="100" value="100" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="vertical-spectrum-hue-offset" class="block text-sm font-medium text-gray-300">色相オフセット</label>
-                        <input type="range" id="vertical-spectrum-hue-offset" min="0" max="360" value="0" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>0</span>
-                            <span>180</span>
-                            <span>360</span>
-                        </div>
-                        <input type="number" step="0.01" id="vertical-spectrum-hue-offset-input" min="0" max="360" value="0" class="w-full mt-2 px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="vertical-spectrum-hue-delta" class="block text-sm font-medium text-gray-300">色相幅</label>
-                        <input type="number" step="0.1" id="vertical-spectrum-hue-delta" value = "240" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="vertical-spectrum-line-count" class="block text-sm font-medium text-gray-300">ライン数</label>
-                        <input type="number" id="vertical-spectrum-line-count" min="3" max="39" value="39" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="vertical-spectrum-width" class="block text-sm font-medium text-gray-300">幅</label>
-                        <input type="number" step="1" id="vertical-spectrum-width" min="10" max="500" value="300" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">周波数コントロール</summary>
-                <div class="pl-6 py-1 space-y-3">
-                    <div>
-                        <button id="spectrum-add-frequency" class="px-3 py-2 bg-blue-500 text-white rounded w-full">周波数を追加</button>
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">円形リップルエフェクト</summary>
-                <div class="pl-6 py-1 space-y-3">
-                    <div>
-                        <button id="add-circle-ripple" class="px-3 py-2 bg-blue-500 text-white rounded w-full">円形リップルを追加</button>
-                    </div>
-                    <div>
-                        <label for="circle-ripple-position-x" class="block text-sm font-medium text-gray-300">X位置</label>
-                        <input type="number" id="circle-ripple-position-x" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-ripple-position-y" class="block text-sm font-medium text-gray-300">Y位置</label>
-                        <input type="number" id="circle-ripple-position-y" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-ripple-lifetime" class="block text-sm font-medium text-gray-300">ライフタイム</label>
-                        <input type="number" step="1" id="circle-ripple-lifetime" value="100" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-ripple-radius-delta" class="block text-sm font-medium text-gray-300">半径の増加量</label>
-                        <input type="number" step="0.1" id="circle-ripple-radius-delta" value="1" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-ripple-default-radius" class="block text-sm font-medium text-gray-300">初期半径</label>
-                        <input type="number" step="1" id="circle-ripple-default-radius" value="10" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-ripple-opacity-delta" class="block text-sm font-medium text-gray-300">不透明度の変化量</label>
-                        <input type="number" step="0.001" id="circle-ripple-opacity-delta" value="-0.01" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-ripple-default-opacity" class="block text-sm font-medium text-gray-300">初期不透明度</label>
-                        <input type="number" step="0.1" id="circle-ripple-default-opacity" value="1" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="circle-ripple-hue" class="block text-sm font-medium text-gray-300">色相</label>
-                        <input type="number" step="1" id="circle-ripple-hue" min="0" max="360" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                </div>
-            </details>
-
-            <details class="bg-gray-700 rounded">
-                <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">四角形リップルエフェクト</summary>
-                <div class="pl-6 py-1 space-y-3">
-                    <div>
-                        <button id="add-square-ripple" class="px-3 py-2 bg-blue-500 text-white rounded w-full">四角形リップルを追加</button>
-                    </div>
-                    <div>
-                        <label for="square-ripple-position-x" class="block text-sm font-medium text-gray-300">X位置</label>
-                        <input type="number" id="square-ripple-position-x" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="square-ripple-position-y" class="block text-sm font-medium text-gray-300">Y位置</label>
-                        <input type="number" id="square-ripple-position-y" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="square-ripple-lifetime" class="block text-sm font-medium text-gray-300">ライフタイム</label>
-                        <input type="number" step="1" id="square-ripple-lifetime" value="100" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="square-ripple-size-delta" class="block text-sm font-medium text-gray-300">サイズの増加量</label>
-                        <input type="number" step="0.1" id="square-ripple-size-delta" value="1" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="square-ripple-default-size" class="block text-sm font-medium text-gray-300">初期サイズ</label>
-                        <input type="number" step="1" id="square-ripple-default-size" value="10" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="square-ripple-opacity-delta" class="block text-sm font-medium text-gray-300">不透明度の変化量</label>
-                        <input type="number" step="0.001" id="square-ripple-opacity-delta" value="-0.01" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="square-ripple-default-opacity" class="block text-sm font-medium text-gray-300">初期不透明度</label>
-                        <input type="number" step="0.1" id="square-ripple-default-opacity" value="1" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="square-ripple-hue" class="block text-sm font-medium text-gray-300">色相</label>
-                        <input type="number" step="1" id="square-ripple-hue" min="0" max="360" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                    <div>
-                        <label for="square-ripple-angle" class="block text-sm font-medium text-gray-300">角度 (度)</label>
-                        <input type="number" step="1" id="square-ripple-angle" value="0" class="w-full px-3 py-2 bg-gray-600 text-white rounded-md">
-                    </div>
-                </div>
-            </details>
+            <dev-accordion summary="ripple effects">
+                <dev-accordion summary="circle ripple">
+                    <double-input label="position"></double-input>
+                    <number-input label="lifetime" value="100"></number-input>
+                    <number-input label="default size" value="0"></number-input>
+                    <number-input label="size delta" value="1"></number-input>
+                    <number-input label="default opacity" value="100"></number-input>
+                    <number-input label="opacity delta" value="-0.01"></number-input>
+                    <color-picker label="color"></color-picker>
+                    <button>generate</button>
+                </dev-accordion>
+                <dev-accordion summary="square ripple">
+                    <double-input label="position"></double-input>
+                    <number-input label="lifetime" value="100"></number-input>
+                    <number-input label="default size" value="0"></number-input>
+                    <number-input label="size delta" value="1"></number-input>
+                    <number-input label="default opacity" value="100"></number-input>
+                    <number-input label="opacity delta" value="-0.01"></number-input>
+                    <color-picker label="color"></color-picker>
+                    <input-slider label="angle" min="0" max="360" value="45"></input-slider>
+                    <button>generate</button>
+                </dev-accordion>
+            </dev-accordion>
         </div>
-    </aside>    
+    </aside>
     <div class="relative flex-1">
         <canvas id="babylon-canvas" class="absolute m-0 inset-0 w-full h-full -z-10"></canvas>
         <canvas id="spectram-canvas" class="absolute m-0 inset-0 w-full h-full -z-9"></canvas>

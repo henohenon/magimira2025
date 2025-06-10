@@ -21,43 +21,43 @@
           class="w-full h-8 bg-gray-600 text-white rounded cursor-pointer"
           value="${value}"
         >
-        <div class="mt-3">
+        <div>
           <div class="flex space-x-2">
             <div class="flex-1">
-              <label class="block text-gray-400 text-xs mb-1">H</label>
+              <label class="block text-gray-400 text-xs">H</label>
               <input 
                 type="number" 
                 class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm 
                        focus:outline-none focus:ring-2 focus:ring-blue-400 
                        appearance-none"
                 min="0"
-                max="360"
+                max="255"
                 step="1"
                 value="${Math.round(h)}"
               >
             </div>
             <div class="flex-1">
-              <label class="block text-gray-400 text-xs mb-1">S</label>
+              <label class="block text-gray-400 text-xs">S</label>
               <input 
                 type="number" 
                 class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm 
                        focus:outline-none focus:ring-2 focus:ring-blue-400 
                        appearance-none"
                 min="0"
-                max="100"
+                max="255"
                 step="1"
                 value="${Math.round(s)}"
               >
             </div>
             <div class="flex-1">
-              <label class="block text-gray-400 text-xs mb-1">L</label>
+              <label class="block text-gray-400 text-xs">L</label>
               <input 
                 type="number" 
                 class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm 
                        focus:outline-none focus:ring-2 focus:ring-blue-400 
                        appearance-none"
                 min="0"
-                max="100"
+                max="255"
                 step="1"
                 value="${Math.round(l)}"
               >
