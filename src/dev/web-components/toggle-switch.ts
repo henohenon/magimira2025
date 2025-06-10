@@ -38,6 +38,8 @@
         bubbles: true
       }));
     });
+
+    this.updateChecked();
   }
 
   updateChecked() {
