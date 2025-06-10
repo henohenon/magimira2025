@@ -14,10 +14,10 @@
         <div class="space-y-2">
             <button id="close-all-button">close all</button>
             <dev-accordion summary="text-alive" open>
-                <button>start</button>
-                <button>pause/unpause</button>
-                <input-slider label="volume" min="0" max="100" step="1" value="100"></input-slider>
-                <input-slider label="time" min="0" max="100" step="1" value="100"></input-slider>
+                <button id="force-start-button">start</button>
+                <button id="pause-unpause-button">pause/unpause</button>
+                <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
+                <input-slider id="time-input-slider" label="time" min="0" max="100" step="1" value="100"></input-slider>
             </dev-accordion>
             <dev-accordion summary="animation">
                 <div class="pl-6 py-1 space-y-1" id="animationList"></div>

@@ -37,17 +37,14 @@
     // Add event listeners to update both the slider and input field
     const slider = this.querySelector('input[type="range"]') as HTMLInputElement;
     this.inputField = this.querySelector('input[type="number"]') as HTMLInputElement;
+    console.log(this.inputField);
 
-    // Update input field and display when slider changes
-    slider?.addEventListener('input', (e) => {
-      if (e.target instanceof HTMLInputElement) {
-        const newValue = e.target.value;
-
-        // Update input field
-        if (this.inputField) {
-          this.inputField.value = newValue;
-        }
-      }
+    slider?.addEventListener('input', (_) => {
+      if (!this.inputField) return;
+      this.inputField.valueAsNumber = slider.valueAsNumber;
+      // inputFieldのイベントを発火
+      const event = new Event('input', { bubbles: true, cancelable: true });
+      this.inputField.dispatchEvent(event);
     });
 
     // Update slider and display when input field changes
@@ -73,7 +70,7 @@
     }
   }
   public subscribe(cb: (value: number) => void) {
-    this.inputField?.addEventListener('change', () => {
+    this.inputField?.addEventListener('input', (_) => {
       cb(this.value);
     });
   }

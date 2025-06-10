@@ -1,9 +1,4 @@
-import "./animation.ts";
-import "./camera.ts";
-import "./light.ts";
-import "./counter.ts";
-import "./spectrum.ts";
-import "./ripple.ts";
+import "./text-alive.ts";
 
 import type {Accordion} from "../web-components/accordion.ts";
 
