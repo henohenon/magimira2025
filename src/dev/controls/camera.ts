@@ -6,7 +6,7 @@
     getCameraPosition,
     getCameraRotation,
     getActiveCamera, switchCamera
-} from "../babylon/camera";
+} from "../../babylon/camera.ts";
 
 // Camera type buttons
 for(const id of ["default","front","side","top","free"]){
@@ -229,7 +229,7 @@ const resetRotButton = document.getElementById('reset-rot-button');
 if (resetPosButton) {
     resetPosButton.addEventListener('click', async () => {
         try {
-            const cameraModule = await import('../babylon/camera.js');
+            const cameraModule = await import('../../babylon/camera.ts');
             const success = cameraModule.resetAllCamerasToInitial();
 
             if (success) {
@@ -250,7 +250,7 @@ if (resetPosButton) {
 if (resetRotButton) {
     resetRotButton.addEventListener('click', async () => {
         try {
-            const cameraModule = await import('../babylon/camera.js');
+            const cameraModule = await import('../../babylon/camera.ts');
             const success = cameraModule.resetAllCamerasToInitial();
 
             if (success) {

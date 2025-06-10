@@ -1,4 +1,4 @@
-﻿import { counter, counterInstance } from "../";
+﻿import { counter, counterInstance } from "../../index.ts";
 
 const counterSlider = document.getElementById("counter-slider") as HTMLInputElement;
 const counterInput = document.getElementById("counter-input") as HTMLInputElement;

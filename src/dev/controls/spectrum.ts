@@ -1,10 +1,10 @@
-﻿import { spectrums } from "../";
+﻿import { spectrums } from "../../index.ts";
 import {
     addFrequency,
     type CircleSpectrum,
     type HorizontalSpectrum,
     type VerticalSpectrum,
-} from "../effects/spectrum";
+} from "../../effects/spectrum";
 
 const circleSpectrum = spectrums["circle"] as CircleSpectrum;
 const horizontalSpectrum = spectrums["horizontal"] as HorizontalSpectrum;
