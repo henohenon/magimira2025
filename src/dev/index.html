@@ -6,11 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>マジミラ2025</title>
     <link rel="stylesheet" href="./style.css" />
+    <script type="module" defer src="./web-components/index.ts"></script>
 </head>
 
 <body class="m-0 w-screen h-screen overflow-hidden flex">
     <aside class="w-64 h-screen bg-gray-800 text-white overflow-y-auto p-4">
         <div class="space-y-2">
+            <dev-accordion summary="ha">
+                <h1>heno</h1>
+            </dev-accordion>
             <details class="bg-gray-700 rounded">
                 <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">アニメーション</summary>
                 <div class="pl-6 py-1 space-y-1" id="animationList">
@@ -579,6 +583,5 @@
         <div id="media"></div>
         <script type="module" src="../index.ts"></script>
     </div>
-    <script type="module" src="./index.ts"></script>
 </body>
 </html>
