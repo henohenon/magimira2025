@@ -12,7 +12,7 @@
 <body class="m-0 w-screen h-screen overflow-hidden flex">
     <aside class="w-64 h-screen bg-gray-800 text-white overflow-y-auto p-4">
         <div class="space-y-2">
-            <button>close all</button>
+            <button id="close-all-button">close all</button>
             <dev-accordion summary="text-alive" open>
                 <button>start</button>
                 <button>pause/unpause</button>
@@ -183,5 +183,6 @@
         <div id="media"></div>
         <script type="module" src="../index.ts"></script>
     </div>
+    <script type="module" src="./controls/index.ts"></script>
 </body>
 </html>
