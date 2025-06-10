@@ -1,4 +1,5 @@
 ﻿class Dropdown extends HTMLElement {
+  select: HTMLSelectElement | null = null;
   connectedCallback() {
     const label = this.getAttribute('label') ?? "label_undefined";
     const placeholder = this.getAttribute('placeholder') ?? "Select an option";
@@ -15,15 +16,14 @@
         console.error('Invalid options format for dropdown', e);
       }
     }
-    
+
     // Reconstruct HTML structure
     this.innerHTML = `
       <div class="mb-2">
         <label class="block text-gray-400 text-xs mb-1">${label}</label>
         <select 
           class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm 
-                 focus:outline-none focus:ring-2 focus:ring-blue-400 
-                 appearance-none"
+                 focus:outline-none focus:ring-2 focus:ring-blue-400 "
           name="${name}"
         >
           <option value="" ${!value ? 'selected' : ''} disabled>${placeholder}</option>
@@ -35,29 +35,18 @@
     `;
 
     // Add event listener for change events
-    const select = this.querySelector('select');
-    select?.addEventListener('change', (e) => {
-      if (e.target instanceof HTMLSelectElement) {
-        // Dispatch custom event
-        this.dispatchEvent(new CustomEvent('change', {
-          detail: { value: e.target.value },
-          bubbles: true
-        }));
-      }
-    });
+    this.select = this.querySelector('select');
   }
 
   // Add getter and setter for value
-  get value() {
-    const select = this.querySelector('select') as HTMLSelectElement;
-    return select?.value || '';
+  get value(): string | undefined {
+    if (!this.select) return undefined;
+    return this.select.value;
   }
 
-  set value(newValue) {
-    const select = this.querySelector('select') as HTMLSelectElement;
-    if (select) {
-      select.value = newValue;
-    }
+  set value(newValue: string) {
+    if (!this.select) return;
+    this.select.value = newValue;
   }
 }
 
