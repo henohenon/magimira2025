@@ -1,11 +1,11 @@
-﻿class Toggle extends HTMLElement {
+﻿class ToggleSwitch extends HTMLElement {
   checkbox: HTMLInputElement | null = null;
   dot: HTMLElement | null = null;
   connectedCallback() {
     const label = this.getAttribute('label') ?? "label_undefined";
     const checked = this.hasAttribute('checked');
     const name = this.getAttribute('name') ?? "";
-    
+
     // Reconstruct HTML structure
     this.innerHTML = `
       <div class="mb-2">
@@ -30,19 +30,26 @@
     this.dot = this.querySelector('.dot') as HTMLElement;
 
     this.checkbox?.addEventListener('change', () => {
-      if (!this.checkbox || !this.dot) return;
-      if (this.checkbox.checked) {
-        this.dot.classList.remove('translate-x-5', 'bg-blue-400');
-      } else {
-        this.dot.classList.add('translate-x-5', 'bg-blue-400');
-      }
+      this.updateChecked();
 
       // Dispatch custom event
       this.dispatchEvent(new CustomEvent('change', {
-        detail: { checked: this.checkbox!.checked },
+        detail: { checked: this.checkbox?.checked },
         bubbles: true
       }));
     });
+  }
+
+  updateChecked() {
+    if (this.checkbox && this.dot) {
+      if (this.checkbox.checked) {
+        this.dot.classList.add('translate-x-5', 'bg-blue-400');
+        this.dot.classList.remove('bg-white');
+      } else {
+        this.dot.classList.remove('translate-x-5', 'bg-blue-400');
+        this.dot.classList.add('bg-white');
+      }
+    }
   }
 
   // Add getter and setter for checked state
@@ -51,19 +58,13 @@
   }
 
   set checked(value) {
-    if (this.checkbox && this.dot) {
-      this.checkbox.checked = value;
-      
-      if (value) {
-        this.dot.classList.add('translate-x-5', 'bg-blue-400');
-      } else {
-        this.dot.classList.remove('translate-x-5', 'bg-blue-400');
-      }
-    }
+    if (!this.checkbox) return;
+    this.checkbox.checked = value;
+    this.updateChecked();
   }
 }
 
 // Register the custom element
-customElements.define('toggle-switch', Toggle);
+customElements.define('toggle-switch', ToggleSwitch);
 
-export { Toggle };
+export { ToggleSwitch };
