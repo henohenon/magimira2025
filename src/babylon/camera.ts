@@ -6,11 +6,6 @@ import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
 import { events } from "./events";
 
-const canvas = document.getElementById("babylon-canvas") as HTMLCanvasElement;
-if (!canvas) {
-    throw new Error("Canvas not found");
-}
-
 // カメラ管理
 const cameras: { [key: string]: ArcRotateCamera } = {};
 let activeCamera: ArcRotateCamera;
@@ -62,28 +57,9 @@ events.on("onSceneDefinition", async ({ scene }) => {
 	);
 	cameras.top = cameraTop;
 
-	// 自由視点カメラ（ユーザーがマウスで自由に動かせる）
-	const cameraFree = new ArcRotateCamera(
-		"camera-free",
-		-Math.PI / 2,
-		Math.PI / 3,
-		6,
-		new Vector3(0, 1, 0),
-		scene,
-	);
-	// 自由視点カメラの操作設定
-	cameraFree.panningSensibility = 50;
-	cameraFree.wheelPrecision = 50;
-	cameraFree.angularSensibilityX = 500;
-	cameraFree.angularSensibilityY = 500;
-    cameraFree.attachControl(canvas, true);
-	cameras.free = cameraFree;
-      activeCamera = cameras.default;
-    _scene.activeCamera = activeCamera;
-
     for(const camera of Object.values(cameras)) {
         camera.detachControl();
-    };
+    }
     
     // 初期状態を保存
     saveInitialCameraStates();
@@ -105,42 +81,6 @@ export function switchCamera(key: string) {
 	// 新しいカメラを設定
 	activeCamera = cameras[key];
 	_scene.activeCamera = activeCamera;
-
-	// 自由視点のみマウスで自由に動かせる
-	if (key === "free") {
-		// 自由視点の場合は操作を有効化
-		canvas.style.cursor = "grab";
-		canvas.style.touchAction = "none"; // タッチ操作の標準動作を無効化
-		activeCamera.inputs.attached.mouse.detachControl(); // 一度リセット
-		activeCamera.attachControl(canvas, true); // 再アタッチ
-
-		// カメラの動作制限を緩和
-		activeCamera.lowerBetaLimit = 0.01;
-		activeCamera.upperBetaLimit = Math.PI - 0.01;
-		activeCamera.lowerRadiusLimit = 1;
-		activeCamera.upperRadiusLimit = 30;
-		activeCamera.panningSensibility = 50;
-		activeCamera.wheelPrecision = 50;
-		activeCamera.angularSensibilityX = 500;
-		activeCamera.angularSensibilityY = 500;
-
-		// イベントリスナーをクリア（重複防止）
-		canvas.onpointerdown = null;
-		canvas.onpointerup = null;
-
-		// カーソル変更用のリスナー
-		canvas.onpointerdown = () => {
-			canvas.style.cursor = "grabbing";
-		};
-		canvas.onpointerup = () => {
-			canvas.style.cursor = "grab";
-		};
-	} else {
-		// 固定視点カメラ
-		canvas.style.cursor = "default";
-		canvas.style.touchAction = "auto";
-		activeCamera.inputs.clear(); // すべての入力を無効化
-	}
 
 	// ボタンのハイライト切替
 	for (const id of ["default", "front", "side", "top", "free"]) {
