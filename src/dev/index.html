@@ -19,6 +19,39 @@
                     <number-input label="fa"></number-input>
                     <input-slider></input-slider>
                 </dev-accordion>
+                <toggle-switch></toggle-switch>
+                <double-input></double-input>
+                <triple-input></triple-input>
+                <drop-down data-options="[0, 1, 2]"></drop-down>
+            </dev-accordion>
+
+            <dev-accordion summary="Web Components Demo" open>
+                <toggle-switch label="Toggle Switch" checked></toggle-switch>
+                <drop-down 
+                    label="Dropdown Menu" 
+                    placeholder="Select an option"
+                    data-options='[
+                        {"value": "option1", "label": "Option 1"},
+                        {"value": "option2", "label": "Option 2"},
+                        {"value": "option3", "label": "Option 3"}
+                    ]'
+                ></drop-down>
+                <double-input 
+                    label="Double Input" 
+                    value1="10" 
+                    value2="20"
+                    label1="Width" 
+                    label2="Height"
+                ></double-input>
+                <triple-input 
+                    label="Triple Input (XYZ)" 
+                    value1="1" 
+                    value2="2" 
+                    value3="3"
+                    label1="X" 
+                    label2="Y" 
+                    label3="Z"
+                ></triple-input>
             </dev-accordion>
             <details class="bg-gray-700 rounded">
                 <summary class="cursor-pointer px-3 py-2 hover:bg-gray-600">アニメーション</summary>

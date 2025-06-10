@@ -1,4 +1,5 @@
 ﻿class NumberInput extends HTMLElement {
+  inputField: HTMLInputElement | null = null;
   connectedCallback() {
     const label = this.getAttribute('label') ?? "label_undefined";
     const placeholder = this.getAttribute('placeholder') ?? "";
@@ -24,6 +25,16 @@
         >
       </div>
     `;
+    this.inputField = this.querySelector('input');
+  }
+
+  get value() {
+    return this.inputField?.valueAsNumber || NaN;
+  }
+  set value(newValue: number) {
+    if (this.inputField) {
+      this.inputField.valueAsNumber = newValue;
+    }
   }
 }
 

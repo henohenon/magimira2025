@@ -1,4 +1,5 @@
-﻿class InputSlider extends HTMLElement {
+﻿class InputAndSlider extends HTMLElement {
+  inputField: HTMLInputElement | null = null;
   connectedCallback() {
     const label = this.getAttribute('label') ?? "label_undefined";
     const value = this.getAttribute('value') ?? "50";
@@ -35,7 +36,7 @@
 
     // Add event listeners to update both the slider and input field
     const slider = this.querySelector('input[type="range"]') as HTMLInputElement;
-    const inputField = this.querySelector('input[type="number"]') as HTMLInputElement;
+    this.inputField = this.querySelector('input[type="number"]') as HTMLInputElement;
 
     // Update input field and display when slider changes
     slider?.addEventListener('input', (e) => {
@@ -43,14 +44,14 @@
         const newValue = e.target.value;
 
         // Update input field
-        if (inputField) {
-          inputField.value = newValue;
+        if (this.inputField) {
+          this.inputField.value = newValue;
         }
       }
     });
 
     // Update slider and display when input field changes
-    inputField?.addEventListener('input', (e) => {
+    this.inputField?.addEventListener('input', (e) => {
       if (e.target instanceof HTMLInputElement) {
         const newValue = e.target.value;
 
@@ -61,9 +62,19 @@
       }
     });
   }
+
+  get value() {
+    return this.inputField?.valueAsNumber || NaN;
+  }
+
+  setValue(newValue: number) {
+    if (this.inputField) {
+      this.inputField.valueAsNumber = newValue;
+    }
+  }
 }
 
 // Register the custom element
-customElements.define('input-slider', InputSlider);
+customElements.define('input-slider', InputAndSlider);
 
-export { InputSlider };
+export { InputAndSlider };
