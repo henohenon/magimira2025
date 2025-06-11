@@ -225,7 +225,7 @@
   }
   
   get hue(): number {
-    return this.hueInput ? parseFloat(this.hueInput.value) : NaN;
+    return Number(this.hueInput?.value);
   }
   
   set hue(newValue: number) {
@@ -236,7 +236,7 @@
   }
   
   get saturation(): number {
-    return this.saturationInput ? parseFloat(this.saturationInput.value) : NaN;
+    return Number(this.saturationInput?.value);
   }
   
   set saturation(newValue: number) {
@@ -247,7 +247,7 @@
   }
   
   get lightness(): number {
-    return this.lightnessInput ? parseFloat(this.lightnessInput.value) : NaN;
+    return Number(this.lightnessInput?.value);
   }
   
   set lightness(newValue: number) {

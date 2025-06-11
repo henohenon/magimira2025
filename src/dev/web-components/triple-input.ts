@@ -80,7 +80,7 @@
 
   // Getters and setters for values
   get value1() {
-    return this.input1?.valueAsNumber || NaN;
+    return Number(this.input1?.value);
   }
 
   set value1(newValue: number) {
@@ -90,7 +90,7 @@
   }
 
   get value2() {
-    return this.input2?.valueAsNumber || NaN;
+    return Number(this.input2?.value);
   }
 
   set value2(newValue: number) {
@@ -100,7 +100,7 @@
   }
 
   get value3() {
-    return this.input3?.valueAsNumber || NaN;
+    return Number(this.input3?.value);
   }
   set value3(newValue: number) {
     if (this.input3) {

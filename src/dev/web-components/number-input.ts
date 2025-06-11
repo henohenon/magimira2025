@@ -29,7 +29,7 @@
   }
 
   get value() {
-    return this.inputField?.valueAsNumber || NaN;
+    return Number(this.inputField?.value);
   }
   set value(newValue: number) {
     if (this.inputField) {

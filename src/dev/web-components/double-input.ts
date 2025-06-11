@@ -57,7 +57,7 @@
 
   // Getters and setters for values
   get value1() {
-    return this.inputField1?.valueAsNumber || NaN;
+    return Number(this.inputField1?.value);
   }
   set value1(newValue) {
     if (this.inputField1) {
@@ -65,7 +65,7 @@
     }
   }
   get value2() {
-    return this.inputField2?.valueAsNumber || NaN;
+    return Number(this.inputField2?.value);
   }
   set value2(newValue) {
     if (this.inputField2) {

@@ -37,7 +37,6 @@
     // Add event listeners to update both the slider and input field
     const slider = this.querySelector('input[type="range"]') as HTMLInputElement;
     this.inputField = this.querySelector('input[type="number"]') as HTMLInputElement;
-    console.log(this.inputField);
 
     slider?.addEventListener('input', (_) => {
       if (!this.inputField) return;
