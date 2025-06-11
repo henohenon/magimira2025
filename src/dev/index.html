@@ -13,7 +13,7 @@
     <aside class="w-64 h-screen bg-gray-800 text-white overflow-y-auto p-4">
         <div class="space-y-2">
             <button id="close-all-button">close all</button>
-            <dev-accordion summary="text-alive" open>
+            <dev-accordion summary="text alive">
                 <button id="force-start-button">start</button>
                 <button id="pause-unpause-button">pause/unpause</button>
                 <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
@@ -22,16 +22,18 @@
             <dev-accordion summary="animation">
                 <div class="pl-6 py-1 space-y-1" id="animationList"></div>
             </dev-accordion>
-            <dev-accordion summary="camera">
-                <drop-down label="select active camera" data-options="default, front, side, top, free" value="default"></drop-down>
-                <triple-input label="addPosition"></triple-input>
-                <button id="addPositionButton">AddPosition</button>
-                <triple-input label="setPosition"></triple-input>
-                <button id="setPositionButton">SetPosition</button>
-                <triple-input label="addRotation"></triple-input>
-                <button id="addRotationButton">AddRotation</button>
-                <triple-input label="setRotation"></triple-input>
-                <button id="setRotationButton">SetRotation</button>
+            <dev-accordion summary="camera" open>
+                <drop-down id="active-camera-dropdown" label="select active camera" data-options="default, front, side, top" value="default"></drop-down>
+                <triple-input id="camera-add-position-input" label="add position"></triple-input>
+                <button id="camera-add-position-button">AddPosition</button>
+                <triple-input id="camera-set-position-input" label="set position"></triple-input>
+                <button id="camera-set-position-button">SetPosition</button>
+                <triple-input id="camera-add-rotation-input" label="add rotation"></triple-input>
+                <button id="camera-add-rotation-button">AddRotation</button>
+                <triple-input id="camera-set-rotation-input" label="set rotation"></triple-input>
+                <button id="camera-set-rotation-button">SetRotation</button>
+                <label class="block text-gray-400 text-xs mb-1">reset camera</label>
+                <button id="camera-reset-button">ResetCamera</button>
                 <div id="camera-position-info" class="mb-2 p-2 bg-gray-900 rounded">
                     <p class="text-xs text-gray-400 mb-1">位置情報:</p>
                     <div class="flex justify-between mb-1">

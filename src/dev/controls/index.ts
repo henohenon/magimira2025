@@ -1,5 +1,6 @@
 import "./text-alive.ts";
-import "./animation.ts"
+import "./animation.ts";
+import "./camera.ts";
 
 import type {Accordion} from "../web-components/accordion.ts";
 

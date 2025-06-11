@@ -3,267 +3,52 @@
     setCameraPosition,
     addCameraRotation,
     setCameraRotation,
-    getCameraPosition,
-    getCameraRotation,
-    getActiveCamera, switchCamera
+    switchCamera,
+    resetCameraToInitial,
+    type CameraType
 } from "../../babylon/camera.ts";
+import type {Dropdown} from "../web-components/dropdown.ts";
+import type {TripleInput} from "../web-components/triple-input.ts";
 
-// Camera type buttons
-for(const id of ["default","front","side","top","free"]){
-    const btn = document.getElementById(`camera-${id}`);
-    if (!btn) {
-        throw new Error(`Camera button ${id} not found`);
-    }
-    btn.addEventListener("click", () => switchCamera(id));
+const activeCameraDropdown = document.getElementById("active-camera-dropdown") as Dropdown;
+const cameraAddPositionInput = document.getElementById("camera-add-position-input") as TripleInput;
+const cameraAddPositionButton = document.getElementById("camera-add-position-button") as HTMLButtonElement;
+const cameraSetPositionInput = document.getElementById("camera-set-position-input") as TripleInput;
+const cameraSetPositionButton = document.getElementById("camera-set-position-button") as HTMLButtonElement;
+const cameraAddRotationInput = document.getElementById("camera-add-rotation-input") as TripleInput;
+const cameraAddRotationButton = document.getElementById("camera-add-rotation-button") as HTMLButtonElement;
+const cameraSetRotationInput = document.getElementById("camera-set-rotation-input") as TripleInput;
+const cameraSetRotationButton = document.getElementById("camera-set-rotation-button") as HTMLButtonElement;
+const cameraResetButton = document.getElementById("camera-reset-button") as HTMLButtonElement;
+
+if (!activeCameraDropdown || !cameraAddPositionInput || !cameraAddPositionButton ||
+    !cameraSetPositionInput || !cameraSetPositionButton || !cameraAddRotationInput ||
+    !cameraAddRotationButton || !cameraSetRotationInput || !cameraSetRotationButton ||
+    !cameraResetButton) {
+    throw new Error("Camera controls not found");
 }
 
-// Addposition/Setposition controls
-const addPosButton = document.getElementById('add-pos-button');
-const setPosButton = document.getElementById('set-pos-button');
-const addPosKeyInput = document.getElementById('add-pos-key') as HTMLInputElement;
-const addPosXInput = document.getElementById('add-pos-x') as HTMLInputElement;
-const addPosYInput = document.getElementById('add-pos-y') as HTMLInputElement;
-const addPosZInput = document.getElementById('add-pos-z') as HTMLInputElement;
-const setPosKeyInput = document.getElementById('set-pos-key') as HTMLInputElement;
-const setPosXInput = document.getElementById('set-pos-x') as HTMLInputElement;
-const setPosYInput = document.getElementById('set-pos-y') as HTMLInputElement;
-const setPosZInput = document.getElementById('set-pos-z') as HTMLInputElement;
-
-// Addrotation/Setrotation controls
-const addRotButton = document.getElementById('add-rot-button');
-const setRotButton = document.getElementById('set-rot-button');
-const addRotKeyInput = document.getElementById('add-rot-key') as HTMLInputElement;
-const addRotXInput = document.getElementById('add-rot-x') as HTMLInputElement;
-const addRotYInput = document.getElementById('add-rot-y') as HTMLInputElement;
-const addRotZInput = document.getElementById('add-rot-z') as HTMLInputElement;
-const setRotKeyInput = document.getElementById('set-rot-key') as HTMLInputElement;
-const setRotXInput = document.getElementById('set-rot-x') as HTMLInputElement;
-const setRotYInput = document.getElementById('set-rot-y') as HTMLInputElement;
-const setRotZInput = document.getElementById('set-rot-z') as HTMLInputElement;
-
-// Check if elements exist
-if (!addPosButton || !addPosKeyInput || !addPosXInput || !addPosYInput || !addPosZInput) {
-    throw new Error('Addposition セクションの要素が見つかりません');
-}
-
-if (!setPosButton || !setPosKeyInput || !setPosXInput || !setPosYInput || !setPosZInput) {
-    throw new Error('Setposition セクションの要素が見つかりません');
-}
-
-if (!addRotButton || !addRotKeyInput || !addRotXInput || !addRotYInput || !addRotZInput) {
-    throw new Error('Addrotation セクションの要素が見つかりません');
-}
-
-if (!setRotButton || !setRotKeyInput || !setRotXInput || !setRotYInput || !setRotZInput) {
-    throw new Error('Setrotation セクションの要素が見つかりません');
-}
-
-// Camera key validation
-function validateCameraKey(key: string): boolean {
-    if (!key) {
-        alert('キー名を入力してください');
-        return false;
-    }
-    return true;
-}
-
-// Addposition button event listener
-addPosButton.addEventListener('click', () => {
-    const key = addPosKeyInput.value.trim();
-    if (!validateCameraKey(key)) return;
-
-    const x = parseFloat(addPosXInput.value);
-    const y = parseFloat(addPosYInput.value);
-    const z = parseFloat(addPosZInput.value);
-
-    const result = addCameraPosition(key, x, y, z);
-
-    if (result) {
-        // Reset form on success
-        addPosXInput.value = '0';
-        addPosYInput.value = '0';
-        addPosZInput.value = '0';
-    } else {
-        alert(`カメラの位置調整に失敗しました。キー "${key}" が存在するか確認してください。`);
-    }
+activeCameraDropdown.subscribe((key) => {
+    switchCamera(key as CameraType);
 });
 
-// Setposition button event listener
-setPosButton.addEventListener('click', () => {
-    const key = setPosKeyInput.value.trim();
-    if (!validateCameraKey(key)) return;
-
-    const x = parseFloat(setPosXInput.value);
-    const y = parseFloat(setPosYInput.value);
-    const z = parseFloat(setPosZInput.value);
-
-    const result = setCameraPosition(key, x, y, z);
-
-    if (result) {
-        // Reset form on success
-        setPosXInput.value = '0';
-        setPosYInput.value = '0';
-        setPosZInput.value = '0';
-    } else {
-        alert(`カメラの位置設定に失敗しました。キー "${key}" が存在するか確認してください。`);
-    }
+cameraAddPositionButton.addEventListener("click", () => {
+    console.log(activeCameraDropdown.value, cameraAddPositionInput.value1, cameraAddPositionInput.value2, cameraAddPositionInput.value3);
+    addCameraPosition(activeCameraDropdown.value as CameraType, cameraAddPositionInput.value1, cameraAddPositionInput.value2, cameraAddPositionInput.value3);
 });
 
-// Addrotation button event listener
-addRotButton.addEventListener('click', () => {
-    const key = addRotKeyInput.value.trim();
-    if (!validateCameraKey(key)) return;
-
-    const alpha = parseFloat(addRotXInput.value); // X = Alpha (水平角)
-    const beta = parseFloat(addRotYInput.value);  // Y = Beta (垂直角)
-    const radius = parseFloat(addRotZInput.value); // Z = Radius (距離)
-
-    const result = addCameraRotation(key, alpha, beta, radius);
-
-    if (result) {
-        // Reset form on success
-        addRotXInput.value = '0';
-        addRotYInput.value = '0';
-        addRotZInput.value = '0';
-    } else {
-        alert(`カメラの回転追加に失敗しました。キー "${key}" が存在するか確認してください。`);
-    }
+cameraSetPositionButton.addEventListener("click", () => {
+    setCameraPosition(activeCameraDropdown.value as CameraType, cameraSetPositionInput.value1, cameraSetPositionInput.value2, cameraSetPositionInput.value3);
 });
 
-// Setrotation button event listener
-setRotButton.addEventListener('click', () => {
-    const key = setRotKeyInput.value.trim();
-    if (!validateCameraKey(key)) return;
-
-    const alpha = parseFloat(setRotXInput.value); // X = Alpha (水平角)
-    const beta = parseFloat(setRotYInput.value);  // Y = Beta (垂直角)
-    const radius = parseFloat(setRotZInput.value); // Z = Radius (距離)
-
-    const result = setCameraRotation(key, alpha, beta, radius);
-
-    if (result) {
-        // Reset form on success
-        setRotXInput.value = '0';
-        setRotYInput.value = '0';
-        setRotZInput.value = '0';
-    } else {
-        alert(`カメラの回転設定に失敗しました。キー "${key}" が存在するか確認してください。`);
-    }
+cameraAddRotationButton.addEventListener("click", () => {
+    addCameraRotation(activeCameraDropdown.value as CameraType, cameraAddRotationInput.value1, cameraAddRotationInput.value2, cameraAddRotationInput.value3);
 });
 
-// Camera info display setup
-const getCameraInfoBtn = document.getElementById('get-camera-info') as HTMLButtonElement;
-const cameraInfoKeySelect = document.getElementById('camera-info-key') as HTMLSelectElement;
-const cameraPosXInfo = document.getElementById('camera-pos-x-info') as HTMLElement;
-const cameraPosYInfo = document.getElementById('camera-pos-y-info') as HTMLElement;
-const cameraPosZInfo = document.getElementById('camera-pos-z-info') as HTMLElement;
-const cameraRotAlphaInfo = document.getElementById('camera-rot-alpha-info') as HTMLElement;
-const cameraRotBetaInfo = document.getElementById('camera-rot-beta-info') as HTMLElement;
-const cameraRotRadiusInfo = document.getElementById('camera-rot-radius-info') as HTMLElement;
-const activeCameraInfo = document.getElementById('active-camera-info') as HTMLElement;
+cameraSetRotationButton.addEventListener("click", () => {
+    setCameraRotation(activeCameraDropdown.value as CameraType, cameraSetRotationInput.value1, cameraSetRotationInput.value2, cameraSetRotationInput.value3);
+});
 
-// Check if elements exist
-if (!getCameraInfoBtn || !cameraInfoKeySelect || !cameraPosXInfo || !cameraPosYInfo || !cameraPosZInfo ||
-    !cameraRotAlphaInfo || !cameraRotBetaInfo || !cameraRotRadiusInfo || !activeCameraInfo) {
-    throw new Error('カメラ座標確認セクションの要素が見つかりません');
-}
-
-// Function to update camera info
-function updateCameraInfo() {
-    const key = cameraInfoKeySelect.value;
-
-    // Get and display position info
-    const position = getCameraPosition(key);
-    if (position) {
-        cameraPosXInfo.textContent = position.x.toFixed(2);
-        cameraPosYInfo.textContent = position.y.toFixed(2);
-        cameraPosZInfo.textContent = position.z.toFixed(2);
-    } else {
-        cameraPosXInfo.textContent = '-';
-        cameraPosYInfo.textContent = '-';
-        cameraPosZInfo.textContent = '-';
-    }
-
-    // Get and display rotation info
-    const rotation = getCameraRotation(key);
-    if (rotation) {
-        cameraRotAlphaInfo.textContent = rotation.alpha.toFixed(2);
-        cameraRotBetaInfo.textContent = rotation.beta.toFixed(2);
-        cameraRotRadiusInfo.textContent = rotation.radius.toFixed(2);
-    } else {
-        cameraRotAlphaInfo.textContent = '-';
-        cameraRotBetaInfo.textContent = '-';
-        cameraRotRadiusInfo.textContent = '-';
-    }
-
-    // Display active camera
-    const activeCamera = getActiveCamera();
-    activeCameraInfo.textContent = activeCamera || '-';
-}
-
-// Camera info button event listener
-getCameraInfoBtn.addEventListener('click', updateCameraInfo);
-
-// Modify camera switch buttons to update info after switching
-for(const id of ["default", "front", "side", "top", "free"]) {
-    const btn = document.getElementById(`camera-${id}`);
-    if (btn) {
-        const originalClick = btn.onclick;
-        btn.onclick = function(event) {
-            if (originalClick) {
-                originalClick.call(btn, event);
-            }
-            // Update camera info after switching (with delay to ensure switch completes)
-            setTimeout(updateCameraInfo, 100);
-        };
-    }
-}
-
-// Initial camera info display
-updateCameraInfo();
-
-// Camera reset buttons
-const resetPosButton = document.getElementById('reset-pos-button');
-const resetRotButton = document.getElementById('reset-rot-button');
-
-if (resetPosButton) {
-    resetPosButton.addEventListener('click', async () => {
-        try {
-            const cameraModule = await import('../../babylon/camera.ts');
-            const success = cameraModule.resetAllCamerasToInitial();
-
-            if (success) {
-                // Visual feedback
-                resetPosButton.classList.add('bg-green-600');
-                setTimeout(() => {
-                    resetPosButton.classList.remove('bg-green-600');
-                }, 600);
-
-                console.log('All cameras reset to initial position');
-            }
-        } catch (error) {
-            console.error('Error resetting camera positions:', error);
-        }
-    });
-}
-
-if (resetRotButton) {
-    resetRotButton.addEventListener('click', async () => {
-        try {
-            const cameraModule = await import('../../babylon/camera.ts');
-            const success = cameraModule.resetAllCamerasToInitial();
-
-            if (success) {
-                // Visual feedback
-                resetRotButton.classList.add('bg-green-600');
-                setTimeout(() => {
-                    resetRotButton.classList.remove('bg-green-600');
-                }, 600);
-
-                console.log('All cameras reset to initial rotation');
-            }
-        } catch (error) {
-            console.error('Error resetting camera rotations:', error);
-        }
-    });
-}
+cameraResetButton.addEventListener("click", () => {
+    resetCameraToInitial(activeCameraDropdown.value as CameraType);
+});
