@@ -12,26 +12,28 @@
 <body class="m-0 w-screen h-screen overflow-hidden flex">
     <aside class="w-64 h-screen bg-gray-800 text-white overflow-y-auto p-4">
         <div class="space-y-2">
-            <button>close all</button>
-            <dev-accordion summary="text-alive" open>
-                <button>start</button>
-                <button>pause/unpause</button>
-                <input-slider label="volume" min="0" max="100" step="1" value="100"></input-slider>
-                <input-slider label="time" min="0" max="100" step="1" value="100"></input-slider>
+            <button id="close-all-button">close all</button>
+            <dev-accordion summary="text alive" open>
+                <button id="force-start-button">start</button>
+                <button id="pause-unpause-button">pause/unpause</button>
+                <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
+                <input-slider id="time-input-slider" label="time" min="0" max="100" step="1" value="100"></input-slider>
             </dev-accordion>
             <dev-accordion summary="animation">
                 <div class="pl-6 py-1 space-y-1" id="animationList"></div>
             </dev-accordion>
             <dev-accordion summary="camera">
-                <drop-down label="select active camera" data-options="default, front, side, top, free" value="default"></drop-down>
-                <triple-input label="addPosition"></triple-input>
-                <button id="addPositionButton">AddPosition</button>
-                <triple-input label="setPosition"></triple-input>
-                <button id="setPositionButton">SetPosition</button>
-                <triple-input label="addRotation"></triple-input>
-                <button id="addRotationButton">AddRotation</button>
-                <triple-input label="setRotation"></triple-input>
-                <button id="setRotationButton">SetRotation</button>
+                <drop-down id="active-camera-dropdown" label="select active camera" data-options="default, front, side, top" value="default"></drop-down>
+                <triple-input id="camera-add-position-input" label="add position"></triple-input>
+                <button id="camera-add-position-button">AddPosition</button>
+                <triple-input id="camera-set-position-input" label="set position"></triple-input>
+                <button id="camera-set-position-button">SetPosition</button>
+                <triple-input id="camera-add-rotation-input" label="add rotation"></triple-input>
+                <button id="camera-add-rotation-button">AddRotation</button>
+                <triple-input id="camera-set-rotation-input" label="set rotation"></triple-input>
+                <button id="camera-set-rotation-button">SetRotation</button>
+                <label class="block text-gray-400 text-xs mb-1">reset camera</label>
+                <button id="camera-reset-button">ResetCamera</button>
                 <div id="camera-position-info" class="mb-2 p-2 bg-gray-900 rounded">
                     <p class="text-xs text-gray-400 mb-1">位置情報:</p>
                     <div class="flex justify-between mb-1">
@@ -64,40 +66,48 @@
                 </div>
             </dev-accordion>
             <dev-accordion summary="light">
-                <dev-accordion summary="default light">
-                    <toggle-switch label="light enable"></toggle-switch>
-                    <color-picker label="light color"></color-picker>
-                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
-                    <triple-input label="add light position"></triple-input>
-                    <button id="addDefaultLightPositionButton">AddLightPosition</button>
-                    <triple-input label="set light position"></triple-input>
-                    <button id="setDefaultLightPositionButton">SetLightPosition</button>
-                </dev-accordion>
                 <dev-accordion summary="spot light">
-                    <toggle-switch label="light enable"></toggle-switch>
-                    <color-picker label="light color"></color-picker>
-                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
-                    <triple-input label="add light position"></triple-input>
-                    <button id="addSpotLightPositionButton">AddLightPosition</button>
-                    <triple-input label="set light position"></triple-input>
-                    <button id="setSpotLightPositionButton">SetLightPosition</button>
+                    <toggle-switch id="spot-light-enable" label="enable"></toggle-switch>
+                    <color-picker id="spot-light-diffuse" label="diffuse"></color-picker>
+                    <color-picker id="spot-light-ground-color" label="ground color"></color-picker>
+                    <input-slider id="spot-light-intensity" label="intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <triple-input id="spot-light-add-position-input" label="add position"></triple-input>
+                    <button id="spot-light-add-position-button">AddPosition</button>
+                    <triple-input id="spot-light-set-position-input" label="set position"></triple-input>
+                    <button id="spot-light-set-position-button">SetPosition</button>
                 </dev-accordion>
                 <dev-accordion summary="point light">
-                    <toggle-switch label="light enable"></toggle-switch>
-                    <color-picker label="light color"></color-picker>
-                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
-                    <triple-input label="add light position"></triple-input>
-                    <button id="addPointLightPositionButton">AddLightPosition</button>
+                    <toggle-switch id="point-light-enable" label="enable"></toggle-switch>
+                    <color-picker id="point-light-diffuse" label="diffuse"></color-picker>
+                    <input-slider id="point-light-intensity" label="intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <triple-input id="point-light-add-position-input" label="add light position"></triple-input>
+                    <button id="point-light-add-position-button">AddPosition</button>
+                    <triple-input id="point-light-set-position-input" label="set position"></triple-input>
+                    <button id="point-light-set-position-button">SetPosition</button>
+                    <triple-input id="point-light-add-direction-input" label="add light direction"></triple-input>
+                    <button id="point-light-add-direction-button">AddDirection</button>
+                    <triple-input id="point-light-set-direction-input" label="set direction"></triple-input>
+                    <button id="point-light-set-direction-button">SetDirection</button>
                 </dev-accordion>
                 <dev-accordion summary="hemispheric light">
-                    <toggle-switch label="light enable"></toggle-switch>
-                    <color-picker label="light color"></color-picker>
-                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <toggle-switch id="hemispheric-light-enable" label="enable"></toggle-switch>
+                    <color-picker id="hemispheric-light-diffuse" label="diffuse"></color-picker>
+                    <color-picker id="hemispheric-light-ground-color" label="ground color"></color-picker>
+                    <input-slider id="hemispheric-light-intensity" label="intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <triple-input id="hemispheric-light-add-direction-input" label="add light direction"></triple-input>
+                    <button id="hemispheric-light-add-direction-button">AddDirection</button>
+                    <triple-input id="hemispheric-light-set-direction-input" label="set direction"></triple-input>
+                    <button id="hemispheric-light-set-direction-button">SetDirection</button>
                 </dev-accordion>
                 <dev-accordion summary="light preset">
-                    <button id="preset-default" class="">
+                    <button id="preset-default">
                         🔄 デフォルトに戻す
                     </button>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="preset-point">point light</button>
+                        <button id="preset-spot">spot light</button>
+                        <button id="preset-hemispheric">hemispheric light</button>
+                    </div>
                     <div class="grid grid-cols-2 gap-2">
                         <button id="preset-day" class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white py-2 px-3 rounded shadow-md transition-all">☀️ 昼間<br><span class="text-xs opacity-80">明るく自然な光</span></button>
                         <button id="preset-night" class="bg-gradient-to-r from-blue-900 to-indigo-900 hover:from-blue-800 hover:to-indigo-800 text-white py-2 px-3 rounded shadow-md transition-all">🌙 夜間<br><span class="text-xs opacity-80">神秘的な月明かり</span></button>
@@ -108,53 +118,52 @@
             </dev-accordion>
             <dev-accordion summary="spectrum">
                 <dev-accordion summary="circle spectrum">
-                    <toggle-switch label="enable"></toggle-switch>
-                    <color-picker label="color"></color-picker>
-                    <input-slider label="color delta" min="0" max="255" step="1" value="0"></input-slider>
-                    <input-slider label="opacity" min="0" max="100" step="1" value="0"></input-slider>
-                    <input-slider label="line counts" min="0" max="39" step="1" value="39"></input-slider>
-                    <number-input label="min radius" min="0" step="0.01" value="0.5"></number-input>
-                    <number-input label="max-radius" step="1" value="200"></number-input>
+                    <toggle-switch id="circle-spectrum-enable" label="enable"></toggle-switch>
+                    <color-picker id="circle-spectrum-color" label="color"></color-picker>
+                    <input-slider id="circle-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
+                    <input-slider id="circle-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                    <input-slider id="circle-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                    <number-input id="circle-spectrum-min-radius" label="min radius" min="0" step="0.01" value="0.5"></number-input>
+                    <number-input id="circle-spectrum-max-radius" label="max-radius" step="1" value="200"></number-input>
                 </dev-accordion>
                 <dev-accordion summary="vertical spectrum">
-                    <toggle-switch label="enable"></toggle-switch>
-                    <color-picker label="color"></color-picker>
-                    <input-slider label="color delta" min="0" max="255" step="1" value="0"></input-slider>
-                    <input-slider label="opacity" min="0" max="100" step="1" value="0"></input-slider>
-                    <input-slider label="line counts" min="0" max="39" step="1" value="39"></input-slider>
-                    <number-input label="height" min="0" step="1" value="300"></number-input>
+                    <toggle-switch id="vertical-spectrum-enable" label="enable"></toggle-switch>
+                    <color-picker id="vertical-spectrum-color" label="color"></color-picker>
+                    <input-slider id="vertical-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
+                    <input-slider id="vertical-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                    <input-slider id="vertical-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                    <number-input id="vertical-spectrum-height" label="height" min="0" step="1" value="300"></number-input>
                 </dev-accordion>
                 <dev-accordion summary="horizontal spectrum">
-                    <toggle-switch label="enable"></toggle-switch>
-                    <color-picker label="color"></color-picker>
-                    <input-slider label="color delta" min="0" max="255" step="1" value="0"></input-slider>
-                    <input-slider label="opacity" min="0" max="100" step="1" value="0"></input-slider>
-                    <input-slider label="line counts" min="0" max="39" step="1" value="39"></input-slider>
-                    <number-input label="width" min="0" step="1" value="300"></number-input>
+                    <toggle-switch id="horizontal-spectrum-enable" label="enable"></toggle-switch>
+                    <color-picker id="horizontal-spectrum-color" label="color"></color-picker>
+                    <input-slider id="horizontal-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
+                    <input-slider id="horizontal-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                    <input-slider id="horizontal-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                    <number-input id="horizontal-spectrum-width" label="width" min="0" step="1" value="300"></number-input>
                 </dev-accordion>
-                <button>周波数を追加</button>
             </dev-accordion>
             <dev-accordion summary="ripple effects">
                 <dev-accordion summary="circle ripple">
-                    <double-input label="position"></double-input>
-                    <number-input label="lifetime" value="100"></number-input>
-                    <number-input label="default size" value="0"></number-input>
-                    <number-input label="size delta" value="1"></number-input>
-                    <number-input label="default opacity" value="100"></number-input>
-                    <number-input label="opacity delta" value="-0.01"></number-input>
-                    <color-picker label="color"></color-picker>
-                    <button>generate</button>
+                    <double-input id="circle-ripple-position-input" label="position"></double-input>
+                    <number-input id="circle-ripple-lifetime-input" label="lifetime" value="100"></number-input>
+                    <number-input id="circle-ripple-default-size-input" label="default size" value="0"></number-input>
+                    <number-input id="circle-ripple-size-delta-input" label="size delta" value="1"></number-input>
+                    <number-input id="circle-ripple-default-opacity-input" label="default opacity" value="1"></number-input>
+                    <number-input id="circle-ripple-opacity-delta-input" label="opacity delta" value="-0.01"></number-input>
+                    <color-picker id="circle-ripple-color-input" label="color"></color-picker>
+                    <button id="circle-ripple-generate-button">generate</button>
                 </dev-accordion>
                 <dev-accordion summary="square ripple">
-                    <double-input label="position"></double-input>
-                    <number-input label="lifetime" value="100"></number-input>
-                    <number-input label="default size" value="0"></number-input>
-                    <number-input label="size delta" value="1"></number-input>
-                    <number-input label="default opacity" value="100"></number-input>
-                    <number-input label="opacity delta" value="-0.01"></number-input>
-                    <color-picker label="color"></color-picker>
-                    <input-slider label="angle" min="0" max="360" value="45"></input-slider>
-                    <button>generate</button>
+                    <double-input id="square-ripple-position-input" label="position"></double-input>
+                    <number-input id="square-ripple-lifetime-input" label="lifetime" value="100"></number-input>
+                    <number-input id="square-ripple-default-size-input" label="default size" value="0"></number-input>
+                    <number-input id="square-ripple-size-delta-input" label="size delta" value="1"></number-input>
+                    <number-input id="square-ripple-default-opacity-input" label="default opacity" value="1"></number-input>
+                    <number-input id="square-ripple-opacity-delta-input" label="opacity delta" value="-0.01"></number-input>
+                    <color-picker id="square-ripple-color-input" label="color"></color-picker>
+                    <input-slider id="square-ripple-angle-input" label="angle" min="0" max="360" value="45"></input-slider>
+                    <button id="square-ripple-generate-button">generate</button>
                 </dev-accordion>
             </dev-accordion>
         </div>
@@ -183,5 +192,6 @@
         <div id="media"></div>
         <script type="module" src="../index.ts"></script>
     </div>
+    <script type="module" src="./controls/index.ts"></script>
 </body>
 </html>

@@ -1,84 +1,71 @@
 ﻿import {createCircleRipple, createSquareRipple} from "../../effects/ripple";
+import type {DoubleInput} from "../web-components/double-input.ts";
+import type {NumberInput} from "../web-components/number-input.ts";
+import type {ColorPicker} from "../web-components/color-picker.ts";
 
-// Circle Ripple Controls
-const addCircleRippleButton = document.getElementById("add-circle-ripple") as HTMLButtonElement;
-const circleRipplePositionXInput = document.getElementById("circle-ripple-position-x") as HTMLInputElement;
-const circleRipplePositionYInput = document.getElementById("circle-ripple-position-y") as HTMLInputElement;
-const circleRippleLifetimeInput = document.getElementById("circle-ripple-lifetime") as HTMLInputElement;
-const circleRippleRadiusDeltaInput = document.getElementById("circle-ripple-radius-delta") as HTMLInputElement;
-const circleRippleDefaultRadiusInput = document.getElementById("circle-ripple-default-radius") as HTMLInputElement;
-const circleRippleOpacityDeltaInput = document.getElementById("circle-ripple-opacity-delta") as HTMLInputElement;
-const circleRippleDefaultOpacityInput = document.getElementById("circle-ripple-default-opacity") as HTMLInputElement;
-const circleRippleHueInput = document.getElementById("circle-ripple-hue") as HTMLInputElement;
 
-// Square Ripple Controls
-const addSquareRippleButton = document.getElementById("add-square-ripple") as HTMLButtonElement;
-const squareRipplePositionXInput = document.getElementById("square-ripple-position-x") as HTMLInputElement;
-const squareRipplePositionYInput = document.getElementById("square-ripple-position-y") as HTMLInputElement;
-const squareRippleLifetimeInput = document.getElementById("square-ripple-lifetime") as HTMLInputElement;
-const squareRippleSizeDeltaInput = document.getElementById("square-ripple-size-delta") as HTMLInputElement;
-const squareRippleDefaultSizeInput = document.getElementById("square-ripple-default-size") as HTMLInputElement;
-const squareRippleOpacityDeltaInput = document.getElementById("square-ripple-opacity-delta") as HTMLInputElement;
-const squareRippleDefaultOpacityInput = document.getElementById("square-ripple-default-opacity") as HTMLInputElement;
-const squareRippleHueInput = document.getElementById("square-ripple-hue") as HTMLInputElement;
-const squareRippleAngleInput = document.getElementById("square-ripple-angle") as HTMLInputElement;
+const circlePosition = document.getElementById("circle-ripple-position-input") as DoubleInput;
+const circleLifetime = document.getElementById("circle-ripple-lifetime-input") as NumberInput;
+const circleDefaultSize = document.getElementById("circle-ripple-default-size-input") as NumberInput;
+const circleSizeDelta = document.getElementById("circle-ripple-size-delta-input") as NumberInput;
+const circleDefaultOpacity = document.getElementById("circle-ripple-default-opacity-input") as NumberInput;
+const circleOpacityDelta = document.getElementById("circle-ripple-opacity-delta-input") as NumberInput;
+const circleColor = document.getElementById("circle-ripple-color-input") as ColorPicker;
+const circleGenerateButton = document.getElementById("circle-ripple-generate-button") as HTMLButtonElement;
 
-if (!addCircleRippleButton || !circleRipplePositionXInput || !circleRipplePositionYInput ||
-    !circleRippleLifetimeInput || !circleRippleRadiusDeltaInput || !circleRippleDefaultRadiusInput ||
-    !circleRippleOpacityDeltaInput || !circleRippleDefaultOpacityInput || !circleRippleHueInput ||
-    !addSquareRippleButton || !squareRipplePositionXInput || !squareRipplePositionYInput ||
-    !squareRippleLifetimeInput || !squareRippleSizeDeltaInput || !squareRippleDefaultSizeInput ||
-    !squareRippleOpacityDeltaInput || !squareRippleDefaultOpacityInput || !squareRippleHueInput ||
-    !squareRippleAngleInput) {
+const squarePosition = document.getElementById("square-ripple-position-input") as DoubleInput;
+const squareLifetime = document.getElementById("square-ripple-lifetime-input") as NumberInput;
+const squareDefaultSize = document.getElementById("square-ripple-default-size-input") as NumberInput;
+const squareSizeDelta = document.getElementById("square-ripple-size-delta-input") as NumberInput;
+const squareDefaultOpacity = document.getElementById("square-ripple-default-opacity-input") as NumberInput;
+const squareOpacityDelta = document.getElementById("square-ripple-opacity-delta-input") as NumberInput;
+const squareColor = document.getElementById("square-ripple-color-input") as ColorPicker;
+const squareAngle = document.getElementById("square-ripple-angle-input") as NumberInput;
+const squareGenerateButton = document.getElementById("square-ripple-generate-button") as HTMLButtonElement;
+
+if (!circlePosition || !circleLifetime || !circleDefaultSize || !circleSizeDelta ||
+    !circleDefaultOpacity || !circleOpacityDelta || !circleColor || !circleGenerateButton ||
+    !squarePosition || !squareLifetime || !squareDefaultSize || !squareSizeDelta ||
+    !squareDefaultOpacity || !squareOpacityDelta || !squareColor || !squareAngle || !squareGenerateButton) {
     throw new Error("Ripple controls not found");
 }
 
 // Set default positions to center of screen
-circleRipplePositionXInput.value = (window.innerWidth / 2).toString();
-circleRipplePositionYInput.value = (window.innerHeight / 2).toString();
-squareRipplePositionXInput.value = (window.innerWidth / 2).toString();
-squareRipplePositionYInput.value = (window.innerHeight / 2).toString();
+const centerOfWidth = window.innerWidth / 2;
+const centerOfHeight = window.innerHeight / 2;
+circlePosition.value1 = centerOfWidth;
+circlePosition.value2 = centerOfHeight;
+squarePosition.value1 = centerOfWidth;
+squarePosition.value2 = centerOfHeight;
 
 // Circle Ripple Event Listener
-addCircleRippleButton.addEventListener("click", () => {
-    const x = parseInt(circleRipplePositionXInput.value);
-    const y = parseInt(circleRipplePositionYInput.value);
-    const lifeTime = parseInt(circleRippleLifetimeInput.value);
-    const radiusDelta = parseFloat(circleRippleRadiusDeltaInput.value);
-    const defaultRadius = parseFloat(circleRippleDefaultRadiusInput.value);
-    const opacityDelta = parseFloat(circleRippleOpacityDeltaInput.value);
-    const defaultOpacity = parseFloat(circleRippleDefaultOpacityInput.value);
-    const hue = parseFloat(circleRippleHueInput.value);
+circleGenerateButton.addEventListener("click", () => {
 
-    createCircleRipple(x, y, {
-        lifeTime: lifeTime,
-        radiusDelta: radiusDelta,
-        defaultRadius: defaultRadius,
-        opacityDelta: opacityDelta,
-        defaultOpacity: defaultOpacity,
-        hue: hue
-    });
+    createCircleRipple(
+        circlePosition.value1,
+        circlePosition.value2,
+        {
+            lifeTime: circleLifetime.value,
+            defaultSize: circleDefaultSize.value,
+            sizeDelta: circleSizeDelta.value,
+            defaultOpacity: circleDefaultOpacity.value,
+            opacityDelta: circleOpacityDelta.value,
+            color: circleColor.value,
+        }
+    );
 });
 
 // Square Ripple Event Listener
-addSquareRippleButton.addEventListener("click", () => {
-    const x = parseInt(squareRipplePositionXInput.value);
-    const y = parseInt(squareRipplePositionYInput.value);
-    const lifeTime = parseInt(squareRippleLifetimeInput.value);
-    const sizeDelta = parseFloat(squareRippleSizeDeltaInput.value);
-    const defaultSize = parseFloat(squareRippleDefaultSizeInput.value);
-    const opacityDelta = parseFloat(squareRippleOpacityDeltaInput.value);
-    const defaultOpacity = parseFloat(squareRippleDefaultOpacityInput.value);
-    const hue = parseFloat(squareRippleHueInput.value);
-    const angleDegrees = parseFloat(squareRippleAngleInput.value);
-
-    createSquareRipple(x, y, {
-        lifeTime: lifeTime,
-        sizeDelta: sizeDelta,
-        defaultSize: defaultSize,
-        opacityDelta: opacityDelta,
-        defaultOpacity: defaultOpacity,
-        hue: hue,
-        angle: angleDegrees * Math.PI / 180 // Convert degrees to radians
-    });
-});
+squareGenerateButton.addEventListener("click", () => {
+    createSquareRipple(
+        squarePosition.value1,
+        squarePosition.value2,
+        {
+            lifeTime: squareLifetime.value,
+            defaultSize: squareDefaultSize.value,
+            sizeDelta: squareSizeDelta.value,
+            defaultOpacity: squareDefaultOpacity.value,
+            opacityDelta: squareOpacityDelta.value,
+        }
+    )
+})
