@@ -118,29 +118,29 @@
             </dev-accordion>
             <dev-accordion summary="spectrum">
                 <dev-accordion summary="circle spectrum">
-                    <toggle-switch label="enable"></toggle-switch>
-                    <color-picker label="color"></color-picker>
-                    <input-slider label="color delta" min="0" max="255" step="1" value="0"></input-slider>
-                    <input-slider label="opacity" min="0" max="100" step="1" value="0"></input-slider>
-                    <input-slider label="line counts" min="0" max="39" step="1" value="39"></input-slider>
-                    <number-input label="min radius" min="0" step="0.01" value="0.5"></number-input>
-                    <number-input label="max-radius" step="1" value="200"></number-input>
+                    <toggle-switch id="circle-spectrum-enable" label="enable"></toggle-switch>
+                    <color-picker id="circle-spectrum-color" label="color"></color-picker>
+                    <input-slider id="circle-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
+                    <input-slider id="circle-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                    <input-slider id="circle-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                    <number-input id="circle-spectrum-min-radius" label="min radius" min="0" step="0.01" value="0.5"></number-input>
+                    <number-input id="circle-spectrum-max-radius" label="max-radius" step="1" value="200"></number-input>
                 </dev-accordion>
                 <dev-accordion summary="vertical spectrum">
-                    <toggle-switch label="enable"></toggle-switch>
-                    <color-picker label="color"></color-picker>
-                    <input-slider label="color delta" min="0" max="255" step="1" value="0"></input-slider>
-                    <input-slider label="opacity" min="0" max="100" step="1" value="0"></input-slider>
-                    <input-slider label="line counts" min="0" max="39" step="1" value="39"></input-slider>
-                    <number-input label="height" min="0" step="1" value="300"></number-input>
+                    <toggle-switch id="vertical-spectrum-enable" label="enable"></toggle-switch>
+                    <color-picker id="vertical-spectrum-color" label="color"></color-picker>
+                    <input-slider id="vertical-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
+                    <input-slider id="vertical-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                    <input-slider id="vertical-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                    <number-input id="vertical-spectrum-height" label="height" min="0" step="1" value="300"></number-input>
                 </dev-accordion>
                 <dev-accordion summary="horizontal spectrum">
-                    <toggle-switch label="enable"></toggle-switch>
-                    <color-picker label="color"></color-picker>
-                    <input-slider label="color delta" min="0" max="255" step="1" value="0"></input-slider>
-                    <input-slider label="opacity" min="0" max="100" step="1" value="0"></input-slider>
-                    <input-slider label="line counts" min="0" max="39" step="1" value="39"></input-slider>
-                    <number-input label="width" min="0" step="1" value="300"></number-input>
+                    <toggle-switch id="horizontal-spectrum-enable" label="enable"></toggle-switch>
+                    <color-picker id="horizontal-spectrum-color" label="color"></color-picker>
+                    <input-slider id="horizontal-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
+                    <input-slider id="horizontal-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                    <input-slider id="horizontal-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                    <number-input id="horizontal-spectrum-width" label="width" min="0" step="1" value="300"></number-input>
                 </dev-accordion>
                 <button>周波数を追加</button>
             </dev-accordion>

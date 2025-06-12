@@ -70,13 +70,13 @@ export function setLightEnabled(lightType: LightType, enabled: boolean) {
     lights[lightType].setEnabled(enabled);
 }
 
-export function setLightDiffuse(lightType: LightType, hsl: string) {
-    lights[lightType].diffuse = Color3.FromHexString(hsl);
+export function setLightDiffuse(lightType: LightType, color: string) {
+    lights[lightType].diffuse = Color3.FromHexString(color);
 }
 
-export function setHemisphericGroundColor(hsl: string) {
+export function setHemisphericGroundColor(color: string) {
     const hemi = lights.hemispheric as HemisphericLight;
-    hemi.groundColor = Color3.FromHexString(hsl);
+    hemi.groundColor = Color3.FromHexString(color);
 }
 
 export function setLightIntensity(lightType: LightType, intensity: number) {

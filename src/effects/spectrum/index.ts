@@ -40,28 +40,29 @@ export const drawFrequencySpectrum = (ctx: CanvasRenderingContext2D, centerX: nu
 }
 
 export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => void, drawLine: (ctx: CanvasRenderingContext2D, centerX: number, centerY: number, frequency: number, lineRate: number) => void) => {
-  let currentLightness = 100;
+  let currentColor = '#ffffff';
+  let currentHue = 0;
+  let currentSaturation = 0;
+  let currentLightness = 1;
+  let hueOffset = 240;
   let currentOpacity = 1;
   let lineCounts = frequency.length;
-  let hueOffset = 0;
-  let hueDelta = 240;
   let isEnabled = true;
 
-  const setLightness = (lightness: number)=> {
-    currentLightness = clamp(lightness, 50, 100);
-  }
-  const setOpacity = (opacity: number)=> {
-    currentOpacity = clamp(opacity, 0, 1);
-  }
-  const setHueDelta = (delta: number)=> {
-    hueDelta = delta;
+  const setColor = (color: string)=> {
+    currentColor = color;
+    const hsl = hexToHsl(currentColor);
+    console.log(hsl)
+    currentHue = hsl.h;
+    currentSaturation = hsl.s;
+    currentLightness = hsl.l;
+    console.log(currentHue, currentSaturation, currentLightness)
   }
   const setHueOffset = (offset: number)=> {
     hueOffset = offset;
   }
-  const setHue = (offset: number, delta: number)=> {
-    setHueOffset(offset);
-    setHueDelta(delta);
+  const setOpacity = (opacity: number)=> {
+    currentOpacity = clamp(opacity, 0, 1);
   }
   const setLineCounts = (count: number)=> {
     lineCounts = clamp(count, 3, 39);
@@ -72,35 +73,61 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
   const drawSpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => {
     if(!isEnabled) return;
     updateFrequency();
+    const strokeBase = `${currentSaturation * 100}%, ${currentLightness * 100}%, ${currentOpacity})`;
     beforeDraw(ctx, centerX, centerY);
     for (let i = 0; i < lineCounts; i++) {
       const freqValue = frequency[i] / 256 || 0;
       const lineRate = i / lineCounts;
-      ctx.strokeStyle = `hsla(${hueOffset + (i / lineCounts) * hueDelta}, 100%, ${currentLightness}%, ${currentOpacity})`;
+      ctx.strokeStyle = `hsla(${currentHue + (i / lineCounts) * hueOffset}, ${strokeBase}`;
+      console.log(currentLightness, `hsla(${currentHue + (i / lineCounts) * hueOffset}, ${strokeBase}`);
       drawLine(ctx, centerX, centerY, freqValue, lineRate);
     }
   }
 
   return {
-    setLightness,
+    setColor,
     setOpacity,
-    setHueDelta,
     setHueOffset,
-    setHue,
     setLineCounts,
     setEnable,
     drawSpectrum,
   };
 };
 export interface Spectrum {
-  setLightness(lightness: number): void;
+  setColor(color: string): void;
   setOpacity(opacity: number): void;
-  setHueDelta(delta: number): void;
   setHueOffset(offset: number): void;
-  setHue(offset: number, delta: number): void;
   setLineCounts(count: number): void;
   setEnable(enable: boolean): void;
   drawSpectrum(ctx: CanvasRenderingContext2D, centerX: number, centerY: number): void;
+}
+
+function hexToHsl(hex: string) {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const d = max - min;
+
+  // Lightness
+  const l = (max + min) / 2;
+
+  // Saturation
+  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+
+  // Hue
+  let h = 0;
+  if (d !== 0) {
+    if (max === r) h = ((g - b) / d) % 6;
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h *= 60;
+    if (h < 0) h += 360;
+  }
+
+  return {h, s, l};
 }
 
 
