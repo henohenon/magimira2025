@@ -1,5 +1,4 @@
-import { player } from "./";
-import type { IPhrase } from "textalive-app-api";
+import {player} from "./";
 
 const lyrixText = document.getElementById("lyrics-text") as HTMLHeadElement;
 if (!lyrixText) {
@@ -7,8 +6,10 @@ if (!lyrixText) {
 }
 
 
-export function updatePosition(position: number) {
-    const phrase: IPhrase = player.video.findPhrase(position);
-    const text = phrase?.text ?? "";
-    lyrixText.innerText = text;
+export function updatePosition(current: number, last: number) {
+    if (!player.video) {
+        return;
+    }
+    const phrase = player.video.findPhraseChange(current, last);
+    lyrixText.innerText = phrase.current?.text ?? "";
 }

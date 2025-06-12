@@ -12,11 +12,11 @@ export const createCircleRipple = (x: number, y: number, config: RippleConfig = 
 
   let time = 0;
 
-  const update = () => {
+  const update = (deltaTime: number) => {
     size += sizeDelta;
     opacity += opacityDelta;
 
-    time++;
+    time += deltaTime;
 
     return time < lifeTime;
   };

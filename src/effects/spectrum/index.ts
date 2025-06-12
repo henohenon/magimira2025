@@ -7,11 +7,11 @@ let frequency = new Uint8Array(lineMaxCounts);
 const frequencyTarget = new Uint8Array(frequency.length);
 const frequencyDelta: number[] = new Array(frequency.length).fill(0);
 
-const updateFrequency = () => {
+const updateFrequency = (deltaTime: number) => {
   for (let i = 0; i < frequency.length; i++) {
     const target = frequencyTarget[i];
     const diff = target - frequency[i];
-    if (Math.abs(diff) <= Math.abs(frequencyDelta[i])) {
+    if (Math.abs(diff) <= Math.abs(frequencyDelta[i] * deltaTime)) {
       if(target == 0) {
         frequencyDelta[i] = 0;
         frequency[i] = 0;
@@ -21,19 +21,23 @@ const updateFrequency = () => {
       }
     }
   }
-  frequency = frequency.map((value, index) => value + frequencyDelta[index]);
+  frequency = frequency.map((value, index) => value + frequencyDelta[index] * deltaTime);
 };
 const updateFrequencyDelta = (index: number) => {
-  frequencyDelta[index] = Math.floor(3 + Math.random() * 5) * Math.sign(frequencyTarget[index] - frequency[index]);
+  const diff = frequencyTarget[index] - frequency[index];
+  frequencyDelta[index] = (5 * Math.abs(diff) / 256) * Math.sign(diff);
 };
 export const addFrequency = (strength: number) => {
-  const idx = Math.floor(Math.random() * frequency.length);
+  const idx =  Math.floor(Math.random() * frequency.length);
   frequencyTarget[idx] = clamp(frequencyTarget[idx] + strength, 0, 255);
   updateFrequencyDelta(idx);
 }
 
-export const drawFrequencySpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => {
-  updateFrequency();
+const updateRate = 0.1;
+export const drawFrequencySpectrum = (ctx: CanvasRenderingContext2D, deltaTime: number) => {
+  updateFrequency(deltaTime * updateRate);
+  const centerX = ctx.canvas.width / 2;
+  const centerY = ctx.canvas.height / 2;
   for (const spectrum of Object.values(spectrums)) {
     spectrum.drawSpectrum(ctx, centerX, centerY);
   }
@@ -70,7 +74,7 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
   }
   const drawSpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => {
     if(!isEnabled) return;
-    updateFrequency();
+    // updateFrequency(deltaTime);
     const strokeBase = `${currentSaturation * 100}%, ${currentLightness * 100}%, ${currentOpacity})`;
     beforeDraw(ctx, centerX, centerY);
     for (let i = 0; i < lineCounts; i++) {
