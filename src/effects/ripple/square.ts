@@ -1,14 +1,8 @@
-﻿import {addRipple, type Ripple} from "./index.ts";
+﻿import {addRipple, type Ripple, type RippleConfig} from "./index.ts";
 
-export interface SquareRippleConfig {
-  lifeTime?: number;
-  sizeDelta?: number;
-  defaultSize?: number;
-  opacityDelta?: number;
-  defaultOpacity?: number;
-  hue?: number;
+export type SquareRippleConfig = RippleConfig & {
   angle?: number;
-}
+};
 
 export const createSquareRipple = (x: number, y: number, config: SquareRippleConfig = {}): Ripple => {
   const lifeTime = config.lifeTime || 100;
@@ -16,7 +10,7 @@ export const createSquareRipple = (x: number, y: number, config: SquareRippleCon
   let size = config.defaultSize || 10;
   const opacityDelta = config.opacityDelta || 0.05;
   let opacity = config.defaultOpacity || 1;
-  const hue = config.hue || 0;
+  const hue = config.color || 0;
   const angle = config.angle || 0;
   let time = 0;
 

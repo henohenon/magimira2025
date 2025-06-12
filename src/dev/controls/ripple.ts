@@ -46,8 +46,8 @@ circleGenerateButton.addEventListener("click", () => {
         circlePosition.value2,
         {
             lifeTime: circleLifetime.value,
-            defaultRadius: circleDefaultSize.value,
-            radiusDelta: circleSizeDelta.value,
+            defaultSize: circleDefaultSize.value,
+            sizeDelta: circleSizeDelta.value,
             defaultOpacity: circleDefaultOpacity.value,
             opacityDelta: circleOpacityDelta.value,
             color: circleColor.value,

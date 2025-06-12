@@ -1,17 +1,9 @@
-﻿import {addRipple, type Ripple} from "./index.ts";
-export interface CircleRippleConfig {
-  lifeTime?: number;
-  radiusDelta?: number;
-  defaultRadius?: number;
-  opacityDelta?: number;
-  defaultOpacity?: number;
-  color?: string;
-}
+﻿import {addRipple, type Ripple, type RippleConfig} from "./index.ts";
 
-export const createCircleRipple = (x: number, y: number, config: CircleRippleConfig = {}): Ripple => {
+export const createCircleRipple = (x: number, y: number, config: RippleConfig = {}): Ripple => {
   const lifeTime = config.lifeTime || 100;
-  const radiusDelta = config.radiusDelta || 1;
-  let radius = config.defaultRadius || 0;
+  let size = config.defaultSize || 0;
+  const sizeDelta = config.sizeDelta || 1;
   const opacityDelta = config.opacityDelta || 0.05;
   let opacity = config.defaultOpacity || 1;
   const inputColor = config.color || "#ffffff";
@@ -21,7 +13,7 @@ export const createCircleRipple = (x: number, y: number, config: CircleRippleCon
   let time = 0;
 
   const update = () => {
-    radius += radiusDelta;
+    size += sizeDelta;
     opacity += opacityDelta;
 
     time++;
@@ -31,7 +23,7 @@ export const createCircleRipple = (x: number, y: number, config: CircleRippleCon
 
   const draw = (ctx: CanvasRenderingContext2D) => {
     ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.arc(x, y, size, 0, Math.PI * 2);
     ctx.strokeStyle = `${colorBase}, ${opacity})`;
     ctx.stroke();
   };

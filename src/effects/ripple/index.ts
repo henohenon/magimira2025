@@ -1,5 +1,14 @@
 ﻿const ripples: Ripple[] = [];
 
+export type RippleConfig = {
+  lifeTime?: number;
+  defaultSize?: number;
+  sizeDelta?: number;
+  defaultOpacity?: number;
+  opacityDelta?: number;
+  color?: string;
+}
+
 export interface Ripple {
   update(): boolean;
   draw(ctx: CanvasRenderingContext2D): void;
