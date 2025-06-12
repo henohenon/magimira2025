@@ -1,4 +1,4 @@
-import { player } from "./main";
+import { player } from "./";
 
 
 const seekBar = document.querySelector("#seekBar") as HTMLDivElement;

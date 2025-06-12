@@ -1,0 +1,8 @@
+﻿{
+  "analyzer": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true
+  }
+}
