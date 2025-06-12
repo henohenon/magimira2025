@@ -13,7 +13,7 @@
     <aside class="w-64 h-screen bg-gray-800 text-white overflow-y-auto p-4">
         <div class="space-y-2">
             <button id="close-all-button">close all</button>
-            <dev-accordion summary="text alive">
+            <dev-accordion summary="text alive" open>
                 <button id="force-start-button">start</button>
                 <button id="pause-unpause-button">pause/unpause</button>
                 <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
@@ -22,7 +22,7 @@
             <dev-accordion summary="animation">
                 <div class="pl-6 py-1 space-y-1" id="animationList"></div>
             </dev-accordion>
-            <dev-accordion summary="camera" open>
+            <dev-accordion summary="camera">
                 <drop-down id="active-camera-dropdown" label="select active camera" data-options="default, front, side, top" value="default"></drop-down>
                 <triple-input id="camera-add-position-input" label="add position"></triple-input>
                 <button id="camera-add-position-button">AddPosition</button>
@@ -66,40 +66,48 @@
                 </div>
             </dev-accordion>
             <dev-accordion summary="light">
-                <dev-accordion summary="default light">
-                    <toggle-switch label="light enable"></toggle-switch>
-                    <color-picker label="light color"></color-picker>
-                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
-                    <triple-input label="add light position"></triple-input>
-                    <button id="addDefaultLightPositionButton">AddLightPosition</button>
-                    <triple-input label="set light position"></triple-input>
-                    <button id="setDefaultLightPositionButton">SetLightPosition</button>
-                </dev-accordion>
                 <dev-accordion summary="spot light">
-                    <toggle-switch label="light enable"></toggle-switch>
-                    <color-picker label="light color"></color-picker>
-                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
-                    <triple-input label="add light position"></triple-input>
-                    <button id="addSpotLightPositionButton">AddLightPosition</button>
-                    <triple-input label="set light position"></triple-input>
-                    <button id="setSpotLightPositionButton">SetLightPosition</button>
+                    <toggle-switch id="spot-light-enable" label="enable"></toggle-switch>
+                    <color-picker id="spot-light-diffuse" label="diffuse"></color-picker>
+                    <color-picker id="spot-light-ground-color" label="ground color"></color-picker>
+                    <input-slider id="spot-light-intensity" label="intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <triple-input id="spot-light-add-position-input" label="add position"></triple-input>
+                    <button id="spot-light-add-position-button">AddPosition</button>
+                    <triple-input id="spot-light-set-position-input" label="set position"></triple-input>
+                    <button id="spot-light-set-position-button">SetPosition</button>
                 </dev-accordion>
                 <dev-accordion summary="point light">
-                    <toggle-switch label="light enable"></toggle-switch>
-                    <color-picker label="light color"></color-picker>
-                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
-                    <triple-input label="add light position"></triple-input>
-                    <button id="addPointLightPositionButton">AddLightPosition</button>
+                    <toggle-switch id="point-light-enable" label="enable"></toggle-switch>
+                    <color-picker id="point-light-diffuse" label="diffuse"></color-picker>
+                    <input-slider id="point-light-intensity" label="intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <triple-input id="point-light-add-position-input" label="add light position"></triple-input>
+                    <button id="point-light-add-position-button">AddPosition</button>
+                    <triple-input id="point-light-set-position-input" label="set position"></triple-input>
+                    <button id="point-light-set-position-button">SetPosition</button>
+                    <triple-input id="point-light-add-direction-input" label="add light direction"></triple-input>
+                    <button id="point-light-add-direction-button">AddDirection</button>
+                    <triple-input id="point-light-set-direction-input" label="set direction"></triple-input>
+                    <button id="point-light-set-direction-button">SetDirection</button>
                 </dev-accordion>
                 <dev-accordion summary="hemispheric light">
-                    <toggle-switch label="light enable"></toggle-switch>
-                    <color-picker label="light color"></color-picker>
-                    <input-slider label="light intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <toggle-switch id="hemispheric-light-enable" label="enable"></toggle-switch>
+                    <color-picker id="hemispheric-light-diffuse" label="diffuse"></color-picker>
+                    <color-picker id="hemispheric-light-ground-color" label="ground color"></color-picker>
+                    <input-slider id="hemispheric-light-intensity" label="intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <triple-input id="hemispheric-light-add-direction-input" label="add light direction"></triple-input>
+                    <button id="hemispheric-light-add-direction-button">AddDirection</button>
+                    <triple-input id="hemispheric-light-set-direction-input" label="set direction"></triple-input>
+                    <button id="hemispheric-light-set-direction-button">SetDirection</button>
                 </dev-accordion>
                 <dev-accordion summary="light preset">
-                    <button id="preset-default" class="">
+                    <button id="preset-default">
                         🔄 デフォルトに戻す
                     </button>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="preset-point">point light</button>
+                        <button id="preset-spot">spot light</button>
+                        <button id="preset-hemispheric">hemispheric light</button>
+                    </div>
                     <div class="grid grid-cols-2 gap-2">
                         <button id="preset-day" class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white py-2 px-3 rounded shadow-md transition-all">☀️ 昼間<br><span class="text-xs opacity-80">明るく自然な光</span></button>
                         <button id="preset-night" class="bg-gradient-to-r from-blue-900 to-indigo-900 hover:from-blue-800 hover:to-indigo-800 text-white py-2 px-3 rounded shadow-md transition-all">🌙 夜間<br><span class="text-xs opacity-80">神秘的な月明かり</span></button>
