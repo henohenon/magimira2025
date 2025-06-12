@@ -56,18 +56,18 @@
   }
 
   // Getters and setters for values
-  get value1() {
+  public get value1() {
     return Number(this.inputField1?.value);
   }
-  set value1(newValue) {
+  public set value1(newValue) {
     if (this.inputField1) {
       this.inputField1.valueAsNumber = newValue;
     }
   }
-  get value2() {
+  public get value2() {
     return Number(this.inputField2?.value);
   }
-  set value2(newValue) {
+  public set value2(newValue) {
     if (this.inputField2) {
       this.inputField2.valueAsNumber = newValue;
     }

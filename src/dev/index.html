@@ -142,29 +142,28 @@
                     <input-slider id="horizontal-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
                     <number-input id="horizontal-spectrum-width" label="width" min="0" step="1" value="300"></number-input>
                 </dev-accordion>
-                <button>周波数を追加</button>
             </dev-accordion>
             <dev-accordion summary="ripple effects">
                 <dev-accordion summary="circle ripple">
-                    <double-input label="position"></double-input>
-                    <number-input label="lifetime" value="100"></number-input>
-                    <number-input label="default size" value="0"></number-input>
-                    <number-input label="size delta" value="1"></number-input>
-                    <number-input label="default opacity" value="100"></number-input>
-                    <number-input label="opacity delta" value="-0.01"></number-input>
-                    <color-picker label="color"></color-picker>
-                    <button>generate</button>
+                    <double-input id="circle-ripple-position-input" label="position"></double-input>
+                    <number-input id="circle-ripple-lifetime-input" label="lifetime" value="100"></number-input>
+                    <number-input id="circle-ripple-default-size-input" label="default size" value="0"></number-input>
+                    <number-input id="circle-ripple-size-delta-input" label="size delta" value="1"></number-input>
+                    <number-input id="circle-ripple-default-opacity-input" label="default opacity" value="100"></number-input>
+                    <number-input id="circle-ripple-opacity-delta-input" label="opacity delta" value="-0.01"></number-input>
+                    <color-picker id="circle-ripple-color-input" label="color"></color-picker>
+                    <button id="circle-ripple-generate-button">generate</button>
                 </dev-accordion>
                 <dev-accordion summary="square ripple">
-                    <double-input label="position"></double-input>
-                    <number-input label="lifetime" value="100"></number-input>
-                    <number-input label="default size" value="0"></number-input>
-                    <number-input label="size delta" value="1"></number-input>
-                    <number-input label="default opacity" value="100"></number-input>
-                    <number-input label="opacity delta" value="-0.01"></number-input>
-                    <color-picker label="color"></color-picker>
-                    <input-slider label="angle" min="0" max="360" value="45"></input-slider>
-                    <button>generate</button>
+                    <double-input id="square-ripple-position-input" label="position"></double-input>
+                    <number-input id="square-ripple-lifetime-input" label="lifetime" value="100"></number-input>
+                    <number-input id="square-ripple-default-size-input" label="default size" value="0"></number-input>
+                    <number-input id="square-ripple-size-delta-input" label="size delta" value="1"></number-input>
+                    <number-input id="square-ripple-default-opacity-input" label="default opacity" value="100"></number-input>
+                    <number-input id="square-ripple-opacity-delta-input" label="opacity delta" value="-0.01"></number-input>
+                    <color-picker id="square-ripple-color-input" label="color"></color-picker>
+                    <input-slider id="square-ripple-angle-input" label="angle" min="0" max="360" value="45"></input-slider>
+                    <button id="square-ripple-generate-button">generate</button>
                 </dev-accordion>
             </dev-accordion>
         </div>
