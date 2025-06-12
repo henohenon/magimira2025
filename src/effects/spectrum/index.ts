@@ -52,11 +52,9 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
   const setColor = (color: string)=> {
     currentColor = color;
     const hsl = hexToHsl(currentColor);
-    console.log(hsl)
     currentHue = hsl.h;
     currentSaturation = hsl.s;
     currentLightness = hsl.l;
-    console.log(currentHue, currentSaturation, currentLightness)
   }
   const setHueOffset = (offset: number)=> {
     hueOffset = offset;
@@ -79,7 +77,6 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
       const freqValue = frequency[i] / 256 || 0;
       const lineRate = i / lineCounts;
       ctx.strokeStyle = `hsla(${currentHue + (i / lineCounts) * hueOffset}, ${strokeBase}`;
-      console.log(currentLightness, `hsla(${currentHue + (i / lineCounts) * hueOffset}, ${strokeBase}`);
       drawLine(ctx, centerX, centerY, freqValue, lineRate);
     }
   }
