@@ -1,4 +1,6 @@
-﻿import {drawFrequencySpectrum} from "./spectrum";
+﻿import "./dom/bottom-lyrics.ts";
+
+import {drawFrequencySpectrum} from "./spectrum";
 import {drawRipples} from "./ripple";
 
 const canvas = document.getElementById('spectram-canvas') as HTMLCanvasElement;
@@ -19,6 +21,3 @@ export const updateEffects = (deltaTime: number) => {
     drawFrequencySpectrum(canvasContext, deltaTime);
     drawRipples(canvasContext, deltaTime);
 }
-
-// Export ripple functions for external use
-export {addRipple} from "./ripple";

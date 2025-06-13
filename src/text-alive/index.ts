@@ -1,7 +1,6 @@
 import "../effects/spectrum/circle-spectrum.ts";
 import { Player } from "textalive-app-api";
 import { events } from "./events";
-import "./bottom-lyrics.ts";
 
 
 const mediaElement = document.getElementById("media") as HTMLMediaElement;
