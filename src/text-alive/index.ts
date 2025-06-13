@@ -1,6 +1,7 @@
 import "../effects/spectrum/circle-spectrum.ts";
 import { Player } from "textalive-app-api";
 import { events } from "./events";
+import {updateBottomLyrics} from "./bottom-lyrics.ts";
 
 
 const mediaElement = document.getElementById("media") as HTMLMediaElement;
@@ -38,3 +39,7 @@ player.addListener({
 		events.emit("onAppReady");
 	}
 });
+
+export const updateTextAlive = (startPosition: number, endPosition:number) => {
+	updateBottomLyrics(startPosition, endPosition);
+}

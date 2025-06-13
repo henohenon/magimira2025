@@ -24,7 +24,7 @@ import { playAnimation } from "./babylon/mdl";
 import {addFrequency, type Spectrum} from "./effects/spectrum";
 import { circleSpectrum, verticalSpectrum, horizontalSpectrum } from "./effects/spectrum";
 import {updateEffects} from "./effects";
-import {player} from "./text-alive";
+import {player, updateTextAlive} from "./text-alive";
 
 
 type Events = {
@@ -127,11 +127,7 @@ const updateCycle = (currentTime: number) => {
     const deltaTime = currentTime - lastTime;
     const currentPosition = lastPosition + deltaTime;
 
-    // updateSeekBarPosition(position);
-    //updateRandomCharPosition(currentPosition);
-    //const data = analyser.getByteFrequencyData();
-    //console.log(data.slice(0, 10));  // 最初の10個だけ表示（毎フレーム出すと重いので）
-    //updateLyricPosition(lastPosition, currentPosition);
+    updateTextAlive(lastPosition, currentPosition)
     updateEffects(deltaTime);
 
     lastTime = currentTime;

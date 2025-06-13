@@ -6,7 +6,7 @@ if (!lyrixText) {
 }
 
 
-export function updatePosition(current: number, last: number) {
+export function updateBottomLyrics(current: number, last: number) {
     if (!player.video) {
         return;
     }
