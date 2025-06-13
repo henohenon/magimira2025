@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
-.textalive-banner{
+.fade{
     @apply transition-opacity duration-3000 opacity-100;
 }
-.textalive-banner.hidden {
-  opacity: 0 !important;
+.fade.out {
+    @apply pointer-events-none;
+    opacity: 0 !important;
+}
+
+#loading-wrapper{
+    z-index: 10001;
 }

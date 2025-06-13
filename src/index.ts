@@ -25,6 +25,12 @@ import {addFrequency, type Spectrum} from "./effects/spectrum";
 import { circleSpectrum, verticalSpectrum, horizontalSpectrum } from "./effects/spectrum";
 import {updateEffects} from "./effects";
 import {player, updateTextAlive} from "./text-alive";
+import {
+    initContainerFadeOut,
+    loadingWrapperFadeOut,
+    playingContainerFadeIn,
+    textaliveBannerFadeOut
+} from "./effects/dom";
 
 
 type Events = {
@@ -65,17 +71,10 @@ textaliveEvents.on("onAppReady", () => {
 });
 textaliveEvents.on("onGameStart", () => {
     if (!babylonLoaded) return;
+    playingContainerFadeIn();
+    initContainerFadeOut();
+    textaliveBannerFadeOut();
 
-    const playingContainer = document.getElementById("playing");
-    if (!playingContainer) {
-        throw new Error("Playing container not found");
-    }
-    const initContainer = document.getElementById("init");
-    if (!initContainer) {
-        throw new Error("Init container not found");
-    }
-    setOpacity(playingContainer, true);
-    setOpacity(initContainer, false);
     playAnimation("startListen");
 
     anyInput.subscribe(() => {
@@ -95,31 +94,9 @@ textaliveEvents.on("onGameStart", () => {
 
 function updateLoading() {
     if (!(babylonLoaded && textaliveLoaded)) return;
-    if (!(textaliveLoaded)) return;
 
-    const loadingWrapper = document.getElementById("loading-wrapper");
-    if (!loadingWrapper) {
-        throw new Error("Loading wrapper not found");
-    }
-    const textaliveBanner = document.getElementsByClassName("textalive-banner")[0] as HTMLElement;
-    if (!textaliveBanner) {
-        throw new Error("TextAlive banner not found");
-    }
-    setOpacity(loadingWrapper, false);
-    textaliveBanner.classList.add("hidden");
+    loadingWrapperFadeOut();
 }
-
-function setOpacity(element: HTMLElement, visible: boolean) {
-    if (visible) {
-        element.classList.remove("opacity-0");
-        element.classList.add("opacity-100");
-        element.classList.remove("pointer-events-none");
-    } else {
-        element.classList.remove("opacity-100");
-        element.classList.add("opacity-0");
-        element.classList.add("pointer-events-none");
-    }
-  }
 
 let lastTime = 0;
 let lastPosition = 0;
