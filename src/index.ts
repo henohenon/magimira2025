@@ -19,10 +19,12 @@ import type {Subject} from "prismatix-input/subject";
 import "./babylon";
 import "./text-alive";
 import { events as babylonEvents } from "./babylon/events";
-import { events as textaliveEvents } from "./text-alive/events";
+import {events, events as textaliveEvents} from "./text-alive/events";
 import { playAnimation } from "./babylon/mdl";
 import {addFrequency, type Spectrum} from "./effects/spectrum";
 import { circleSpectrum, verticalSpectrum, horizontalSpectrum } from "./effects/spectrum";
+import {updateEffects} from "./effects";
+import {player, updateTextAlive} from "./text-alive";
 
 
 type Events = {
@@ -118,3 +120,35 @@ function setOpacity(element: HTMLElement, visible: boolean) {
         element.classList.add("pointer-events-none");
     }
   }
+
+let lastTime = 0;
+let lastPosition = 0;
+const updateCycle = (currentTime: number) => {
+    const deltaTime = currentTime - lastTime;
+    const currentPosition = lastPosition + deltaTime;
+
+    updateTextAlive(lastPosition, currentPosition)
+    updateEffects(deltaTime);
+
+    lastTime = currentTime;
+    lastPosition = currentPosition;
+    requestAnimationFrame(updateCycle);
+}
+
+events.on("onAppReady", () => {
+    const startButton = document.getElementById("start-button");
+    if (!startButton) {
+        throw new Error("Start button not found");
+    }
+    startButton.addEventListener("click", () => {
+        events.emit("onGameStart");
+        setTimeout(() => {
+            player.requestMediaSeek(0);
+            player.requestPlay();
+            const now = performance.now();
+            lastTime = now;
+            lastPosition = 0;
+            updateCycle(now);
+        }, 3000);
+    });
+})

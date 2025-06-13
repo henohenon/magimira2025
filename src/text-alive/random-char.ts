@@ -4,7 +4,7 @@ import { player } from "./";
 let lastChar: IChar | null = null;
 
 export function updatePosition(position: number) {
-    if (!player.video.firstChar) {
+    if (!player.video || !player.video.firstChar) {
         return;
     }
 

@@ -1,9 +1,7 @@
 import "../effects/spectrum/circle-spectrum.ts";
 import { Player } from "textalive-app-api";
 import { events } from "./events";
-import { updatePosition as updateRandomCharPosition } from "./random-char";
-import { updatePosition as updateLyricPosition } from "./bottom-lyrics";
-import {updateEffects} from "../effects";
+import {updateBottomLyrics} from "./bottom-lyrics.ts";
 
 
 const mediaElement = document.getElementById("media") as HTMLMediaElement;
@@ -39,27 +37,9 @@ player.addListener({
 			},
 		);
 		events.emit("onAppReady");
-		const startButton = document.getElementById("start-button");
-		if (!startButton) {
-			throw new Error("Start button not found");
-		}
-		console.log("Start button found");
-		startButton.addEventListener("click", () => {
-			console.log("Start button clicked");
-			events.emit("onGameStart");
-
-			setTimeout(() => {
-				player.requestMediaSeek(0);
-				player.requestPlay();
-			}, 3000);
-		});
-	},
-	onTimeUpdate: (position: number) => {
-		// updateSeekBarPosition(position);
-		updateRandomCharPosition(position);
-		//const data = analyser.getByteFrequencyData();
-		//console.log(data.slice(0, 10));  // 最初の10個だけ表示（毎フレーム出すと重いので）
-		updateLyricPosition(position);
-		updateEffects();
-	},
+	}
 });
+
+export const updateTextAlive = (startPosition: number, endPosition:number) => {
+	updateBottomLyrics(startPosition, endPosition);
+}

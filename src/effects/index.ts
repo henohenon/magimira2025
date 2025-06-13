@@ -14,12 +14,10 @@ const resizeCanvas = () => {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-export const updateEffects = () => {
+export const updateEffects = (deltaTime: number) => {
     canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    drawFrequencySpectrum(canvasContext, centerX, centerY);
-    drawRipples(canvasContext);
+    drawFrequencySpectrum(canvasContext, deltaTime);
+    drawRipples(canvasContext, deltaTime);
 }
 
 // Export ripple functions for external use

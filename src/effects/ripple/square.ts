@@ -14,12 +14,12 @@ export const createSquareRipple = (x: number, y: number, config: SquareRippleCon
   const angle = config.angle || 0;
   let time = 0;
 
-  const update = () => {
+  const update = (deltaTime: number) => {
 
     size += sizeDelta;
     opacity += opacityDelta;
 
-    time++;
+    time += deltaTime;
 
     return time < lifeTime;
   };

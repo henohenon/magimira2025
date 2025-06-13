@@ -10,7 +10,7 @@ export type RippleConfig = {
 }
 
 export interface Ripple {
-  update(): boolean;
+  update(deltaTime: number): boolean;
   draw(ctx: CanvasRenderingContext2D): void;
 }
 
@@ -18,17 +18,19 @@ export const addRipple = (ripple: Ripple) => {
   ripples.push(ripple);
 }
 
-export const drawRipples = (ctx: CanvasRenderingContext2D) => {
+export const drawRipples = (ctx: CanvasRenderingContext2D, deltaTime: number) => {
   ctx.lineWidth = 3;
   ctx.lineCap = 'round';
   for (let i = ripples.length - 1; i >= 0; i--) {
-    const isActive = ripples[i].update();
+    const isActive = ripples[i].update(deltaTime);
     if (!isActive) {
       ripples.splice(i, 1);
     }
   }
 
-  ripples.forEach(ripple => ripple.draw(ctx));
+  for (const ripple of ripples) {
+    ripple.draw(ctx);
+  }
 };
 
 export const clearRipples = () => {
