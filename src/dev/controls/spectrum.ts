@@ -1,9 +1,9 @@
-﻿import { spectrums } from "../../index.ts";
+﻿import { spectrums } from "~/index.ts";
 import {
     type CircleSpectrum,
     type HorizontalSpectrum,
     type VerticalSpectrum,
-} from "../../effects/spectrum";
+} from "~/effects/spectrum";
 import type {ToggleSwitch} from "../web-components/toggle-switch.ts";
 import type {ColorPicker} from "../web-components/color-picker.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";

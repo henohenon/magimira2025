@@ -7,7 +7,7 @@
     setLightEnabled,
     addLightPosition,
     setLightPosition, addLightDirection, setLightDirection, resetPoint, resetSpot
-} from "../../babylon/light.ts";
+} from "~/babylon/light.ts";
 import type {ToggleSwitch} from "../web-components/toggle-switch.ts";
 import type {ColorPicker} from "../web-components/color-picker.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";

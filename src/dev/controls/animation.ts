@@ -1,5 +1,5 @@
-﻿import { events as babylonEvents } from "../../babylon/events.ts";
-import { playAnimation } from "../../babylon/mdl.ts";
+﻿import { events as babylonEvents } from "~/babylon/events.ts";
+import { playAnimation } from "~/babylon/mdl.ts";
 
 const animationList = document.getElementById("animationList");
 if (!animationList) {

@@ -1,5 +1,5 @@
-import { spectrums } from "../../";
-import { clamp } from "../../util.ts";
+import { spectrums } from "~/index.ts";
+import { clamp } from "~/util.ts";
 
 // Define the maximum number of lines for the spectrum
 const lineMaxCounts = 40;
