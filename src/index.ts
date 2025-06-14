@@ -31,7 +31,12 @@ import {
     playingContainerFadeIn,
     textaliveBannerFadeOut
 } from "./effects/dom";
-
+import {
+    circleRippleAndCircleSpectrum,
+    squareRippleAndVerticalSpectrum,
+    cameraMoveAndHorizontalSpectrum,
+    colorFullAll
+} from "./effects/preset";
 
 type Events = {
     anyInput: KeyboardInputEvent | WithPositionInputEvent;
@@ -45,6 +50,14 @@ export const spectrums: Record<string, Spectrum> = {
     "horizontal": horizontalSpectrum(),
     "vertical": verticalSpectrum()
 };
+
+// Array of preset functions for random selection on beat
+const presets = [
+    circleRippleAndCircleSpectrum,
+    squareRippleAndVerticalSpectrum,
+    cameraMoveAndHorizontalSpectrum,
+    colorFullAll
+];
 
 const emitter = mitt<Events>();
 export const { anyInput, duration, durationRepeat, counter } = createSubjects(emitter, ["anyInput", "durationRepeat", "duration", "counter"]);
@@ -89,7 +102,18 @@ textaliveEvents.on("onGameStart", () => {
     counter.subscribe((e) => {
         console.log("counter", e);
         // setLightness(100 - e.count/2);
-    })
+    });
+
+    // Change random preset when a beat is detected
+    textaliveEvents.on("onBeat", () => {
+        // Select a random preset from the array
+        const randomIndex = Math.floor(Math.random() * presets.length);
+        const randomPreset = presets[randomIndex];
+
+        // Apply the selected preset
+        randomPreset();
+        console.log("Beat detected! Changed to preset:", randomIndex);
+    });
 });
 
 function updateLoading() {
@@ -128,4 +152,4 @@ events.on("onAppReady", () => {
             updateCycle(now);
         }, 3000);
     });
-})
+});
