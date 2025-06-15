@@ -28,7 +28,7 @@ export const horizontal = (): HorizontalSpectrum => {
 
   return {
     ...spectrum,
-    setHeight,
+    setHeight
   };
 };
 
