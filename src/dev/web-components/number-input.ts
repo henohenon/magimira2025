@@ -11,7 +11,7 @@
     // Reconstruct HTML structure
     this.innerHTML = `
       <div class="mb-2">
-        <label class="block text-gray-400 text-xs mb-1">${label}</label>
+        <label>${label}</label>
         <input 
           type="number" 
           class="w-full bg-gray-600 text-white px-2 py-1 rounded text-sm 

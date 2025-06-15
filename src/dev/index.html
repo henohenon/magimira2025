@@ -20,8 +20,18 @@
                 <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
                 <input-slider id="time-input-slider" label="time" min="0" max="100" step="1" value="100"></input-slider>
             </dev-accordion>
-            <dev-accordion summary="animation">
-                <div class="pl-6 py-1 space-y-1" id="animationList"></div>
+            <dev-accordion summary="models" id="models-accordion">
+                <dev-accordion summary="dotmiku" id="model-accordion-dotmiku">
+                    <toggle-switch id="model-visibility-dotmiku" label="enable"></toggle-switch>
+                    <dev-accordion summary="animations" id="animations-accordion-dotmiku"></dev-accordion>
+                </dev-accordion>
+                <dev-accordion summary="dotmiku-tanabata" id="model-accordion-dotmiku-tanabata">
+                    <toggle-switch id="model-visibility-dotmiku-tanabata" label="enable"></toggle-switch>
+                    <dev-accordion summary="animations" id="animations-accordion-dotmiku-tanabata"></dev-accordion>
+                </dev-accordion>
+                <dev-accordion summary="room" id="model-accordion-room">
+                    <toggle-switch id="model-visibility-room" label="enable"></toggle-switch>
+                </dev-accordion>
             </dev-accordion>
             <dev-accordion summary="camera">
                 <drop-down id="active-camera-dropdown" label="select active camera" data-options="default, front, side, top" value="default"></drop-down>
@@ -33,7 +43,7 @@
                 <button id="camera-add-rotation-button">AddRotation</button>
                 <triple-input id="camera-set-rotation-input" label="set rotation"></triple-input>
                 <button id="camera-set-rotation-button">SetRotation</button>
-                <label class="block text-gray-400 text-xs mb-1">reset camera</label>
+                <label>reset camera</label>
                 <button id="camera-reset-button">ResetCamera</button>
                 <div id="camera-position-info" class="mb-2 p-2 bg-gray-900 rounded">
                     <p class="text-xs text-gray-400 mb-1">位置情報:</p>
