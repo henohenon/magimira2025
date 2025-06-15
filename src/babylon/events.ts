@@ -8,7 +8,7 @@ type Events = {
         scene: Scene;
     },
     onSceneLoaded: undefined;
-    onMdlAnimLoaded: string[];
+    onMdlAnimLoaded: {mdlName: string, animations: string[]};
     onModelVisibilityChanged: {
         modelName: string;
         visible: boolean;

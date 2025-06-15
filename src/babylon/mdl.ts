@@ -7,9 +7,10 @@ import type { AnimationGroup } from "@babylonjs/core/Animations/animationGroup";
 import type { Scene } from "@babylonjs/core/scene";
 import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 
-let animGroups: AnimationGroup[] = [];
 // Store loaded model meshes by model name
-const modelMeshes: Record<string, AbstractMesh[]> = {};
+const modelMeshes: Record<string, Record<string, AbstractMesh>> = {};
+// Store animation groups by model name
+const modelAnimations: Record<string, Record<string, AnimationGroup>> = {};
 
 /**
  * Load a model from the specified source path
@@ -17,7 +18,7 @@ const modelMeshes: Record<string, AbstractMesh[]> = {};
  * @param scene The scene to append the model to
  * @returns The animation groups from the loaded model
  */
-export async function loadModel(sourcePath: string, scene: Scene): Promise<AnimationGroup[]> {
+export async function loadModel(sourcePath: string, scene: Scene) {
 	// Get the initial mesh count to identify new meshes
 	const initialMeshCount = scene.meshes.length;
 
@@ -36,12 +37,12 @@ export async function loadModel(sourcePath: string, scene: Scene): Promise<Anima
 	const modelName = sourcePath.split('/').pop()?.split('.')[0] || 'unknown';
 
 	// Store the new meshes for this model
-	const newMeshes: AbstractMesh[] = [];
+	const newMeshes: Record<string, AbstractMesh> = {};
 
 	// Process materials for all meshes
 	for (let i = initialMeshCount; i < scene.meshes.length; i++) {
 		const mesh = scene.meshes[i];
-		newMeshes.push(mesh);
+		newMeshes[mesh.name] = mesh;
 
 		const mat = mesh.material;
 		if (mat) {
@@ -55,22 +56,25 @@ export async function loadModel(sourcePath: string, scene: Scene): Promise<Anima
 	// Store meshes by model name
 	modelMeshes[modelName] = newMeshes;
 
-	console.log(`Model loaded from ${sourcePath} with ${newMeshes.length} meshes`);
-	return modelAnimGroups;
+	// Store animation groups by model name
+	modelAnimations[modelName] = modelAnimGroups.reduce((
+		acc, animGroup) => {
+		acc[animGroup.name] = animGroup; return acc;
+	}, {} as Record<string, AnimationGroup>);
+
+	console.log(`Model loaded from ${sourcePath} with ${Object.keys(newMeshes).length} meshes and ${modelAnimGroups.length} animations`);
 }
 
 events.on("onSceneDefinition", async ({ scene }) => {
-	/* --- どっと式ミクさん --- */
 	// Load both models and collect their animation groups
-	const dotmikuAnimGroups = await loadModel("/dotmiku.glb", scene);
-	const tanabataAnimGroups = await loadModel("/dotmiku-tanabata.glb", scene);
+	/* --- どっと式ミクさん --- */
+	await loadModel("/dotmiku.glb", scene);
+	await loadModel("/dotmiku-tanabata.glb", scene);
 
-	// Combine animation groups from both models
-	animGroups = [...dotmikuAnimGroups, ...tanabataAnimGroups];
+	// Load room model
+	await loadModel("/room.glb", scene);
 
-	// Emit animation names after loading all models
-	const animNames = animGroups.map((group) => group.name);
-	events.emit("onMdlAnimLoaded", animNames);
+	hideModel("dotmiku-tanabata");
 
 	// Emit available model names
 	const modelNames = getModelNames();
@@ -79,14 +83,18 @@ events.on("onSceneDefinition", async ({ scene }) => {
 	console.log("All GLTF models loaded!");
 });
 
-export function playAnimation(name: string) {
-	const animGroup = animGroups.find((group) => group.name === name);
+export const getAnimations = (mdlName: string) => {
+	return modelAnimations[mdlName];
+}
+
+export function playAnimation(mdl: string, animation: string) {
+	const animGroup = modelAnimations[mdl][animation]
 	if (animGroup) {
-		console.log(`Playing animation: ${name}`);
+		console.log(`Playing animation: ${animation}`);
 		animGroup.reset();
 		animGroup.play(false);
 	} else {
-		console.warn(`Animation group "${name}" not found.`);
+		console.warn(`Animation group "${animation}" not found.`);
 	}
 }
 
@@ -98,17 +106,23 @@ export function getModelNames(): string[] {
 	return Object.keys(modelMeshes);
 }
 
+function getMeshes(mdlName: string): AbstractMesh[] | undefined {
+	const meshes = Object.values(modelMeshes[mdlName]);
+	if (!meshes || meshes.length === 0) {
+		console.warn(`Model "${mdlName}" not found.`);
+		return undefined;
+	}
+	return meshes;
+}
+
 /**
  * Show a model by making all its meshes visible
  * @param modelName Name of the model to show
  * @returns true if model was found and shown, false otherwise
  */
 export function showModel(modelName: string): boolean {
-	const meshes = modelMeshes[modelName];
-	if (!meshes || meshes.length === 0) {
-		console.warn(`Model "${modelName}" not found.`);
-		return false;
-	}
+	const meshes = getMeshes(modelName);
+	if (!meshes) return false;
 
 	for (const mesh of meshes) {
 		mesh.isVisible = true;
@@ -127,11 +141,8 @@ export function showModel(modelName: string): boolean {
  * @returns true if model was found and hidden, false otherwise
  */
 export function hideModel(modelName: string): boolean {
-	const meshes = modelMeshes[modelName];
-	if (!meshes || meshes.length === 0) {
-		console.warn(`Model "${modelName}" not found.`);
-		return false;
-	}
+	const meshes = getMeshes(modelName);
+	if (!meshes) return false;
 
 	for (const mesh of meshes) {
 		mesh.isVisible = false;
@@ -150,11 +161,8 @@ export function hideModel(modelName: string): boolean {
  * @returns true if model was found and toggled, false otherwise
  */
 export function toggleModelVisibility(modelName: string): boolean {
-	const meshes = modelMeshes[modelName];
-	if (!meshes || meshes.length === 0) {
-		console.warn(`Model "${modelName}" not found.`);
-		return false;
-	}
+	const meshes = getMeshes(modelName);
+	if (!meshes) return false;
 
 	// Check current visibility (use first mesh as reference)
 	const isCurrentlyVisible = meshes[0].isVisible;
@@ -177,11 +185,8 @@ export function toggleModelVisibility(modelName: string): boolean {
  * @returns true if model is visible, false if hidden or not found
  */
 export function isModelVisible(modelName: string): boolean {
-	const meshes = modelMeshes[modelName];
-	if (!meshes || meshes.length === 0) {
-		console.warn(`Model "${modelName}" not found.`);
-		return false;
-	}
+	const meshes = getMeshes(modelName);
+	if (!meshes) return false;
 
 	// Use the first mesh to determine visibility
 	return meshes[0].isVisible;

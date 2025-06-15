@@ -45,7 +45,7 @@ textaliveEvents.on("onGameStart", () => {
     initContainerFadeOut();
     textaliveBannerFadeOut();
 
-    playAnimation("startListen");
+    playAnimation("dotmiku", "startListen");
 
     let lastSegmentTime = -2000;
     let currentPresetIndex = 0;
