@@ -15,6 +15,7 @@ export const subscriptions: Array<Subscription> = [];
  */
 export const enableCircleSpectrum = (strength: number = 200, range: number = 0) => {
     const circleSpectrum = spectrums["circle"] as CircleSpectrum;
+    circleSpectrum.setEnable(true);
 
     const s = pointer.subscribe((e: WithPositionInputEvent) => {
         // Convert position to angle for circle spectrum
@@ -45,9 +46,11 @@ export const enableCircleSpectrum = (strength: number = 200, range: number = 0) 
  */
 export const enableHorizontalSpectrum = (strength: number = 200, range: number = 0) => {
     const horizontalSpectrum = spectrums["horizontal"] as HorizontalSpectrum;
+    horizontalSpectrum.setEnable(true);
 
     const s = pointer.subscribe((e: WithPositionInputEvent) => {
         // Calculate the rate based on x position relative to width
+        console.log(e, window.innerWidth);
         const xRate = e.x / window.innerWidth;
 
         if (e.action === "start") {
@@ -75,6 +78,7 @@ export const enableHorizontalSpectrum = (strength: number = 200, range: number =
  */
 export const enableVerticalSpectrum = (strength: number = 200, range: number = 0) => {
     const verticalSpectrum = spectrums["vertical"] as VerticalSpectrum;
+    verticalSpectrum.setEnable(true);
 
     const s = pointer.subscribe((e: WithPositionInputEvent) => {
         // Calculate the rate based on y position relative to height
@@ -103,6 +107,7 @@ export const enableVerticalSpectrum = (strength: number = 200, range: number = 0
 export const disableFrequencyOnClick = () => {
     // Call each unsubscribe function
     for (const s of subscriptions) s.unsubscribe();
+    for (const spectrum of Object.values(spectrums)) spectrum.setEnable(false);
 
     // Clear the subscriptions array
     subscriptions.length = 0;

@@ -2,9 +2,11 @@
 import {createSubjects} from "prismatix-input/mitt";
 import {
     keyboardInput,
-    type KeyboardInputEvent, type KeyboardInputOptions,
-    pointerInput,
-    type PointerInputOptions, type WithPositionInputEvent
+    pointerInputWithPosition
+} from "prismatix-input/web-native";
+import type {
+    KeyboardInputEvent, KeyboardInputOptions,
+    PointerInputOptions, WithPositionInputEvent
 } from "prismatix-input/web-native";
 import type {Subject} from "prismatix-input/subject";
 import {
@@ -29,7 +31,7 @@ const emitter = mitt<Events>();
 export const { anyInput, pointer, duration, durationRepeat, counter } = createSubjects(emitter, ["anyInput", "pointer", "durationRepeat", "duration", "counter"]);
 
 const inputArea = document.getElementById("input-area");
-pointerInput([anyInput, pointer], { events: ["pointerdown", "pointerup"], target: inputArea } as PointerInputOptions);
+pointerInputWithPosition([anyInput as Subject<WithPositionInputEvent>, pointer], { events: ["pointerdown", "pointerup"], target: inputArea } as PointerInputOptions);
 keyboardInput(anyInput as Subject<KeyboardInputEvent>, { events: ["keydown-norepeat", "keyup"], target: inputArea as EventTarget } as KeyboardInputOptions);
 startToEndDurationInput(anyInput, [durationRepeat as Subject<DurationInputEvent>, duration], { minDuration: 300 });
 repeatInput(anyInput, durationRepeat as Subject<RepeatInputEvent>)
