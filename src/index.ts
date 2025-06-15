@@ -24,8 +24,7 @@ import {
 const presets = [
     circleRippleAndCircleSpectrum,
     squareRippleAndVerticalSpectrum,
-    cameraMoveAndHorizontalSpectrum,
-    colorFullAll
+    cameraMoveAndHorizontalSpectrum
 ];
 
 let babylonLoaded = false;
@@ -57,7 +56,7 @@ textaliveEvents.on("onGameStart", () => {
     console.log("Game started! Applied first preset: 0");
 
     // Change preset in order every 2 phrases
-    textaliveEvents.on("onPhrase", () => {
+    textaliveEvents.on("onSegment", () => {
         phraseCount++;
 
         // Change preset every 2 phrases
@@ -77,6 +76,9 @@ textaliveEvents.on("onGameStart", () => {
         } else {
             console.log("Phrase detected! Waiting for next phrase. Current count:", phraseCount);
         }
+    });
+    textaliveEvents.on("onChorus", () => {
+        colorFullAll();
     });
 });
 
