@@ -6,8 +6,8 @@ export interface Spectrum {
   setHueOffset(offset: number): void;
   setLineCounts(count: number): void;
   setEnable(enable: boolean): void;
-  setFrequency(strength: number, index: number): void;
-  setFrequencyByRate(rate: number, strength: number, range?: number): void;
+  addFrequency(strength: number, index: number): void;
+  addFrequencyByRate(rate: number, strength: number, range?: number): void;
   drawSpectrum(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, deltaTime: number): void;
 }
 
@@ -77,24 +77,24 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
   const setEnable = (enable: boolean)=> {
     isEnabled = enable;
   }
-  const setFrequency = (strength: number, index: number) => {
-    frequencyTarget[index] = clamp(strength, 0, 100) * 255;
+  const addFrequency = (strength: number, index: number) => {
+    frequencyTarget[index] = clamp(frequencyTarget[index] + strength, 0, 100) * 255;
   }
-  const setFrequencyByRate = (rate: number, strength: number, range: number = 0) => {
+  const addFrequencyByRate = (rate: number, strength: number, range: number = 0) => {
     const index = Math.round(rate * (lineCounts - 1));
     // Set frequency for the main index
-    setFrequency(strength, index);
+    addFrequency(strength, index);
 
     // Set frequency for the range of lines around the index
     for (let i = 1; i <= range; i++) {
       // Set frequency for lines before the index
       if (index - i >= 0) {
-        setFrequency(strength, index - i);
+        addFrequency(strength, index - i);
       }
 
       // Set frequency for lines after the index
       if (index + i < lineCounts) {
-        setFrequency(strength, index + i);
+        addFrequency(strength, index + i);
       }
     }
   }
@@ -120,8 +120,8 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
     setHueOffset,
     setLineCounts,
     setEnable,
-    setFrequency,
-    setFrequencyByRate,
+    addFrequency,
+    addFrequencyByRate,
     drawSpectrum,
   };
 };

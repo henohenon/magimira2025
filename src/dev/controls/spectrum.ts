@@ -41,17 +41,17 @@ const verticalHeight = document.getElementById("vertical-spectrum-height") as Nu
 const horizontalRate = document.getElementById("horizontal-spectrum-rate") as InputAndSlider;
 const horizontalStrength = document.getElementById("horizontal-spectrum-strength") as NumberInput;
 const horizontalRange = document.getElementById("horizontal-spectrum-range") as NumberInput;
-const horizontalSetFrequencyButton = document.getElementById("horizontal-spectrum-set-frequency-button") as HTMLButtonElement;
+const horizontalSetFrequencyButton = document.getElementById("horizontal-spectrum-add-frequency-button") as HTMLButtonElement;
 
 const verticalRate = document.getElementById("vertical-spectrum-rate") as InputAndSlider;
 const verticalStrength = document.getElementById("vertical-spectrum-strength") as NumberInput;
 const verticalRange = document.getElementById("vertical-spectrum-range") as NumberInput;
-const verticalSetFrequencyButton = document.getElementById("vertical-spectrum-set-frequency-button") as HTMLButtonElement;
+const verticalSetFrequencyButton = document.getElementById("vertical-spectrum-add-frequency-button") as HTMLButtonElement;
 
 const circleRate = document.getElementById("circle-spectrum-rate") as InputAndSlider;
 const circleStrength = document.getElementById("circle-spectrum-strength") as NumberInput;
 const circleRange = document.getElementById("circle-spectrum-range") as NumberInput;
-const circleSetFrequencyButton = document.getElementById("circle-spectrum-set-frequency-button") as HTMLButtonElement;
+const circleSetFrequencyButton = document.getElementById("circle-spectrum-add-frequency-button") as HTMLButtonElement;
 
 if (!circleEnable || !horizontalEnable || !verticalEnable ||
     !circleColor || !horizontalColor || !verticalColor ||
@@ -153,32 +153,32 @@ verticalHeight.subscribe((width) => {
     verticalSpectrum.setWidth(width);
 });
 
-// Set up event listener for horizontal spectrum setFrequencyByRate button
+// Set up event listener for horizontal spectrum addFrequencyByRate button
 horizontalSetFrequencyButton.addEventListener("click", () => {
     const rate = horizontalRate.value;
     const strength = horizontalStrength.value;
     const range = horizontalRange.value;
     if (rate !== null && strength !== null && range !== null) {
-        horizontalSpectrum.setFrequencyByRate(rate, strength, range);
+        horizontalSpectrum.addFrequencyByRate(rate, strength, range);
     }
 });
 
-// Set up event listener for vertical spectrum setFrequencyByRate button
+// Set up event listener for vertical spectrum addFrequencyByRate button
 verticalSetFrequencyButton.addEventListener("click", () => {
     const rate = verticalRate.value;
     const strength = verticalStrength.value;
     const range = verticalRange.value;
     if (rate !== null && strength !== null && range !== null) {
-        verticalSpectrum.setFrequencyByRate(rate, strength, range);
+        verticalSpectrum.addFrequencyByRate(rate, strength, range);
     }
 });
 
-// Set up event listener for circle spectrum setFrequencyByRate button
+// Set up event listener for circle spectrum addFrequencyByRate button
 circleSetFrequencyButton.addEventListener("click", () => {
     const rate = circleRate.value;
     const strength = circleStrength.value;
     const range = circleRange.value;
     if (rate !== null && strength !== null && range !== null) {
-        circleSpectrum.setFrequencyByRate(rate, strength, range);
+        circleSpectrum.addFrequencyByRate(rate, strength, range);
     }
 });
