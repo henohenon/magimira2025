@@ -1,4 +1,4 @@
-﻿import { clamp } from "~/util.ts";
+﻿import {clamp} from "~/util.ts";
 
 export interface Spectrum {
   setColor(color: string): void;
@@ -6,7 +6,8 @@ export interface Spectrum {
   setHueOffset(offset: number): void;
   setLineCounts(count: number): void;
   setEnable(enable: boolean): void;
-  drawSpectrum(ctx: CanvasRenderingContext2D, centerX: number, centerY: number): void;
+  setFrequency(strength: number, index: number): void;
+  drawSpectrum(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, deltaTime: number): void;
 }
 
 export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => void, drawLine: (ctx: CanvasRenderingContext2D, centerX: number, centerY: number, frequency: number, lineRate: number) => void) => {
@@ -18,6 +19,43 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
   let currentOpacity = 1;
   let lineCounts = 40; // Use a default value that matches the frequency array length
   let isEnabled = true;
+  const constantSpeed = 100;
+  const diffSpeedRate = 2;
+
+  // Each spectrum has its own frequency data
+  const lineMaxCounts = 40;
+  const frequency = new Uint8Array(lineMaxCounts);
+  const frequencyTarget = new Uint8Array(frequency.length);
+
+  const updateFrequency = (deltaTime: number) => {
+    for (let i = 0; i < frequency.length; i++) {
+      const current = frequency[i];
+      const target = frequencyTarget[i];
+
+      if (current === target) continue;
+
+      let speed: number;
+
+      const diff = target - current;
+      const absDiff = Math.abs(diff);
+      if (target === 0) {
+        // If the target is 0, the frequency should stop immediately
+        speed = constantSpeed;
+      } else {
+        // If the target is not 0, the frequency should slow down and speed up
+        const speedMultiplier = 1 + (absDiff / 255 * diffSpeedRate);
+        speed = constantSpeed * speedMultiplier * (diff > 0 ? 1 : -1);
+      }
+      // Limit the speed to the difference between the current and target
+      speed *= deltaTime;
+      if (absDiff < Math.abs(speed)) {
+        speed = diff;
+      }
+
+      // Update the frequency
+      frequency[i] = clamp(current + speed, 0, 255);
+    }
+  };
 
   const setColor = (color: string)=> {
     currentColor = color;
@@ -38,9 +76,16 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
   const setEnable = (enable: boolean)=> {
     isEnabled = enable;
   }
-  const drawSpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => {
+  const setFrequency = (strength: number, index: number) => {
+    frequencyTarget[index] = clamp(strength, 0, 100) * 255;
+  }
+
+  const drawSpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number, deltaTime: number) => {
     if(!isEnabled) return;
-    // updateFrequency(deltaTime);
+
+    // Update frequency values
+    updateFrequency(deltaTime);
+
     const strokeBase = `${currentSaturation * 100}%, ${currentLightness * 100}%, ${currentOpacity})`;
     beforeDraw(ctx, centerX, centerY);
     for (let i = 0; i < lineCounts; i++) {
@@ -57,51 +102,18 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
     setHueOffset,
     setLineCounts,
     setEnable,
+    setFrequency,
     drawSpectrum,
   };
 };
 
-// Define the maximum number of lines for the spectrum
-const lineMaxCounts = 40;
-let frequency = new Uint8Array(lineMaxCounts);
-const frequencyTarget = new Uint8Array(frequency.length);
-const frequencyDelta: number[] = new Array(frequency.length).fill(0);
-
-const updateFrequency = (deltaTime: number) => {
-  for (let i = 0; i < frequency.length; i++) {
-    const target = frequencyTarget[i];
-    const diff = target - frequency[i];
-    if (Math.abs(diff) <= Math.abs(frequencyDelta[i] * deltaTime)) {
-      if(target == 0) {
-        frequencyDelta[i] = 0;
-        frequency[i] = 0;
-      }else{
-        frequencyTarget[i] = 0;
-        updateFrequencyDelta(i);
-      }
-    }
-  }
-  frequency = frequency.map((value, index) => value + frequencyDelta[index] * deltaTime);
-};
-
-const updateFrequencyDelta = (index: number) => {
-  const diff = frequencyTarget[index] - frequency[index];
-  frequencyDelta[index] = (5 * Math.abs(diff) / 256) * Math.sign(diff);
-};
-
-export const addFrequency = (strength: number) => {
-  const idx =  Math.floor(Math.random() * frequency.length);
-  frequencyTarget[idx] = clamp(frequencyTarget[idx] + strength, 0, 255);
-  updateFrequencyDelta(idx);
-}
-
-const updateRate = 0.1;
+// The drawFrequencySpectrum function now just calls drawSpectrum on each spectrum
+// Each spectrum manages its own frequency data
 export const drawFrequencySpectrum = (ctx: CanvasRenderingContext2D, deltaTime: number) => {
-  updateFrequency(deltaTime * updateRate);
   const centerX = ctx.canvas.width / 2;
   const centerY = ctx.canvas.height / 2;
   for (const spectrum of Object.values(spectrums)) {
-    spectrum.drawSpectrum(ctx, centerX, centerY);
+    spectrum.drawSpectrum(ctx, centerX, centerY, deltaTime);
   }
 }
 
