@@ -15,8 +15,7 @@ import {
 import {
     circleRippleAndCircleSpectrum,
     squareRippleAndVerticalSpectrum,
-    cameraMoveAndHorizontalSpectrum,
-    colorFullAll
+    cameraMoveAndHorizontalSpectrum
 } from "./effects/preset";
 
 
@@ -39,6 +38,7 @@ textaliveEvents.on("onAppReady", () => {
     console.log("TextAlive loaded");
     updateLoading();
 });
+
 textaliveEvents.on("onGameStart", () => {
     if (!babylonLoaded) return;
     playingContainerFadeIn();
@@ -47,38 +47,24 @@ textaliveEvents.on("onGameStart", () => {
 
     playAnimation("startListen");
 
-    // Variables to track preset rotation
+    let lastSegmentTime = -2000;
     let currentPresetIndex = 0;
-    let phraseCount = 0;
 
     // Apply the first preset immediately
-    presets[0]();
     console.log("Game started! Applied first preset: 0");
 
-    // Change preset in order every 2 phrases
     textaliveEvents.on("onSegment", () => {
-        phraseCount++;
+        // Don't apply the same preset twice in a row'
+        const now = performance.now();
+        if (now - lastSegmentTime < 2000) return;
+        lastSegmentTime = now;
 
-        // Change preset every 2 phrases
-        if (phraseCount >= 2) {
-            // Select the next preset in order
-            const preset = presets[currentPresetIndex];
+        // Apply the selected preset
+        const preset = presets[currentPresetIndex];
+        preset();
 
-            // Apply the selected preset
-            preset();
-            console.log("Phrase detected! Changed to preset:", currentPresetIndex);
-
-            // Move to the next preset (loop back to the beginning if needed)
-            currentPresetIndex = (currentPresetIndex + 1) % presets.length;
-
-            // Reset phrase count
-            phraseCount = 0;
-        } else {
-            console.log("Phrase detected! Waiting for next phrase. Current count:", phraseCount);
-        }
-    });
-    textaliveEvents.on("onChorus", () => {
-        colorFullAll();
+        // Move to the next preset (loop back to the beginning if needed)
+        currentPresetIndex = (currentPresetIndex + 1) % presets.length;
     });
 });
 
