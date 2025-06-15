@@ -1,6 +1,6 @@
-﻿import { createSpectrum, type Spectrum } from "./index.ts";
+﻿import { createSpectrum, type Spectrum } from "./utils.ts";
 
-export const verticalSpectrum = (): VerticalSpectrum => {
+export const vertical = (): VerticalSpectrum => {
   let width = 300;
 
   const setWidth = (newWidth: number) => {

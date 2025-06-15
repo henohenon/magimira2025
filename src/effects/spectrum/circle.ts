@@ -1,7 +1,7 @@
-import { createSpectrum, type Spectrum } from "./index.ts";
+import { createSpectrum, type Spectrum } from "./utils.ts";
 import { clamp } from "~/util.ts";
 
-export const circleSpectrum = (): CircleSpectrum => {
+export const circle = (): CircleSpectrum => {
   let minRadiusRatio = 0.5;
   let maxRadiusRatio = 200;
 

@@ -1,4 +1,4 @@
-import "../effects/spectrum/circle-spectrum.ts";
+import "../effects/spectrum/circle.ts";
 import { Player } from "textalive-app-api";
 import { events } from "./events";
 
