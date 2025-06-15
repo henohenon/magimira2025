@@ -2,12 +2,18 @@ import { defineConfig } from "vite";
 import tailwind from "@tailwindcss/vite";
 import { visualizer } from "rollup-plugin-visualizer";
 import fs from "node:fs";
+import path from "node:path";
 
 export default defineConfig({
 	root: "src",
 	envDir: "../",
 	publicDir: "../public",
 	base: "./",
+	resolve: {
+		alias: {
+			"~": path.resolve(__dirname, "src")
+		}
+	},
 	build: {
 		outDir: "../dist",
 		emptyOutDir: true,

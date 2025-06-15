@@ -1,4 +1,4 @@
-import {events} from "../../text-alive/events.ts";
+import {events} from "~/text-alive/events.ts";
 
 const lyrixText = document.getElementById("lyrics-text") as HTMLHeadElement;
 if (!lyrixText) {

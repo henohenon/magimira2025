@@ -6,7 +6,7 @@
     switchCamera,
     resetCameraToInitial,
     type CameraType
-} from "../../babylon/camera.ts";
+} from "~/babylon/camera.ts";
 import type {Dropdown} from "../web-components/dropdown.ts";
 import type {TripleInput} from "../web-components/triple-input.ts";
 

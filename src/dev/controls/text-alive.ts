@@ -1,5 +1,5 @@
-﻿import {player} from "../../text-alive";
-import {events} from "../../text-alive/events.ts";
+﻿import {player} from "~/text-alive";
+import {events} from "~/text-alive/events.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";
 
 const forceStartButton = document.getElementById("force-start-button");
