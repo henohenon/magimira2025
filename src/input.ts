@@ -19,17 +19,18 @@ import {
 
 type Events = {
     anyInput: KeyboardInputEvent | WithPositionInputEvent;
+    pointer: WithPositionInputEvent;
     duration: DurationInputEvent;
     durationRepeat: DurationInputEvent | RepeatInputEvent;
     counter: CounterInputEvent;
 };
 
 const emitter = mitt<Events>();
-export const { anyInput, duration, durationRepeat, counter } = createSubjects(emitter, ["anyInput", "durationRepeat", "duration", "counter"]);
+export const { anyInput, pointer, duration, durationRepeat, counter } = createSubjects(emitter, ["anyInput", "pointer", "durationRepeat", "duration", "counter"]);
 
 const inputArea = document.getElementById("input-area");
-pointerInput(anyInput, { events: ["pointerdown", "pointerup"], target: inputArea } as PointerInputOptions);
+pointerInput([anyInput, pointer], { events: ["pointerdown", "pointerup"], target: inputArea } as PointerInputOptions);
 keyboardInput(anyInput as Subject<KeyboardInputEvent>, { events: ["keydown-norepeat", "keyup"], target: inputArea as EventTarget } as KeyboardInputOptions);
 startToEndDurationInput(anyInput, [durationRepeat as Subject<DurationInputEvent>, duration], { minDuration: 300 });
 repeatInput(anyInput, durationRepeat as Subject<RepeatInputEvent>)
-export const counterInstance  = counterMiddleware(durationRepeat, counter) as CounterMiddleware;
+export const counterInstance = counterMiddleware(durationRepeat, counter) as CounterMiddleware;

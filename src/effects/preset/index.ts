@@ -3,6 +3,7 @@ import { clearRipples } from "../ripple";
 import { setLightingPreset, switchLight } from "./light";
 import { addCameraRotation, setCameraPosition, switchCamera } from "~/babylon/camera";
 import type { HorizontalSpectrum, VerticalSpectrum } from "../spectrum";
+import { enableCircleRipple, enableSquareRipple, disableAll } from "./ripple";
 
 export const clearAllEffects = () => {
   // Disable all spectrum effects
@@ -12,11 +13,17 @@ export const clearAllEffects = () => {
 
   // Clear all ripple effects
   clearRipples();
+
+  // Disable all ripple subscriptions
+  disableAll();
 };
 
 export const circleRippleAndCircleSpectrum = () => {
   // Clear existing effects
   clearAllEffects();
+
+  // Enable circle ripple effect
+  enableCircleRipple();
 
   // Enable and configure circle spectrum
   const circleSpec = spectrums["circle"];
@@ -30,6 +37,9 @@ export const circleRippleAndCircleSpectrum = () => {
 export const squareRippleAndVerticalSpectrum = () => {
   // Clear existing effects
   clearAllEffects();
+
+  // Enable square ripple effect
+  enableSquareRipple();
 
   // Enable and configure vertical spectrum
   const verticalSpec = spectrums["vertical"] as VerticalSpectrum;
