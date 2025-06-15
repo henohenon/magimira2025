@@ -15,7 +15,7 @@
     // Reconstruct HTML structure
     this.innerHTML = `
       <div class="mb-2">
-        <label class="block text-gray-400 text-xs mb-1">${label}</label>
+        <label>${label}</label>
         <div class="flex space-x-2">
           <div class="flex-1">
             ${label1 ? `<label class="block text-gray-400 text-xs">${label1}</label>` : ''}

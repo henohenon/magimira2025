@@ -3,3 +3,7 @@
 aside button {
     @apply bg-gray-600 w-full h-8 rounded cursor-pointer hover:bg-gray-500 active:bg-blue-400;
 }
+
+aside label{
+    @apply block text-gray-400 text-xs mb-1;
+}

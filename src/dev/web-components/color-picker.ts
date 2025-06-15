@@ -15,7 +15,7 @@
     // Reconstruct HTML structure
     this.innerHTML = `
       <div class="mb-4">
-        <label class="block text-gray-400 text-xs mb-1">${label}</label>
+        <label>${label}</label>
         <input 
           type="color" 
           class="w-full h-8 bg-gray-600 text-white rounded cursor-pointer"
