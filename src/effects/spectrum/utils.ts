@@ -79,7 +79,6 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
     isEnabled = enable;
   }
   const addFrequency = (strength: number, index: number) => {
-    console.log(frequencyTarget[index], strength, clamp(frequencyTarget[index]/255 + strength, 0, 1) * 255);
     frequencyTarget[index] = clamp(frequencyTarget[index]/255 + strength, 0, 1) * 255;
   }
   const addFrequencyByRate = (rate: number, strength: number, range: number = 0) => {

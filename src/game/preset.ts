@@ -8,7 +8,7 @@ import {
     enableHorizontalSpectrum,
     enableVerticalSpectrum
 } from "./spectrum";
-import {disableAllRipples, enableSquareRipple} from "./ripple";
+import {disableAllRipples, enableCircleRipple, enableSquareRipple} from "./ripple";
 import {switchCamera} from "~/babylon/camera.ts";
 
 let currentPresetIndex = 0;
@@ -50,7 +50,7 @@ clearAllEffects();
 const presets = [
     () => {
         switchCamera("side");
-        enableSquareRipple();
+        enableCircleRipple();
         enableCircleSpectrum()
     },
     () => {

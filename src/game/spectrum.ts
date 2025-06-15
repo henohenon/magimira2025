@@ -32,7 +32,6 @@ const enableSpectrum = <T extends Spectrum>(
     let isClicking = false;
 
     const s = pointer.subscribe((e: WithPositionInputEvent) => {
-        console.log(e, window.innerWidth);
         // Calculate the position
         const currentRate = calculateRate(e);
 

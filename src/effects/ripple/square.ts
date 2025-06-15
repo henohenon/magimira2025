@@ -1,25 +1,31 @@
-﻿import {addRipple, type Ripple, type RippleConfig} from "./index.ts";
+﻿import {addRipple, hexToRgb, type Ripple, type RippleConfig} from "./index.ts";
 
 export type SquareRippleConfig = RippleConfig & {
   angle?: number;
 };
 
 export const createSquareRipple = (x: number, y: number, config: SquareRippleConfig = {}): Ripple => {
-  const lifeTime = config.lifeTime || 100;
-  const sizeDelta = config.sizeDelta || 1;
-  let size = config.defaultSize || 10;
-  const opacityDelta = config.opacityDelta || 0.05;
-  let opacity = config.defaultOpacity || 1;
-  const hue = config.color || 0;
-  const angle = config.angle || 0;
+  const lifeTime = config.lifeTime || 1000;
+  const defaultSize = config.defaultSize || 0;
+  const targetSize = config.targetSize || 100;
+  const defaultOpacity = config.defaultOpacity || 1;
+  const targetOpacity = config.targetOpacity || 0;
+  const inputColor = config.color || "#ffffff";
+  const {r, g, b} = hexToRgb(inputColor);
+  const colorBase = `rgba(${r}, ${g}, ${b}`;
+  const angle = config.angle || 45;
   let time = 0;
+  let size = defaultSize;
+  let opacity = defaultOpacity;
 
   const update = (deltaTime: number) => {
-
-    size += sizeDelta;
-    opacity += opacityDelta;
-
+    // Calculate progress as a value between 0 and 1
     time += deltaTime;
+    const progress = Math.min(time / lifeTime, 1);
+
+    // Interpolate size and opacity based on progress
+    size = defaultSize + (targetSize - defaultSize) * progress;
+    opacity = defaultOpacity + (targetOpacity - defaultOpacity) * progress;
 
     return time < lifeTime;
   };
@@ -27,11 +33,11 @@ export const createSquareRipple = (x: number, y: number, config: SquareRippleCon
   const draw = (ctx: CanvasRenderingContext2D) => {
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(angle);
+    ctx.rotate(angle * Math.PI / 180);
 
     ctx.beginPath();
     ctx.rect(-size, -size, size * 2, size * 2);
-    ctx.strokeStyle = `hsla(${hue}, 100%, 70%, ${opacity})`;
+    ctx.strokeStyle = `${colorBase}, ${opacity})`;
     ctx.stroke();
 
     ctx.restore();
