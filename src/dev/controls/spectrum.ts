@@ -38,16 +38,34 @@ const circleMaxRadius = document.getElementById("circle-spectrum-max-radius") as
 const horizontalWidth = document.getElementById("horizontal-spectrum-width") as NumberInput;
 const verticalHeight = document.getElementById("vertical-spectrum-height") as NumberInput;
 
+const horizontalRate = document.getElementById("horizontal-spectrum-rate") as InputAndSlider;
+const horizontalStrength = document.getElementById("horizontal-spectrum-strength") as NumberInput;
+const horizontalSetFrequencyButton = document.getElementById("horizontal-spectrum-set-frequency-button") as HTMLButtonElement;
+
+const verticalRate = document.getElementById("vertical-spectrum-rate") as InputAndSlider;
+const verticalStrength = document.getElementById("vertical-spectrum-strength") as NumberInput;
+const verticalSetFrequencyButton = document.getElementById("vertical-spectrum-set-frequency-button") as HTMLButtonElement;
+
+const circleRate = document.getElementById("circle-spectrum-rate") as InputAndSlider;
+const circleStrength = document.getElementById("circle-spectrum-strength") as NumberInput;
+const circleSetFrequencyButton = document.getElementById("circle-spectrum-set-frequency-button") as HTMLButtonElement;
+
 if (!circleEnable || !horizontalEnable || !verticalEnable ||
     !circleColor || !horizontalColor || !verticalColor ||
     !circleHueOffset || !horizontalHueOffset || !verticalHueOffset ||
     !circleOpacity || !horizontalOpacity || !verticalOpacity ||
     !circleLineCounts || !horizontalLineCounts || !verticalLineCounts ||
-    !circleMinRadius || !circleMaxRadius || !horizontalWidth || !verticalHeight) {
+    !circleMinRadius || !circleMaxRadius || !horizontalWidth || !verticalHeight ||
+    !horizontalRate || !horizontalStrength || !horizontalSetFrequencyButton ||
+    !verticalRate || !verticalStrength || !verticalSetFrequencyButton ||
+    !circleRate || !circleStrength || !circleSetFrequencyButton) {
     console.error(circleEnable, horizontalEnable, verticalEnable, circleColor, horizontalColor, verticalColor,
         circleHueOffset, horizontalHueOffset, verticalHueOffset,
         circleOpacity, horizontalOpacity, verticalOpacity, circleLineCounts,
-        horizontalLineCounts, verticalLineCounts, circleMinRadius, circleMaxRadius, horizontalWidth, verticalHeight);
+        horizontalLineCounts, verticalLineCounts, circleMinRadius, circleMaxRadius, horizontalWidth, verticalHeight,
+        horizontalRate, horizontalStrength, horizontalSetFrequencyButton,
+        verticalRate, verticalStrength, verticalSetFrequencyButton,
+        circleRate, circleStrength, circleSetFrequencyButton);
     throw new Error("Spectrum controls not found");
 }
 
@@ -130,4 +148,31 @@ horizontalWidth.subscribe((height) => {
 verticalHeight.subscribe((width) => {
     if (!width) return;
     verticalSpectrum.setWidth(width);
+});
+
+// Set up event listener for horizontal spectrum setFrequencyByRate button
+horizontalSetFrequencyButton.addEventListener("click", () => {
+    const rate = horizontalRate.value;
+    const strength = horizontalStrength.value;
+    if (rate !== null && strength !== null) {
+        horizontalSpectrum.setFrequencyByRate(rate, strength);
+    }
+});
+
+// Set up event listener for vertical spectrum setFrequencyByRate button
+verticalSetFrequencyButton.addEventListener("click", () => {
+    const rate = verticalRate.value;
+    const strength = verticalStrength.value;
+    if (rate !== null && strength !== null) {
+        verticalSpectrum.setFrequencyByRate(rate, strength);
+    }
+});
+
+// Set up event listener for circle spectrum setFrequencyByRate button
+circleSetFrequencyButton.addEventListener("click", () => {
+    const rate = circleRate.value;
+    const strength = circleStrength.value;
+    if (rate !== null && strength !== null) {
+        circleSpectrum.setFrequencyByRate(rate, strength);
+    }
 });
