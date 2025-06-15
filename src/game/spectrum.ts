@@ -1,4 +1,4 @@
-﻿import { pointer } from "~/input.ts";
+﻿import { pointer } from "~/game/input.ts";
 import type { Subscription } from "prismatix-input/subject";
 import type { WithPositionInputEvent } from "prismatix-input/web-native";
 

@@ -11,7 +11,7 @@ import type {ToggleSwitch} from "../web-components/toggle-switch.ts";
 import type {ColorPicker} from "../web-components/color-picker.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";
 import type {TripleInput} from "../web-components/triple-input.ts";
-import {setLightingPreset, switchLight} from "~/game/preset/light.ts";
+import {setLightingPreset, switchLight} from "~/game/light.ts";
 
 const spotLightEnable = document.getElementById("spot-light-enable") as ToggleSwitch;
 const spotLightDiffuse = document.getElementById("spot-light-diffuse") as ColorPicker;
