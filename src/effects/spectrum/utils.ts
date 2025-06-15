@@ -7,6 +7,7 @@ export interface Spectrum {
   setLineCounts(count: number): void;
   setEnable(enable: boolean): void;
   setFrequency(strength: number, index: number): void;
+  setFrequencyByRate(rate: number, strength: number): void;
   drawSpectrum(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, deltaTime: number): void;
 }
 
@@ -79,7 +80,10 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
   const setFrequency = (strength: number, index: number) => {
     frequencyTarget[index] = clamp(strength, 0, 100) * 255;
   }
-
+  const setFrequencyByRate = (rate: number, strength: number) => {
+    const index = Math.round(rate * (lineCounts - 1));
+    setFrequency(strength, index);
+  }
   const drawSpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number, deltaTime: number) => {
     if(!isEnabled) return;
 
@@ -103,6 +107,7 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
     setLineCounts,
     setEnable,
     setFrequency,
+    setFrequencyByRate,
     drawSpectrum,
   };
 };
