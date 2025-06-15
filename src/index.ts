@@ -48,15 +48,35 @@ textaliveEvents.on("onGameStart", () => {
 
     playAnimation("startListen");
 
-    // Change random preset when a beat is detected
-    textaliveEvents.on("onBeat", () => {
-        // Select a random preset from the array
-        const randomIndex = Math.floor(Math.random() * presets.length);
-        const randomPreset = presets[randomIndex];
+    // Variables to track preset rotation
+    let currentPresetIndex = 0;
+    let phraseCount = 0;
 
-        // Apply the selected preset
-        randomPreset();
-        console.log("Beat detected! Changed to preset:", randomIndex);
+    // Apply the first preset immediately
+    presets[0]();
+    console.log("Game started! Applied first preset: 0");
+
+    // Change preset in order every 2 phrases
+    textaliveEvents.on("onPhrase", () => {
+        phraseCount++;
+
+        // Change preset every 2 phrases
+        if (phraseCount >= 2) {
+            // Select the next preset in order
+            const preset = presets[currentPresetIndex];
+
+            // Apply the selected preset
+            preset();
+            console.log("Phrase detected! Changed to preset:", currentPresetIndex);
+
+            // Move to the next preset (loop back to the beginning if needed)
+            currentPresetIndex = (currentPresetIndex + 1) % presets.length;
+
+            // Reset phrase count
+            phraseCount = 0;
+        } else {
+            console.log("Phrase detected! Waiting for next phrase. Current count:", phraseCount);
+        }
     });
 });
 
