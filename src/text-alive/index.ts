@@ -1,5 +1,5 @@
 import "../effects/spectrum/circle-spectrum.ts";
-import { Player } from "textalive-app-api";
+import {Player, type ISongMap, type IRepetitiveSegment} from "textalive-app-api";
 import { events } from "./events";
 
 
@@ -16,6 +16,8 @@ export const player = new Player({
 });
 player.volume = 20;
 
+// Cache for song map
+let segments: IRepetitiveSegment[] | null = null;
 
 player.addListener({
 	onAppReady: async () => {
@@ -36,6 +38,10 @@ player.addListener({
 			},
 		);
 		events.emit("onAppReady");
+	},
+	onSongMapLoad: (songMap: ISongMap) => {
+		// Cache the song map
+		segments = songMap.segments.map(s => s.segments).flat();
 	}
 });
 
@@ -69,4 +75,14 @@ export const updateTextAlive = (startPosition: number, endPosition:number) => {
 	});
 	// events.emit("onVocalAmplitude", { amplitude: vocalAmplitude });
 	// events.emit("onValenceArousal", { valence: valenceArousal.v, arousal: valenceArousal.a });
+
+	// Use the cached song map if available
+	if (segments) {
+		// Check for segments that are active in the current time range
+		for (const segment of segments) {
+			if(segment.startTime >= startPosition && segment.startTime <= endPosition){
+				events.emit("onSegment", { segment: segment.index, duration: segment.endTime - startPosition });
+			}
+		}
+	}
 }
