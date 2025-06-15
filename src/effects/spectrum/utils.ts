@@ -7,7 +7,7 @@ export interface Spectrum {
   setLineCounts(count: number): void;
   setEnable(enable: boolean): void;
   setFrequency(strength: number, index: number): void;
-  setFrequencyByRate(rate: number, strength: number): void;
+  setFrequencyByRate(rate: number, strength: number, range?: number): void;
   drawSpectrum(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, deltaTime: number): void;
 }
 
@@ -80,9 +80,23 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
   const setFrequency = (strength: number, index: number) => {
     frequencyTarget[index] = clamp(strength, 0, 100) * 255;
   }
-  const setFrequencyByRate = (rate: number, strength: number) => {
+  const setFrequencyByRate = (rate: number, strength: number, range: number = 0) => {
     const index = Math.round(rate * (lineCounts - 1));
+    // Set frequency for the main index
     setFrequency(strength, index);
+
+    // Set frequency for the range of lines around the index
+    for (let i = 1; i <= range; i++) {
+      // Set frequency for lines before the index
+      if (index - i >= 0) {
+        setFrequency(strength, index - i);
+      }
+
+      // Set frequency for lines after the index
+      if (index + i < lineCounts) {
+        setFrequency(strength, index + i);
+      }
+    }
   }
   const drawSpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number, deltaTime: number) => {
     if(!isEnabled) return;
