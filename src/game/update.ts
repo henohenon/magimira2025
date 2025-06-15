@@ -1,0 +1,24 @@
+﻿import {updateTextAlive} from "~/text-alive";
+import {updateEffects} from "~/effects";
+
+export const startUpdateCycle = () => {
+    const now = performance.now();
+    lastTime = now;
+    lastPosition = 0;
+    updateCycle(now);
+}
+
+let lastTime = 0;
+let lastPosition = 0;
+const updateCycle = (currentTime: number) => {
+    const deltaTime = currentTime - lastTime;
+    const currentPosition = lastPosition + deltaTime;
+
+    updateTextAlive(lastPosition, currentPosition)
+    updateEffects(deltaTime);
+
+    lastTime = currentTime;
+    lastPosition = currentPosition;
+    requestAnimationFrame(updateCycle);
+}
+

@@ -1,22 +1,27 @@
-﻿import {addRipple, type Ripple, type RippleConfig} from "./index.ts";
+﻿import {addRipple, hexToRgb, type Ripple, type RippleConfig} from "./index.ts";
 
 export const createCircleRipple = (x: number, y: number, config: RippleConfig = {}): Ripple => {
-  const lifeTime = config.lifeTime || 100;
-  let size = config.defaultSize || 0;
-  const sizeDelta = config.sizeDelta || 1;
-  const opacityDelta = config.opacityDelta || 0.05;
-  let opacity = config.defaultOpacity || 1;
+  const lifeTime = config.lifeTime || 1000;
+  const defaultSize = config.defaultSize || 0;
+  const targetSize = config.targetSize || 100;
+  const defaultOpacity = config.defaultOpacity || 1;
+  const targetOpacity = config.targetOpacity || 0;
   const inputColor = config.color || "#ffffff";
   const {r, g, b} = hexToRgb(inputColor);
   const colorBase = `rgba(${r}, ${g}, ${b}`
 
   let time = 0;
+  let size = defaultSize;
+  let opacity = defaultOpacity;
 
   const update = (deltaTime: number) => {
-    size += sizeDelta;
-    opacity += opacityDelta;
-
+    // Calculate progress as a value between 0 and 1
     time += deltaTime;
+    const progress = Math.min(time / lifeTime, 1);
+
+    // Interpolate size and opacity based on progress
+    size = defaultSize + (targetSize - defaultSize) * progress;
+    opacity = defaultOpacity + (targetOpacity - defaultOpacity) * progress;
 
     return time < lifeTime;
   };
@@ -35,10 +40,3 @@ export const createCircleRipple = (x: number, y: number, config: RippleConfig = 
   addRipple(ripple)
   return ripple;
 };
-
-function hexToRgb(hex: string) {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return {r, g, b};
-}

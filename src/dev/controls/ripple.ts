@@ -47,9 +47,9 @@ circleGenerateButton.addEventListener("click", () => {
         {
             lifeTime: circleLifetime.value,
             defaultSize: circleDefaultSize.value,
-            sizeDelta: circleSizeDelta.value,
+            targetSize: circleSizeDelta.value,
             defaultOpacity: circleDefaultOpacity.value,
-            opacityDelta: circleOpacityDelta.value,
+            targetOpacity: circleOpacityDelta.value,
             color: circleColor.value,
         }
     );
@@ -63,9 +63,11 @@ squareGenerateButton.addEventListener("click", () => {
         {
             lifeTime: squareLifetime.value,
             defaultSize: squareDefaultSize.value,
-            sizeDelta: squareSizeDelta.value,
+            targetSize: squareSizeDelta.value,
             defaultOpacity: squareDefaultOpacity.value,
-            opacityDelta: squareOpacityDelta.value,
+            targetOpacity: squareOpacityDelta.value,
+            color: squareColor.value,
+            angle: squareAngle.value,
         }
     )
 })
