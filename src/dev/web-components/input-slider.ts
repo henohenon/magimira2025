@@ -10,7 +10,7 @@
     // Reconstruct HTML structure
     this.innerHTML = `
       <div class="mb-2">
-          <label class="block text-gray-400 text-xs mb-1">${label}</label>
+          <label>${label}</label>
           <input 
             type="range" 
             class="w-full bg-gray-600 text-white rounded 
