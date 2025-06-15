@@ -4,8 +4,6 @@ import "./input.ts";
 import { events as babylonEvents } from "./babylon/events";
 import {events, events as textaliveEvents} from "./text-alive/events";
 import { playAnimation } from "./babylon/mdl";
-import {type Spectrum} from "./effects/spectrum";
-import { circleSpectrum, verticalSpectrum, horizontalSpectrum } from "./effects/spectrum";
 import {updateEffects} from "./effects";
 import {player, updateTextAlive} from "./text-alive";
 import {
@@ -21,11 +19,6 @@ import {
     colorFullAll
 } from "./effects/preset";
 
-export const spectrums: Record<string, Spectrum> = {
-    "circle": circleSpectrum(),
-    "horizontal": horizontalSpectrum(),
-    "vertical": verticalSpectrum()
-};
 
 // Array of preset functions for random selection on beat
 const presets = [

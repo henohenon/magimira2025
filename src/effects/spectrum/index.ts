@@ -1,5 +1,7 @@
-import { spectrums } from "~/index.ts";
 import { clamp } from "~/util.ts";
+import {circleSpectrum} from "~/effects/spectrum/circle-spectrum.ts";
+import {horizontalSpectrum} from "~/effects/spectrum/horizontal-spectrum.ts";
+import {verticalSpectrum} from "~/effects/spectrum/vertical-spectrum.ts";
 
 // Define the maximum number of lines for the spectrum
 const lineMaxCounts = 40;
@@ -135,3 +137,9 @@ function hexToHsl(hex: string) {
 export * from "./circle-spectrum.ts";
 export * from "./horizontal-spectrum.ts";
 export * from "./vertical-spectrum.ts";
+
+export const spectrums: Record<string, Spectrum> = {
+  "circle": circleSpectrum(),
+  "horizontal": horizontalSpectrum(),
+  "vertical": verticalSpectrum()
+};

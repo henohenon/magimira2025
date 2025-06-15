@@ -1,4 +1,4 @@
-﻿import { spectrums } from "~/index.ts";
+﻿import { spectrums } from "~/effects/spectrum";
 import {
     type CircleSpectrum,
     type HorizontalSpectrum,

@@ -1,4 +1,4 @@
-﻿import { spectrums } from "~/index.ts";
+﻿import { spectrums } from "../spectrum";
 import { clearRipples } from "../ripple";
 import { setLightingPreset, switchLight } from "./light";
 import { addCameraRotation, setCameraPosition, switchCamera } from "~/babylon/camera";
