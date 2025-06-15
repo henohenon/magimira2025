@@ -8,6 +8,7 @@ export interface Spectrum {
   setEnable(enable: boolean): void;
   addFrequency(strength: number, index: number): void;
   addFrequencyByRate(rate: number, strength: number, range?: number): void;
+  refreshFrequency(): void;
   drawSpectrum(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, deltaTime: number): void;
 }
 
@@ -21,7 +22,7 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
   let lineCounts = 40; // Use a default value that matches the frequency array length
   let isEnabled = true;
   const constantSpeed = 100;
-  const diffSpeedRate = 2;
+  const diffSpeedRate = 4;
 
   // Each spectrum has its own frequency data
   const lineMaxCounts = 40;
@@ -41,14 +42,14 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
       const absDiff = Math.abs(diff);
       if (target === 0) {
         // If the target is 0, the frequency should stop immediately
-        speed = constantSpeed;
+        speed = -constantSpeed;
       } else {
         // If the target is not 0, the frequency should slow down and speed up
         const speedMultiplier = 1 + (absDiff / 255 * diffSpeedRate);
         speed = constantSpeed * speedMultiplier * (diff > 0 ? 1 : -1);
       }
       // Limit the speed to the difference between the current and target
-      speed *= deltaTime;
+      speed *= deltaTime/1000;
       if (absDiff < Math.abs(speed)) {
         speed = diff;
       }
@@ -78,7 +79,8 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
     isEnabled = enable;
   }
   const addFrequency = (strength: number, index: number) => {
-    frequencyTarget[index] = clamp(frequencyTarget[index] + strength, 0, 100) * 255;
+    console.log(frequencyTarget[index], strength, clamp(frequencyTarget[index]/255 + strength, 0, 1) * 255);
+    frequencyTarget[index] = clamp(frequencyTarget[index]/255 + strength, 0, 1) * 255;
   }
   const addFrequencyByRate = (rate: number, strength: number, range: number = 0) => {
     const index = Math.round(rate * (lineCounts - 1));
@@ -101,6 +103,9 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
         addFrequency(attenuatedStrength, index + i);
       }
     }
+  }
+  const refreshFrequency = () => {
+    frequencyTarget.fill(0);
   }
   const drawSpectrum = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number, deltaTime: number) => {
     if(!isEnabled) return;
@@ -126,6 +131,7 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
     setEnable,
     addFrequency,
     addFrequencyByRate,
+    refreshFrequency,
     drawSpectrum,
   };
 };
