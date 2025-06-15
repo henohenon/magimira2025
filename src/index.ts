@@ -75,7 +75,7 @@ textaliveEvents.on("onGameStart", () => {
     initContainerFadeOut();
     textaliveBannerFadeOut();
 
-    playAnimation("startListen");
+    playAnimation("dotmiku", "startListen");
 
     anyInput.subscribe(() => {
         addFrequency(50);
@@ -84,7 +84,7 @@ textaliveEvents.on("onGameStart", () => {
 
     duration.subscribe(() => {
         console.log("duration");
-        playAnimation("listening");
+        playAnimation("dotmiku", "listening");
     });
     counter.subscribe((e) => {
         console.log("counter", e);
