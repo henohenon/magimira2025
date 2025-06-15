@@ -12,5 +12,6 @@ type Events = {
     onChorus: { maxDuration: number, duration: number };
     onVocalAmplitude: { amplitude: number };
     onValenceArousal: { valence: number, arousal: number };
+    onSegment: { segment: number, duration: number };
 }
 export const events: Emitter<Events> = mitt<Events>();
