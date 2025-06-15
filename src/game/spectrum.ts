@@ -1,40 +1,140 @@
 ﻿import { pointer } from "~/game/input.ts";
 import type { Subscription } from "prismatix-input/subject";
 import type { WithPositionInputEvent } from "prismatix-input/web-native";
+import { spectrums } from "~/effects/spectrum";
+import type { CircleSpectrum, HorizontalSpectrum, VerticalSpectrum } from "~/effects/spectrum";
+import type { Spectrum } from "~/effects/spectrum";
 
-// Single subscription reference
-let currentSubscription: Subscription | null = null;
-
+// Array to track all active subscriptions
+export const subscriptions: Array<Subscription> = [];
 
 /**
- * Enables spectrum frequency effect on click with ripple visualization
- * @param strength Optional strength of the frequency effect (default: 200)
+ * Common function to enable spectrum frequency effect on click
+ * @param spectrumType The type of spectrum to enable
+ * @param calculateRate Function to calculate position from input event
+ * @param addFrequency Function to add frequency to the spectrum
+ * @param strength Optional strength of the frequency effect (default: 0.3)
+ * @param range Optional range of the frequency effect (default: 2)
  * @returns Subscription that can be used to unsubscribe
  */
-export const enableFrequencyOnClick = () => {
-    // If there's already an active subscription, unsubscribe first
-    if (currentSubscription) {
-        currentSubscription.unsubscribe();
-        currentSubscription = null;
-    }
+const enableSpectrum = <T extends Spectrum>(
+    spectrumType: T,
+    calculateRate: (e: WithPositionInputEvent) => number,
+    addFrequency: (spectrum: T, position: number, strength: number, range: number) => void,
+    strength: number = 0.3,
+    range: number = 2
+) => {
+    spectrumType.setEnable(true);
 
-    // Create a new subscription
-    currentSubscription = pointer.subscribe((e: WithPositionInputEvent) => {
+    // TODO: Multi tap countermeasure
+    // Variable to cache the last position
+    let lastRate: number | null = null;
+    let isClicking = false;
+
+    const s = pointer.subscribe((e: WithPositionInputEvent) => {
+        // Calculate the position
+        const currentRate = calculateRate(e);
+
         if (e.action === "start") {
-            // Add frequency effect to all active spectrums
+            // Add frequency effect to spectrum
+            addFrequency(spectrumType, currentRate, strength, range);
+            // Cache the position
+            lastRate = currentRate;
+            isClicking = true;
+        } else if (isClicking && e.action === "move") {
+            if(lastRate !== null){
+                // Remove effect at the last position
+                addFrequency(spectrumType, lastRate, -strength, range);
+            }
+
+            // Add effect at the current position
+            addFrequency(spectrumType, currentRate, strength, range);
+
+            // Update the last position
+            lastRate = currentRate;
+        } else if (e.action === "end") {
+            isClicking = false;
+
+            if(lastRate !== null){
+                // Add negative frequency effect to spectrum when input ends
+                addFrequency(spectrumType, lastRate, -strength, range);
+                // Reset the last position
+                lastRate = null;
+            }
         }
     });
 
-    return currentSubscription;
-}
+    // Add the subscription to the array
+    subscriptions.push(s);
+
+    return s;
+};
 
 /**
- * Disables the spectrum frequency subscription
+ * Enables circle spectrum frequency effect on click
+ * @param strength Optional strength of the frequency effect (default: 0.3)
+ * @param range Optional range of the frequency effect (default: 2)
+ * @returns Subscription that can be used to unsubscribe
+ */
+export const enableCircleSpectrum = (strength: number = 0.3, range: number = 2) => {
+    const circleSpectrum = spectrums["circle"] as CircleSpectrum;
+
+    return enableSpectrum(
+        circleSpectrum,
+        (e) => Math.atan2(e.y - window.innerHeight / 2, e.x - window.innerWidth / 2),
+        (spectrum, angle, strength, range) => spectrum.addFrequencyByAngle(angle, strength, range),
+        strength,
+        range
+    );
+};
+
+/**
+ * Enables horizontal spectrum frequency effect on click
+ * @param strength Optional strength of the frequency effect (default: 0.3)
+ * @param range Optional range of the frequency effect (default: 2)
+ * @returns Subscription that can be used to unsubscribe
+ */
+export const enableHorizontalSpectrum = (strength: number = 0.3, range: number = 2) => {
+    const horizontalSpectrum = spectrums["horizontal"] as HorizontalSpectrum;
+
+    return enableSpectrum(
+        horizontalSpectrum,
+        (e) => e.x / window.innerWidth,
+        (spectrum, rate, strength, range) => spectrum.addFrequencyByRate(rate, strength, range),
+        strength,
+        range
+    );
+};
+
+/**
+ * Enables vertical spectrum frequency effect on click
+ * @param strength Optional strength of the frequency effect (default: 0.3)
+ * @param range Optional range of the frequency effect (default: 2)
+ * @returns Subscription that can be used to unsubscribe
+ */
+export const enableVerticalSpectrum = (strength: number = 0.3, range: number = 2) => {
+    const verticalSpectrum = spectrums["vertical"] as VerticalSpectrum;
+
+    return enableSpectrum(
+        verticalSpectrum,
+        (e) => e.y / window.innerHeight,
+        (spectrum, rate, strength, range) => spectrum.addFrequencyByRate(rate, strength, range),
+        strength,
+        range
+    );
+};
+
+/**
+ * Disables all spectrum frequency subscriptions
  */
 export const disableFrequencyOnClick = () => {
-    // Unsubscribe if there's an active subscription
-    if (currentSubscription) {
-        currentSubscription.unsubscribe();
-        currentSubscription = null;
+    // Call each unsubscribe function
+    for (const s of subscriptions) s.unsubscribe();
+    for (const spectrum of Object.values(spectrums)) {
+        spectrum.setEnable(false);
+        spectrum.refreshFrequency();
     }
-}
+
+    // Clear the subscriptions array
+    subscriptions.length = 0;
+};

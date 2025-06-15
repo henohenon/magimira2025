@@ -33,7 +33,7 @@ export const enableSquareRipple = () => {
 }
 
 // Function to disable all subscriptions
-export const disableAll = () => {
+export const disableAllRipples = () => {
     // Call each unsubscribe function
     for (const s of subscriptions) s.unsubscribe();
 
