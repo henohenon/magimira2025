@@ -85,16 +85,20 @@ export const createSpectrum = (beforeDraw: (ctx: CanvasRenderingContext2D, cente
     // Set frequency for the main index
     addFrequency(strength, index);
 
-    // Set frequency for the range of lines around the index
+    // Set frequency for the range of lines around the index with attenuation
     for (let i = 1; i <= range; i++) {
+      // Calculate attenuation factor based on distance from center
+      const attenuationFactor = 1 - (i / (range + 1));
+      const attenuatedStrength = strength * attenuationFactor;
+
       // Set frequency for lines before the index
       if (index - i >= 0) {
-        addFrequency(strength, index - i);
+        addFrequency(attenuatedStrength, index - i);
       }
 
       // Set frequency for lines after the index
       if (index + i < lineCounts) {
-        addFrequency(strength, index + i);
+        addFrequency(attenuatedStrength, index + i);
       }
     }
   }
