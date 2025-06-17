@@ -23,18 +23,30 @@
             <dev-accordion summary="models" id="models-accordion">
                 <dev-accordion summary="dotmiku" id="model-accordion-dotmiku">
                     <toggle-switch id="model-visibility-dotmiku" label="enable"></toggle-switch>
+                    <triple-input id="model-add-position-dotmiku" label="add position"></triple-input>
+                    <button id="model-add-position-button-dotmiku">AddPosition</button>
+                    <triple-input id="model-set-position-dotmiku" label="set position"></triple-input>
+                    <button id="model-set-position-button-dotmiku">SetPosition</button>
                     <dev-accordion summary="animations" id="animations-accordion-dotmiku"></dev-accordion>
                 </dev-accordion>
                 <dev-accordion summary="dotmiku-tanabata" id="model-accordion-dotmiku-tanabata">
                     <toggle-switch id="model-visibility-dotmiku-tanabata" label="enable"></toggle-switch>
+                    <triple-input id="model-add-position-dotmiku-tanabata" label="add position"></triple-input>
+                    <button id="model-add-position-button-dotmiku-tanabata">AddPosition</button>
+                    <triple-input id="model-set-position-dotmiku-tanabata" label="set position"></triple-input>
+                    <button id="model-set-position-button-dotmiku-tanabata">SetPosition</button>
                     <dev-accordion summary="animations" id="animations-accordion-dotmiku-tanabata"></dev-accordion>
                 </dev-accordion>
                 <dev-accordion summary="room" id="model-accordion-room">
                     <toggle-switch id="model-visibility-room" label="enable"></toggle-switch>
+                    <triple-input id="model-add-position-room" label="add position"></triple-input>
+                    <button id="model-add-position-button-room">AddPosition</button>
+                    <triple-input id="model-set-position-room" label="set position"></triple-input>
+                    <button id="model-set-position-button-room">SetPosition</button>
                 </dev-accordion>
             </dev-accordion>
             <dev-accordion summary="camera">
-                <drop-down id="active-camera-dropdown" label="select active camera" data-options="default, front, side, top" value="default"></drop-down>
+                <drop-down id="active-camera-dropdown" label="select active camera" data-options="default, front, side, top, normal" value="default"></drop-down>
                 <triple-input id="camera-add-position-input" label="add position"></triple-input>
                 <button id="camera-add-position-button">AddPosition</button>
                 <triple-input id="camera-set-position-input" label="set position"></triple-input>

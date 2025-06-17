@@ -191,3 +191,55 @@ export function isModelVisible(modelName: string): boolean {
 	// Use the first mesh to determine visibility
 	return meshes[0].isVisible;
 }
+
+/**
+ * Set the absolute position of a model
+ * @param modelName Name of the model to position
+ * @param x X coordinate
+ * @param y Y coordinate
+ * @param z Z coordinate
+ * @returns true if model was found and positioned, false otherwise
+ */
+export function setPosition(modelName: string, x: number, y: number, z: number): boolean {
+	const meshes = getMeshes(modelName);
+	if (!meshes || isNaN(x) || isNaN(y) || isNaN(z)) {
+		console.warn(`Invalid model name or position values: ${modelName}, x=${x}, y=${y}, z=${z}`);
+		return false;
+	}
+
+	// Set position for all meshes in the model
+	for (const mesh of meshes) {
+		mesh.position.x = x;
+		mesh.position.y = y;
+		mesh.position.z = z;
+	}
+
+	console.log(`Model "${modelName}" position set to: x=${x}, y=${y}, z=${z}`);
+	return true;
+}
+
+/**
+ * Add to the current position of a model
+ * @param modelName Name of the model to position
+ * @param x X offset to add
+ * @param y Y offset to add
+ * @param z Z offset to add
+ * @returns true if model was found and positioned, false otherwise
+ */
+export function addPosition(modelName: string, x: number, y: number, z: number): boolean {
+	const meshes = getMeshes(modelName);
+	if (!meshes || isNaN(x) || isNaN(y) || isNaN(z)) {
+		console.warn(`Invalid model name or position values: ${modelName}, x=${x}, y=${y}, z=${z}`);
+		return false;
+	}
+
+	// Add to position for all meshes in the model
+	for (const mesh of meshes) {
+		mesh.position.x += x;
+		mesh.position.y += y;
+		mesh.position.z += z;
+	}
+
+	console.log(`Model "${modelName}" position adjusted by: x=${x}, y=${y}, z=${z}`);
+	return true;
+}

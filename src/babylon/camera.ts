@@ -1,14 +1,16 @@
 import "@babylonjs/loaders";
 import type {Scene} from "@babylonjs/core/scene";
 import {ArcRotateCamera} from "@babylonjs/core/Cameras/arcRotateCamera";
+import {FreeCamera} from "@babylonjs/core/Cameras/freeCamera";
 import {Vector3} from "@babylonjs/core/Maths/math.vector";
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
 import {events} from "./events";
+import {getNormalCamera} from "./camera/normal";
 
-export type CameraType = "default" | "front" | "side" | "top";
+export type CameraType = "default" | "front" | "side" | "top" | "normal";
 // カメラ管理
-const cameras = {} as Record<CameraType, ArcRotateCamera>;
+const cameras = {} as Record<CameraType, ArcRotateCamera | FreeCamera>;
 
 // 初期状態の保存
 interface CameraInitialState {
@@ -64,20 +66,32 @@ events.on("onSceneDefinition", async ({ scene }) => {
 		scene,
 	);
 
+	// ノーマルカメラ（FreeCamera）
+	cameras.normal = getNormalCamera();
+
 	/*
     for(const camera of Object.values(cameras)) {
         camera.detachControl();
     }*/
-    
+
     // 初期状態を保存
 	for (const [key, camera] of Object.entries(cameras)) {
-		const arcCamera = camera as ArcRotateCamera;
-		initialCameraStates[key] = {
-			alpha: arcCamera.alpha,
-			beta: arcCamera.beta,
-			radius: arcCamera.radius,
-			target: arcCamera.target.clone()
-		};
+		if (camera instanceof ArcRotateCamera) {
+			initialCameraStates[key] = {
+				alpha: camera.alpha,
+				beta: camera.beta,
+				radius: camera.radius,
+				target: camera.target.clone()
+			};
+		} else if (camera instanceof FreeCamera) {
+			// For FreeCamera, store position as target and use default values for rotation
+			initialCameraStates[key] = {
+				alpha: 0,
+				beta: 0,
+				radius: 0,
+				target: camera.position.clone()
+			};
+		}
 	}
 });
 
@@ -96,17 +110,23 @@ export function addCameraPosition(key: CameraType, x: number, y: number, z: numb
 	}
 
 	const camera = cameras[key];
-	const currentTarget = camera.target;
-	
-	// 相対的に移動（現在の位置に加算）
-	const newTarget = new Vector3(
-		currentTarget.x + x,
-		currentTarget.y + y,
-		currentTarget.z + z
-	);
-	
-	// カメラのターゲット（注視点）を更新
-	camera.setTarget(newTarget);
+
+	if (camera instanceof ArcRotateCamera) {
+		const currentTarget = camera.target;
+
+		// 相対的に移動（現在の位置に加算）
+		const newTarget = new Vector3(
+			currentTarget.x + x,
+			currentTarget.y + y,
+			currentTarget.z + z
+		);
+
+		// カメラのターゲット（注視点）を更新
+		camera.setTarget(newTarget);
+	} else if (camera instanceof FreeCamera) {
+		// For FreeCamera, adjust the position directly
+		camera.position.addInPlace(new Vector3(x, y, z));
+	}
 
 	// 現在アクティブなカメラの場合は、シーンのカメラも更新
 	/*
@@ -141,17 +161,22 @@ export function setCameraPosition(key: CameraType, x: number, y: number, z: numb
 	}
 
 	const camera = cameras[key];
-	
-	// 位置を直接設定
-	const newTarget = new Vector3(x, y, z);
-	camera.setTarget(newTarget);
+
+	if (camera instanceof ArcRotateCamera) {
+		// 位置を直接設定
+		const newTarget = new Vector3(x, y, z);
+		camera.setTarget(newTarget);
+	} else if (camera instanceof FreeCamera) {
+		// For FreeCamera, set the position directly
+		camera.position = new Vector3(x, y, z);
+	}
 
 	/*
 	// 現在アクティブなカメラの場合は、シーンのカメラも更新
 	if (_scene.activeCamera === camera) {
 		_scene.activeCamera = camera;
 	}*/
-	
+
 	console.log(`Camera ${key} position set to: x=${x}, y=${y}, z=${z}`);
 	return true;
 }
@@ -163,16 +188,30 @@ export function addCameraRotation(key: CameraType, alpha: number, beta: number, 
 		return false;
 	}
 
-	const camera = cameras[key] as ArcRotateCamera;
-	
-	// 現在の値に加算
-	camera.alpha += alpha;
-	camera.beta += beta;
-	camera.radius += radius;
+	const camera = cameras[key];
 
-	applyArcLimit(camera);
+	if (camera instanceof ArcRotateCamera) {
+		// 現在の値に加算
+		camera.alpha += alpha;
+		camera.beta += beta;
+		camera.radius += radius;
 
-	console.log(`Camera ${key} rotation adjusted by: alpha=${alpha}, beta=${beta}, radius=${radius}`);
+		applyArcLimit(camera);
+
+		console.log(`ArcRotateCamera ${key} rotation adjusted by: alpha=${alpha}, beta=${beta}, radius=${radius}`);
+	} else if (camera instanceof FreeCamera) {
+		// For FreeCamera, rotation is handled differently
+		// alpha affects rotation around Y axis (yaw)
+		// beta affects rotation around X axis (pitch)
+		// radius is not applicable for FreeCamera
+
+		// Convert alpha and beta to radians if they're not already
+		camera.rotation.y += alpha;
+		camera.rotation.x += beta;
+
+		console.log(`FreeCamera ${key} rotation adjusted by: yaw=${alpha}, pitch=${beta}`);
+	}
+
 	return true;
 }
 
@@ -198,16 +237,29 @@ export function setCameraRotation(key: CameraType, alpha: number, beta: number, 
 		return false;
 	}
 
-	const camera = cameras[key] as ArcRotateCamera;
+	const camera = cameras[key];
 
-	// 値を直接設定
-	camera.alpha = alpha;
-	camera.beta = beta;
-	camera.radius = radius;
+	if (camera instanceof ArcRotateCamera) {
+		// 値を直接設定
+		camera.alpha = alpha;
+		camera.beta = beta;
+		camera.radius = radius;
 
-	applyArcLimit(camera);
-	
-	console.log(`Camera ${key} rotation set to: alpha=${alpha}, beta=${beta}, radius=${radius}`);
+		applyArcLimit(camera);
+
+		console.log(`ArcRotateCamera ${key} rotation set to: alpha=${alpha}, beta=${beta}, radius=${radius}`);
+	} else if (camera instanceof FreeCamera) {
+		// For FreeCamera, set rotation directly
+		// alpha affects rotation around Y axis (yaw)
+		// beta affects rotation around X axis (pitch)
+		// radius is not applicable for FreeCamera
+
+		camera.rotation.y = alpha;
+		camera.rotation.x = beta;
+
+		console.log(`FreeCamera ${key} rotation set to: yaw=${alpha}, pitch=${beta}`);
+	}
+
 	return true;
 }
 
@@ -269,19 +321,31 @@ export function resetAllCamerasToInitial() {
 
 // 特定のカメラを初期状態に戻す関数
 export function resetCameraToInitial(key: CameraType) {
-    const camera = cameras[key] as ArcRotateCamera;
+    const camera = cameras[key];
     const initialState = initialCameraStates[key];
-    
+
     if (!camera || !initialState) {
         console.warn(`Camera "${key}" or its initial state not found`);
         return false;
     }
-    
-    camera.alpha = initialState.alpha;
-    camera.beta = initialState.beta;
-    camera.radius = initialState.radius;
-    camera.setTarget(initialState.target.clone());
-    
-    console.log(`Camera ${key} reset to initial state`);
+
+    if (camera instanceof ArcRotateCamera) {
+        camera.alpha = initialState.alpha;
+        camera.beta = initialState.beta;
+        camera.radius = initialState.radius;
+        camera.setTarget(initialState.target.clone());
+
+        console.log(`ArcRotateCamera ${key} reset to initial state`);
+    } else if (camera instanceof FreeCamera) {
+        // For FreeCamera, restore the position
+        camera.position = initialState.target.clone();
+        // Reset rotation to default (looking forward)
+        camera.rotation.x = 0;
+        camera.rotation.y = 0;
+        camera.rotation.z = 0;
+
+        console.log(`FreeCamera ${key} reset to initial state`);
+    }
+
     return true;
 }

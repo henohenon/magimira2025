@@ -1,5 +1,6 @@
 ﻿import {events as babylonEvents} from "../../babylon/events.ts";
-import {getAnimations, isModelVisible, playAnimation, toggleModelVisibility} from "../../babylon/mdl.ts";
+import {getAnimations, isModelVisible, playAnimation, toggleModelVisibility, setPosition, addPosition} from "../../babylon/mdl.ts";
+import type {TripleInput} from "../web-components/triple-input.ts";
 
 // Initialize toggle switches for each model when models are loaded
 babylonEvents.on("onModelsLoaded", (modelNames) => {
@@ -22,6 +23,28 @@ babylonEvents.on("onModelsLoaded", (modelNames) => {
                 toggleModelVisibility(modelName);
             }
         });
+
+        // Set up position controls
+        const addPositionInput = document.getElementById(`model-add-position-${modelName}`) as TripleInput;
+        const addPositionButton = document.getElementById(`model-add-position-button-${modelName}`) as HTMLButtonElement;
+        const setPositionInput = document.getElementById(`model-set-position-${modelName}`) as TripleInput;
+        const setPositionButton = document.getElementById(`model-set-position-button-${modelName}`) as HTMLButtonElement;
+
+        if (addPositionInput && addPositionButton) {
+            addPositionButton.addEventListener("click", () => {
+                addPosition(modelName, addPositionInput.value1, addPositionInput.value2, addPositionInput.value3);
+            });
+        } else {
+            console.warn(`Add position controls for model "${modelName}" not found`);
+        }
+
+        if (setPositionInput && setPositionButton) {
+            setPositionButton.addEventListener("click", () => {
+                setPosition(modelName, setPositionInput.value1, setPositionInput.value2, setPositionInput.value3);
+            });
+        } else {
+            console.warn(`Set position controls for model "${modelName}" not found`);
+        }
 
         if(modelName === "room") continue;
         const animationsElem = document.querySelector(`#animations-accordion-${modelName} details`) as HTMLElement;
