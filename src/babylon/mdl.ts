@@ -6,7 +6,7 @@ import { events } from "./events";
 import type { AnimationGroup } from "@babylonjs/core/Animations/animationGroup";
 import type { Scene } from "@babylonjs/core/scene";
 import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
-import { Vector3 } from "@babylonjs/core/Maths/math.vector";
+import {Quaternion, Vector3} from "@babylonjs/core/Maths/math.vector";
 
 // Store loaded model meshes by model name
 const modelMeshes: Record<string, Record<string, AbstractMesh>> = {};
@@ -238,3 +238,48 @@ export function addPosition(modelName: string, x: number, y: number, z: number):
 	console.log(`Model "${modelName}" position adjusted by: x=${x}, y=${y}, z=${z}`);
 	return true;
 }
+
+/**
+ * Set the absolute rotation of a model (in radians)
+ * @param modelName Name of the model to rotate
+ * @param x Rotation around X axis (in radians)
+ * @param y Rotation around Y axis (in radians)
+ * @param z Rotation around Z axis (in radians)
+ * @returns true if model was found and rotated, false otherwise
+ */
+export function setModelRotation(modelName: string, x: number, y: number, z: number): boolean {
+	const mesh = rootModels[modelName];
+	if (!mesh || isNaN(x) || isNaN(y) || isNaN(z)) {
+		console.warn(`Invalid model name or rotation values: ${modelName}, x=${x}, y=${y}, z=${z}`);
+		return false;
+	}
+
+	mesh.rotationQuaternion = Quaternion.RotationYawPitchRoll(degToRad(y), degToRad(x), degToRad(z));
+
+	console.log(`Model "${modelName}" rotation set to: x=${x}, y=${y}, z=${z}`);
+	return true;
+}
+
+/**
+ * Add to the current rotation of a model (in radians)
+ * @param modelName Name of the model to rotate
+ * @param x Additional rotation around X axis (in radians)
+ * @param y Additional rotation around Y axis (in radians)
+ * @param z Additional rotation around Z axis (in radians)
+ * @returns true if model was found and rotated, false otherwise
+ */
+export function addModelRotation(modelName: string, x: number, y: number, z: number): boolean {
+	const mesh = rootModels[modelName];
+	if (!mesh || isNaN(x) || isNaN(y) || isNaN(z)) {
+		console.warn(`Invalid model name or rotation values: ${modelName}, x=${x}, y=${y}, z=${z}`);
+		return false;
+	}
+
+	const currentRotation = mesh.rotationQuaternion || Quaternion.Identity();
+	mesh.rotationQuaternion = currentRotation.multiply(Quaternion.RotationYawPitchRoll(degToRad(y), degToRad(x), degToRad(z)));
+
+	console.log(`Model "${modelName}" rotation adjusted by: x=${x}, y=${y}, z=${z}`);
+	return true;
+}
+
+const degToRad = (deg: number) => deg * Math.PI / 180;
