@@ -6,11 +6,13 @@ import { events } from "./events";
 import type { AnimationGroup } from "@babylonjs/core/Animations/animationGroup";
 import type { Scene } from "@babylonjs/core/scene";
 import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 
 // Store loaded model meshes by model name
 const modelMeshes: Record<string, Record<string, AbstractMesh>> = {};
 // Store animation groups by model name
 const modelAnimations: Record<string, Record<string, AnimationGroup>> = {};
+const rootModels: Record<string, AbstractMesh> = {};
 
 /**
  * Load a model from the specified source path
@@ -51,6 +53,10 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 			mesh.material = mat;
 		}
 		// mesh.alwaysSelectAsActiveMesh = true;
+
+		if(mesh.name === "__root__") {
+			rootModels[modelName] = mesh;
+		}
 	}
 
 	// Store meshes by model name
@@ -201,18 +207,12 @@ export function isModelVisible(modelName: string): boolean {
  * @returns true if model was found and positioned, false otherwise
  */
 export function setPosition(modelName: string, x: number, y: number, z: number): boolean {
-	const meshes = getMeshes(modelName);
-	if (!meshes || isNaN(x) || isNaN(y) || isNaN(z)) {
+	const mesh = rootModels[modelName];
+	if (!mesh || isNaN(x) || isNaN(y) || isNaN(z)) {
 		console.warn(`Invalid model name or position values: ${modelName}, x=${x}, y=${y}, z=${z}`);
 		return false;
 	}
-
-	// Set position for all meshes in the model
-	for (const mesh of meshes) {
-		mesh.position.x = x;
-		mesh.position.y = y;
-		mesh.position.z = z;
-	}
+	mesh.position.set(x, y, z);
 
 	console.log(`Model "${modelName}" position set to: x=${x}, y=${y}, z=${z}`);
 	return true;
@@ -227,18 +227,13 @@ export function setPosition(modelName: string, x: number, y: number, z: number):
  * @returns true if model was found and positioned, false otherwise
  */
 export function addPosition(modelName: string, x: number, y: number, z: number): boolean {
-	const meshes = getMeshes(modelName);
-	if (!meshes || isNaN(x) || isNaN(y) || isNaN(z)) {
+	const mesh = rootModels[modelName];
+	if (!mesh || isNaN(x) || isNaN(y) || isNaN(z)) {
 		console.warn(`Invalid model name or position values: ${modelName}, x=${x}, y=${y}, z=${z}`);
 		return false;
 	}
 
-	// Add to position for all meshes in the model
-	for (const mesh of meshes) {
-		mesh.position.x += x;
-		mesh.position.y += y;
-		mesh.position.z += z;
-	}
+	mesh.position.addInPlace(new Vector3(x, y, z));
 
 	console.log(`Model "${modelName}" position adjusted by: x=${x}, y=${y}, z=${z}`);
 	return true;

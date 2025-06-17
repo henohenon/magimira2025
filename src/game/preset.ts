@@ -14,6 +14,7 @@ import {switchCamera} from "~/babylon/camera.ts";
 let currentPresetIndex = 0;
 let lastSegmentTime = 0;
 
+
 events.on("onSegment", () => {
     // Don't apply the same preset twice in a row'
     const now = performance.now();
