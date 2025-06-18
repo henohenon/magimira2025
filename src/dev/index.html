@@ -45,11 +45,22 @@
                     <button id="model-add-rotation-button-room">AddRotation</button>
                 </dev-accordion>
             </dev-accordion>
-            <dev-accordion summary="camera">
-                <drop-down id="active-camera-dropdown" label="select active camera" data-options="arc, free" value="arc"></drop-down>
-                <triple-input id="camera-add-position-input" label="add position"></triple-input>
-                <button id="camera-add-position-button">AddPosition</button>
-                <triple-input id="camera-set-position-input" label="set position"></triple-input>
+            <drop-down id="camera-active-type" label="Camera Type" data-options="arc, free" value="arc"></drop-down>
+            <dev-accordion summary="Arc Camera Controls">
+                <triple-input id="camera-arc-position-add" label="Add Target Position"></triple-input>
+                <button id="camera-arc-position-add-btn">Add Position</button>
+                <triple-input id="camera-arc-position-set" label="Set Target Position"></triple-input>
+                <triple-input id="camera-arc-rotation-add" label="Add Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
+                <button id="camera-arc-rotation-add-btn">Add Rotation</button>
+                <triple-input id="camera-arc-rotation-set" label="Set Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
+            </dev-accordion>
+            <dev-accordion summary="Free Camera Controls">
+                <triple-input id="camera-free-position-add" label="Add Camera Position"></triple-input>
+                <button id="camera-free-position-add-btn">Add Position</button>
+                <triple-input id="camera-free-position-set" label="Set Camera Position"></triple-input>
+                <triple-input id="camera-free-rotation-add" label="Add Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
+                <button id="camera-free-rotation-add-btn">Add Rotation</button>
+                <triple-input id="camera-free-rotation-set" label="Set Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
             </dev-accordion>
             <dev-accordion summary="light">
                 <dev-accordion summary="spot light">

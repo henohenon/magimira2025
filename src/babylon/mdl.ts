@@ -7,6 +7,7 @@ import type { AnimationGroup } from "@babylonjs/core/Animations/animationGroup";
 import type { Scene } from "@babylonjs/core/scene";
 import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 import {Quaternion, Vector3} from "@babylonjs/core/Maths/math.vector";
+import {degToRad, radToDeg} from ".";
 
 // Store loaded model meshes by model name
 const modelMeshes: Record<string, Record<string, AbstractMesh>> = {};
@@ -337,6 +338,3 @@ export function addModelRotation(modelName: string, x: number, y: number, z: num
 	console.log(`Model "${modelName}" rotation adjusted by: x=${x}, y=${y}, z=${z}`);
 	return true;
 }
-
-const degToRad = (deg: number) => deg * Math.PI / 180;
-const radToDeg = (rad: number) => rad * 180 / Math.PI;
