@@ -13,5 +13,8 @@ type Events = {
     onVocalAmplitude: { amplitude: number };
     onValenceArousal: { valence: number, arousal: number };
     onSegment: { segment: number, duration: number };
+    onPause: undefined;
+    onPlay: { position: number };
+    onSeek: { position: number };
 }
 export const events: Emitter<Events> = mitt<Events>();
