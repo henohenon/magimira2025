@@ -2,12 +2,32 @@
 import {events} from "~/text-alive/events.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";
 
-const forceStartButton = document.getElementById("force-start-button");
-forceStartButton?.addEventListener("click", () => {
-    player.requestMediaSeek(0);
-    player.requestPlay();
-    events.emit("onGameStart");
-})
+const autoStartToggle = document.getElementById("auto-start-toggle") as HTMLInputElement;
+// Store auto-start preference - load from localStorage or default to false
+let autoStart = localStorage.getItem("autoStart") === "true";
+
+if (autoStartToggle) {
+    // Set initial state
+    autoStartToggle.checked = autoStart;
+
+    // Add event listener for changes
+    autoStartToggle.addEventListener("change", (event) => {
+        const target = event.target as HTMLInputElement;
+        autoStart = target.checked;
+        // Save preference to localStorage
+        localStorage.setItem("autoStart", autoStart.toString());
+    });
+}
+
+// Listen for app ready event to auto-start if enabled
+events.on("onAppReady", () => {
+    if (autoStart) {
+        setTimeout(() => {
+            player.requestMediaSeek(0);
+            player.requestPlay();
+        }, 3000); // Small delay to ensure everything is ready
+    }
+});
 
 const pauseUnpauseButton = document.getElementById("pause-unpause-button");
 pauseUnpauseButton?.addEventListener("click", () => {
