@@ -7,7 +7,6 @@ import "@babylonjs/loaders/glTF";
 import { events } from "./events";
 import "./mdl";
 import "./camera";
-import "./camera/normal";
 import "./light";
 
 const canvas = document.getElementById("babylon-canvas") as HTMLCanvasElement;

@@ -199,6 +199,62 @@ export function isModelVisible(modelName: string): boolean {
 }
 
 /**
+ * Check if a model is currently enabled (alias for isModelVisible)
+ * @param modelName Name of the model to check
+ * @returns true if model is enabled, false if disabled or not found
+ */
+export function isModelEnabled(modelName: string): boolean {
+	return isModelVisible(modelName);
+}
+
+/**
+ * Get the current position of a model
+ * @param modelName Name of the model
+ * @returns Object with x, y, z coordinates or null if model not found
+ */
+export function getModelPosition(modelName: string): { x: number, y: number, z: number } | null {
+	const mesh = rootModels[modelName];
+	if (!mesh) {
+		console.warn(`Model "${modelName}" not found.`);
+		return null;
+	}
+
+	return {
+		x: mesh.position.x,
+		y: mesh.position.y,
+		z: mesh.position.z
+	};
+}
+
+/**
+ * Get the current rotation of a model (in degrees)
+ * @param modelName Name of the model
+ * @returns Object with x, y, z rotation values or null if model not found
+ */
+export function getModelRotation(modelName: string): { x: number, y: number, z: number } | null {
+	const mesh = rootModels[modelName];
+	if (!mesh) {
+		console.warn(`Model "${modelName}" not found.`);
+		return null;
+	}
+
+	// If rotationQuaternion is not set, return zero rotation
+	if (!mesh.rotationQuaternion) {
+		return { x: 0, y: 0, z: 0 };
+	}
+
+	// Convert quaternion to Euler angles
+	const euler = mesh.rotationQuaternion.toEulerAngles();
+
+	// Convert radians to degrees
+	return {
+		x: radToDeg(euler.x),
+		y: radToDeg(euler.y),
+		z: radToDeg(euler.z)
+	};
+}
+
+/**
  * Set the absolute position of a model
  * @param modelName Name of the model to position
  * @param x X coordinate
@@ -283,3 +339,4 @@ export function addModelRotation(modelName: string, x: number, y: number, z: num
 }
 
 const degToRad = (deg: number) => deg * Math.PI / 180;
+const radToDeg = (rad: number) => rad * 180 / Math.PI;

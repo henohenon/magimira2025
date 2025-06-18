@@ -6,7 +6,6 @@ import {Vector3} from "@babylonjs/core/Maths/math.vector";
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
 import {events} from "./events";
-import {getNormalCamera} from "./camera/normal";
 
 export type CameraType = "default" | "front" | "side" | "top" | "normal";
 // カメラ管理
@@ -22,6 +21,8 @@ interface CameraInitialState {
 
 const initialCameraStates: { [key: string]: CameraInitialState } = {};
 
+// Normal camera (FreeCamera) implementation
+let normalCamera: FreeCamera;
 let _scene: Scene;
 events.on("onSceneDefinition", async ({ scene }) => {
     _scene = scene;
@@ -67,7 +68,19 @@ events.on("onSceneDefinition", async ({ scene }) => {
 	);
 
 	// ノーマルカメラ（FreeCamera）
-	cameras.normal = getNormalCamera();
+	normalCamera = new FreeCamera(
+		"camera-normal",
+		new Vector3(0, 1.5, -5), // Position the camera slightly above ground level and back from origin
+		scene,
+	);
+
+	// Set the target to look at
+	normalCamera.setTarget(new Vector3(0, 1, 0)); // Look at a point slightly above the origin
+
+	// Enable camera controls
+	normalCamera.attachControl();
+
+	cameras.normal = normalCamera;
 
 	/*
     for(const camera of Object.values(cameras)) {
@@ -347,5 +360,30 @@ export function resetCameraToInitial(key: CameraType) {
         console.log(`FreeCamera ${key} reset to initial state`);
     }
 
+    return true;
+}
+
+// Function to get the normal camera instance
+export function getNormalCamera(): FreeCamera {
+    return normalCamera;
+}
+
+// Function to activate the normal camera
+export function activateNormalCamera() {
+    if (!normalCamera || !_scene) return;
+    _scene.activeCamera = normalCamera;
+}
+
+// Function to set the position of the normal camera
+export function setNormalCameraPosition(x: number, y: number, z: number) {
+    if (!normalCamera) return false;
+    normalCamera.position = new Vector3(x, y, z);
+    return true;
+}
+
+// Function to set the target of the normal camera
+export function setNormalCameraTarget(x: number, y: number, z: number) {
+    if (!normalCamera) return false;
+    normalCamera.setTarget(new Vector3(x, y, z));
     return true;
 }
