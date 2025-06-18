@@ -1,6 +1,7 @@
 ﻿import {player} from "~/text-alive";
 import {events} from "~/text-alive/events.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";
+import {cameraActions} from "~/game/events";
 
 const autoStartToggle = document.getElementById("auto-start-toggle") as HTMLInputElement;
 // Store auto-start preference - load from localStorage or default to false
@@ -55,3 +56,37 @@ events.on("onAppReady", () => {
 timeInputSlider.subscribe((time) => {
     player.requestMediaSeek(Math.round(time));
 })
+
+// Function to format milliseconds to MM:SS format
+function formatTime(ms: number): string {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Get the timestamp buttons container
+const timestampButtonsContainer = document.getElementById('timestamp-buttons');
+
+// Function to generate timestamp buttons for each camera action
+if (!timestampButtonsContainer) throw new Error("Timestamp buttons container not found");
+
+// Clear existing buttons
+timestampButtonsContainer.innerHTML = '';
+
+// Sort camera actions by position
+const sortedActions = [...cameraActions].sort((a, b) => a.position - b.position);
+
+// Create a button for each camera action
+sortedActions.forEach(action => {
+    const button = document.createElement('button');
+    button.className = 'px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700';
+    button.textContent = `${action.name} (${formatTime(action.position)})`;
+
+    // Add click event listener to seek to the camera action position and play
+    button.addEventListener('click', () => {
+        player.requestMediaSeek(action.position);
+    });
+
+    timestampButtonsContainer.appendChild(button);
+});

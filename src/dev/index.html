@@ -19,6 +19,10 @@
                 <button id="pause-unpause-button">pause/unpause</button>
                 <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
                 <input-slider id="time-input-slider" label="time" min="0" max="position-max" step="1" value="0"></input-slider>
+                <div id="timestamp-buttons-container" class="mt-2">
+                    <p class="text-xs text-gray-400 mb-1">Camera Action Timestamps:</p>
+                    <div id="timestamp-buttons" class="flex flex-wrap gap-2"></div>
+                </div>
             </dev-accordion>
             <dev-accordion summary="models" id="models-accordion">
                 <dev-accordion summary="dotmiku" id="model-accordion-dotmiku">
