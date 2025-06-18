@@ -83,7 +83,7 @@ if (!cameraActionDropdown) throw new Error("Camera action dropdown not found");
 const optionsStr = sortedActions.map(action => `${action.name} (${formatTime(action.position)})`).join(',');
 
 // Set the data-options attribute dynamically
-cameraActionDropdown.setAttribute('data-options', optionsStr);
+cameraActionDropdown.setDataOptions(optionsStr);
 
 // Create a button for each camera action
 sortedActions.forEach(action => {
