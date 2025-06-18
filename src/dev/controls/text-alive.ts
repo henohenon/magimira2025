@@ -24,18 +24,14 @@ volumeInputSlider?.subscribe((volume) => {
 })
 
 const timeInputSlider = document.getElementById("time-input-slider") as InputAndSlider;
+if (!timeInputSlider) {
+    throw new Error("Time controls not found");
+}
 
-// Update slider max to actual duration when video is loaded
-player.addListener({
-    onVideoReady: () => {
-        if (timeInputSlider && player.video.duration) {
-            timeInputSlider.max = player.video.duration;
-        }
-    }
+events.on("onAppReady", () => {
+    timeInputSlider.max = player.video.duration;
 });
 
-timeInputSlider?.subscribe((time) => {
-    console.log(time, player.video.duration);
-    player.requestMediaSeek(time);
-    player.requestPlay();
+timeInputSlider.subscribe((time) => {
+    player.requestMediaSeek(Math.round(time));
 })

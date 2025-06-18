@@ -1,35 +1,47 @@
 ﻿import type { InputAndSlider } from "../web-components/input-slider";
 import {events} from "~/text-alive/events.ts";
+import {player} from "~/text-alive";
 
 // Reference to the time slider element
 const timeInputSlider = document.getElementById("time-input-slider") as InputAndSlider;
+if (!timeInputSlider) throw new Error("Time controls not found");
 
 // Track time independently from game/update.ts
 let lastTime = 0;
 let lastPosition = 0;
+let animationFrameId: number | null = null;
 
-export const startUpdateCycle = () => {
-    const now = performance.now();
-    lastTime = now;
-    lastPosition = 0;
-    updateCycle(now);
-}
 
 const updateCycle = (currentTime: number) => {
     const deltaTime = currentTime - lastTime;
     const currentPosition = lastPosition + deltaTime;
 
     // Update the time slider with the current position
-    if (timeInputSlider) {
-        timeInputSlider.value = currentPosition;
-    }
+    timeInputSlider.value = Math.round(currentPosition);
 
     lastTime = currentTime;
     lastPosition = currentPosition;
-    requestAnimationFrame(updateCycle);
+    animationFrameId = requestAnimationFrame(updateCycle);
 }
 
-events.on("onGameStart", () => {
-    // Initialize the update cycle when the module is loaded
-    startUpdateCycle();
-})
+const stopUpdateCycle = () => {
+    if (!animationFrameId) return;
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+}
+const restartUpdateCycle = (position: number) => {
+    stopUpdateCycle();
+    lastTime = performance.now();
+    lastPosition = position;
+    updateCycle(lastTime);
+}
+events.on("onPause", () => {
+    stopUpdateCycle();
+});
+events.on("onPlay", ({ position }) => {
+        restartUpdateCycle(position);
+});
+events.on("onSeek", ({ position }) => {
+    if(!player.isPlaying) return;
+    restartUpdateCycle(position);
+});
