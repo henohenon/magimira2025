@@ -17,8 +17,8 @@ export const events: Emitter<Events> = mitt<Events>();
 
 // Array of camera actions with their trigger positions
 export const cameraActions: CameraAction[] = [
-  { name: "initialize", position: 0 },
-  { name: "camera-zoom-leg", position: 31000 }
+  { name: "2C", position: 11000 },
+  { name: "first", position: 21000 }
 ];
 
 export const checkCameraActions = (position: number): void => {
@@ -29,6 +29,9 @@ export const checkCameraActions = (position: number): void => {
         action,
         position
       });
+      if(action.name === "first") {
+        continue;
+      }
       // Mark the action as executed
       action.executed = true;
     }

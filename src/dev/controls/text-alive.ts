@@ -24,8 +24,18 @@ volumeInputSlider?.subscribe((volume) => {
 })
 
 const timeInputSlider = document.getElementById("time-input-slider") as InputAndSlider;
+
+// Update slider max to actual duration when video is loaded
+player.addListener({
+    onVideoReady: () => {
+        if (timeInputSlider && player.video.duration) {
+            timeInputSlider.max = player.video.duration;
+        }
+    }
+});
+
 timeInputSlider?.subscribe((time) => {
     console.log(time, player.video.duration);
-    player.requestMediaSeek(time / 100 * player.video.duration);
-
+    player.requestMediaSeek(time);
+    player.requestPlay();
 })

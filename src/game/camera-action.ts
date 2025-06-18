@@ -1,7 +1,9 @@
-﻿import {setCameraPosition, switchCamera} from "~/babylon/camera.ts";
+﻿import {setCameraPosition, setCameraRotation, switchCamera} from "~/babylon/camera.ts";
 import {events as babylonEvents} from "~/babylon/events.ts";
 import {setModelRotation, setPosition} from "~/babylon/mdl.ts";
 import {events} from "./events";
+import {setLightingPreset} from "~/game/light.ts";
+import {setLightIntensity} from "~/babylon/light.ts";
 
 switchCamera("normal");
 setCameraPosition("normal", -2.5, 1.5, -8);
@@ -9,7 +11,10 @@ setCameraPosition("normal", -2.5, 1.5, -8);
 babylonEvents.on("onModelsLoaded", () => {
     setPosition("dotmiku", -2.5, 0 , -1);
     setModelRotation("dotmiku", 0, 0, 0);
+    setLightingPreset("night");
 });
+
+let intensity = 0.08;
 
 // Listen for camera action events
 events.on("onCameraAction", ({action, position}) => {
@@ -17,14 +22,13 @@ events.on("onCameraAction", ({action, position}) => {
 
     // Handle different camera actions
     switch(action.name) {
-        case "initialize":
-            setCameraPosition("normal", -2.5, 1.5, -8);
+        case "2C":
+            setCameraPosition("normal", 2.5, 1.5, -2);
+            setCameraRotation("normal", -Math.PI / 2, 0, 0);
             break;
-        case "camera-zoom-leg":
-            setCameraPosition("normal", -2.5, 1.5, -4);
-            break;
-        default:
-            // Default camera behavior
+        case "first":
+            intensity += 0.01;
+            setLightIntensity("hemispheric", intensity);
             break;
     }
 });
