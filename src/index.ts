@@ -11,7 +11,6 @@ import {
 } from "~/effects/dom";
 import {playAnimation} from "~/babylon/mdl.ts";
 import {player} from "~/text-alive";
-import {startUpdateCycle} from "~/game/update.ts";
 
 
 let babylonLoaded = false;
@@ -47,5 +46,4 @@ const updateLoading = () => {
 textaliveEvents.on("onGameStart", () => {
     player.requestMediaSeek(0);
     player.requestPlay();
-    startUpdateCycle();
 });
