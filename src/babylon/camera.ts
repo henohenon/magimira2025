@@ -261,12 +261,11 @@ export function setCameraRotation(key: CameraType, alpha: number, beta: number, 
 		applyArcLimit(camera);
 
 		console.log(`ArcRotateCamera ${key} rotation set to: alpha=${alpha}, beta=${beta}, radius=${radius}`);
-	} else if (camera instanceof FreeCamera) {
+	} else {
 		// For FreeCamera, set rotation directly
 		// alpha affects rotation around Y axis (yaw)
 		// beta affects rotation around X axis (pitch)
 		// radius is not applicable for FreeCamera
-
 		camera.rotation.y = alpha;
 		camera.rotation.x = beta;
 
@@ -309,7 +308,7 @@ export function getCameraRotation(key: CameraType): { alpha: number, beta: numbe
 	return {
 		alpha: camera.alpha,
 		beta: camera.beta,
-	radius: camera.radius
+		radius: camera.radius
 	};
 }
 
@@ -387,3 +386,4 @@ export function setNormalCameraTarget(x: number, y: number, z: number) {
     normalCamera.setTarget(new Vector3(x, y, z));
     return true;
 }
+
