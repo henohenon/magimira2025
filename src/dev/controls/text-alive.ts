@@ -25,7 +25,23 @@ if (autoStartToggle) {
 events.on("onAppReady", () => {
     if (autoStart) {
         setTimeout(() => {
-            player.requestMediaSeek(0);
+            // Check if there's a default camera action selected in the dropdown
+            if (cameraActionDropdown.value) {
+                // Find the corresponding camera action
+                const actionName = cameraActionDropdown.value.split(' (')[0];
+                const action = sortedActions.find(a => a.name === actionName);
+
+                if (action) {
+                    // Seek to the camera action position
+                    player.requestMediaSeek(action.position);
+                } else {
+                    // Fallback to beginning if action not found
+                    player.requestMediaSeek(0);
+                }
+            } else {
+                // No camera action selected, start from beginning
+                player.requestMediaSeek(0);
+            }
             player.requestPlay();
         }, 3000); // Small delay to ensure everything is ready
     }
@@ -84,6 +100,23 @@ const optionsStr = sortedActions.map(action => `${action.name} (${formatTime(act
 
 // Set the data-options attribute dynamically
 cameraActionDropdown.setDataOptions(optionsStr);
+
+// Load default camera action from localStorage if available
+const savedDefaultCameraAction = localStorage.getItem("defaultCameraAction");
+if (savedDefaultCameraAction) {
+    // Find if the saved action still exists in the current options
+    const optionsArray = optionsStr.split(',').map(s => s.trim());
+    if (optionsArray.includes(savedDefaultCameraAction)) {
+        cameraActionDropdown.value = savedDefaultCameraAction;
+    }
+}
+
+// Subscribe to dropdown changes to save the selected value
+cameraActionDropdown.subscribe((value) => {
+    if (value) {
+        localStorage.setItem("defaultCameraAction", value);
+    }
+});
 
 // Create a button for each camera action
 sortedActions.forEach(action => {
