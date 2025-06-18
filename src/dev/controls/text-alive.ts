@@ -65,14 +65,11 @@ function formatTime(ms: number): string {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-// Get the timestamp buttons container
-const timestampButtonsContainer = document.getElementById('timestamp-buttons');
+// Get the details element inside the camera action timestamps accordion
+const cameraActionAccordionDetails = document.querySelector('#camera-action-timestamps-accordion details') as HTMLElement;
 
 // Function to generate timestamp buttons for each camera action
-if (!timestampButtonsContainer) throw new Error("Timestamp buttons container not found");
-
-// Clear existing buttons
-timestampButtonsContainer.innerHTML = '';
+if (!cameraActionAccordionDetails) throw new Error("Camera action timestamps accordion details not found");
 
 // Sort camera actions by position
 const sortedActions = [...cameraActions].sort((a, b) => a.position - b.position);
@@ -80,7 +77,6 @@ const sortedActions = [...cameraActions].sort((a, b) => a.position - b.position)
 // Create a button for each camera action
 sortedActions.forEach(action => {
     const button = document.createElement('button');
-    button.className = 'px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700';
     button.textContent = `${action.name} (${formatTime(action.position)})`;
 
     // Add click event listener to seek to the camera action position and play
@@ -88,5 +84,5 @@ sortedActions.forEach(action => {
         player.requestMediaSeek(action.position);
     });
 
-    timestampButtonsContainer.appendChild(button);
+    cameraActionAccordionDetails.appendChild(button);
 });
