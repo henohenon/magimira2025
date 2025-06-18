@@ -5,10 +5,10 @@
     const placeholder = this.getAttribute('placeholder') ?? "Select an option";
     const value = this.getAttribute('value') ?? "";
     const name = this.getAttribute('name') ?? "";
-    
+
     let options: string[] = [];
     const optionsStr = this.getAttribute('data-options');
-    
+
     if (optionsStr) {
       try {
         options = optionsStr.split(",").map(s => s.trim());
@@ -53,6 +53,44 @@
     this.select?.addEventListener('change', () => {
       cb(this.value);
     });
+  }
+
+  public setDataOptions(optionsStr: string) {
+    // Update the attribute
+    this.setAttribute('data-options', optionsStr);
+
+    if (!this.select) return;
+
+    // Parse options
+    let options: string[] = [];
+    try {
+      options = optionsStr.split(",").map(s => s.trim());
+    } catch (e) {
+      console.error('Invalid options format for dropdown', e);
+      return;
+    }
+
+    // Save current value
+    const currentValue = this.value;
+
+    // Clear existing options (except the placeholder)
+    while (this.select.options.length > 1) {
+      this.select.remove(1);
+    }
+
+    // Add new options
+    for (const opt of options) {
+      const option = document.createElement('option');
+      option.value = opt;
+      option.text = opt;
+      option.selected = opt === currentValue;
+      this.select.add(option);
+    }
+
+    // If the current value is no longer in the options, select the placeholder
+    if (currentValue && !options.includes(currentValue)) {
+      this.select.value = "";
+    }
   }
 }
 
