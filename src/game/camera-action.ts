@@ -5,8 +5,8 @@ import {events} from "./events";
 import {setLightingPreset} from "~/game/light.ts";
 import {setLightIntensity} from "~/babylon/light.ts";
 
-switchCamera("normal");
-setCameraPosition("normal", -2.5, 1.5, -8);
+switchCamera("free");
+setCameraPosition("free", -2.5, 1.5, -8);
 
 babylonEvents.on("onModelsLoaded", () => {
     setPosition("dotmiku", -2.5, 0 , -1);
@@ -23,8 +23,8 @@ events.on("onCameraAction", ({action, position}) => {
     // Handle different camera actions
     switch(action.name) {
         case "2C":
-            setCameraPosition("normal", 2.5, 1.5, -2);
-            setCameraRotation("normal", -Math.PI / 2, 0, 0);
+            setCameraPosition("free", 2.5, 1.5, -2);
+            setCameraRotation("free", -Math.PI / 2, 0, 0);
             break;
         case "first":
             intensity += 0.01;
@@ -35,6 +35,6 @@ events.on("onCameraAction", ({action, position}) => {
 
 export const cameraActionUpdate = (position: number) => {
     if(3000 < position) {
-        setCameraPosition("normal", -2.5, 1.5, -8 + position);
+        setCameraPosition("free", -2.5, 1.5, -8 + position);
     }
 }

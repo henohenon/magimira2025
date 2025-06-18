@@ -7,7 +7,7 @@ import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
 import {events} from "./events";
 
-export type CameraType = "default" | "front" | "side" | "top" | "normal";
+export type CameraType = "free" | "arc";
 // カメラ管理
 const cameras = {} as Record<CameraType, ArcRotateCamera | FreeCamera>;
 
@@ -21,15 +21,15 @@ interface CameraInitialState {
 
 const initialCameraStates: { [key: string]: CameraInitialState } = {};
 
-// Normal camera (FreeCamera) implementation
-let normalCamera: FreeCamera;
+// Free camera implementation
+let freeCamera: FreeCamera;
 let _scene: Scene;
 events.on("onSceneDefinition", async ({ scene }) => {
     _scene = scene;
 
-	// デフォルトカメラ（後ろ固定）
-	cameras.default = new ArcRotateCamera(
-		"camera-default",
+	// Arc camera (rotatable around target)
+	cameras.arc = new ArcRotateCamera(
+		"camera-arc",
 		-Math.PI / 2,
 		Math.PI / 3,
 		6,
@@ -37,50 +37,20 @@ events.on("onSceneDefinition", async ({ scene }) => {
 		scene,
 	);
 
-	// 横カメラ（元：正面の設定）
-	cameras.side = new ArcRotateCamera(
-		"camera-side",
-		Math.PI,
-		Math.PI / 2.2,
-		6,
-		new Vector3(0, 1, 0),
-		scene,
-	);
-
-	// 正面カメラ（元：横の設定）
-	cameras.front = new ArcRotateCamera(
-		"camera-front",
-		Math.PI / 2,
-		Math.PI / 2.2,
-		6,
-		new Vector3(0, 1, 0),
-		scene,
-	);
-
-	// 上部カメラ
-	cameras.top = new ArcRotateCamera(
-		"camera-top",
-		-Math.PI / 2,
-		0.3, // 少し角度を調整（0.2から0.3へ）
-		6, // 距離を半分に縮小（10から5へ）
-		new Vector3(0, 1.3, 0), // ターゲット位置を少し上に（頭部付近）
-		scene,
-	);
-
-	// ノーマルカメラ（FreeCamera）
-	normalCamera = new FreeCamera(
-		"camera-normal",
+	// Free camera (movable)
+	freeCamera = new FreeCamera(
+		"camera-free",
 		new Vector3(0, 1.5, -5), // Position the camera slightly above ground level and back from origin
 		scene,
 	);
 
 	// Set the target to look at
-	normalCamera.setTarget(new Vector3(0, 1, 0)); // Look at a point slightly above the origin
+	freeCamera.setTarget(new Vector3(0, 1, 0)); // Look at a point slightly above the origin
 
 	// Enable camera controls
-	normalCamera.attachControl();
+	freeCamera.attachControl();
 
-	cameras.normal = normalCamera;
+	cameras.free = freeCamera;
 
 	/*
     for(const camera of Object.values(cameras)) {
@@ -359,31 +329,6 @@ export function resetCameraToInitial(key: CameraType) {
         console.log(`FreeCamera ${key} reset to initial state`);
     }
 
-    return true;
-}
-
-// Function to get the normal camera instance
-export function getNormalCamera(): FreeCamera {
-    return normalCamera;
-}
-
-// Function to activate the normal camera
-export function activateNormalCamera() {
-    if (!normalCamera || !_scene) return;
-    _scene.activeCamera = normalCamera;
-}
-
-// Function to set the position of the normal camera
-export function setNormalCameraPosition(x: number, y: number, z: number) {
-    if (!normalCamera) return false;
-    normalCamera.position = new Vector3(x, y, z);
-    return true;
-}
-
-// Function to set the target of the normal camera
-export function setNormalCameraTarget(x: number, y: number, z: number) {
-    if (!normalCamera) return false;
-    normalCamera.setTarget(new Vector3(x, y, z));
     return true;
 }
 
