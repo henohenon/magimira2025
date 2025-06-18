@@ -2,6 +2,7 @@
 import {events} from "~/text-alive/events.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";
 import {cameraActions} from "~/game/events";
+import type {Dropdown} from "~/dev/web-components/dropdown.ts";
 
 const autoStartToggle = document.getElementById("auto-start-toggle") as HTMLInputElement;
 // Store auto-start preference - load from localStorage or default to false
@@ -73,6 +74,16 @@ if (!cameraActionAccordionDetails) throw new Error("Camera action timestamps acc
 
 // Sort camera actions by position
 const sortedActions = [...cameraActions].sort((a, b) => a.position - b.position);
+
+// Get the dropdown element
+const cameraActionDropdown = document.getElementById('camera-action-dropdown') as Dropdown;
+if (!cameraActionDropdown) throw new Error("Camera action dropdown not found");
+
+// Create options string from camera actions
+const optionsStr = sortedActions.map(action => `${action.name} (${formatTime(action.position)})`).join(',');
+
+// Set the data-options attribute dynamically
+cameraActionDropdown.setAttribute('data-options', optionsStr);
 
 // Create a button for each camera action
 sortedActions.forEach(action => {
