@@ -24,26 +24,24 @@ if (autoStartToggle) {
 // Listen for app ready event to auto-start if enabled
 events.on("onAppReady", () => {
     if (autoStart) {
-        setTimeout(() => {
-            // Check if there's a default camera action selected in the dropdown
-            if (cameraActionDropdown.value) {
-                // Find the corresponding camera action
-                const actionName = cameraActionDropdown.value.split(' (')[0];
-                const action = sortedActions.find(a => a.name === actionName);
+        // Check if there's a default camera action selected in the dropdown
+        if (cameraActionDropdown.value) {
+            // Find the corresponding camera action
+            const actionName = cameraActionDropdown.value.split(' (')[0];
+            const action = sortedActions.find(a => a.name === actionName);
 
-                if (action) {
-                    // Seek to the camera action position
-                    player.requestMediaSeek(action.position);
-                } else {
-                    // Fallback to beginning if action not found
-                    player.requestMediaSeek(0);
-                }
+            if (action) {
+                // Seek to the camera action position
+                player.requestMediaSeek(action.position);
             } else {
-                // No camera action selected, start from beginning
+                // Fallback to beginning if action not found
                 player.requestMediaSeek(0);
             }
-            player.requestPlay();
-        }, 3000); // Small delay to ensure everything is ready
+        } else {
+            // No camera action selected, start from beginning
+            player.requestMediaSeek(0);
+        }
+        events.emit("onGameStart");
     }
 });
 
