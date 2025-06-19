@@ -2,6 +2,7 @@
 import {events} from "~/text-alive/events.ts";
 import {player} from "~/text-alive";
 import {updateCameraInfo} from "./camera.ts";
+import {updateModelInfo} from "~/dev/controls/models.ts";
 
 // Reference to the time slider element
 const timeInputSlider = document.getElementById("time-input-slider") as InputAndSlider;
@@ -22,6 +23,7 @@ const updateCycle = (currentTime: number) => {
 
     // Update camera position and rotation info
     updateCameraInfo();
+    updateModelInfo();
 
     lastTime = currentTime;
     lastPosition = currentPosition;

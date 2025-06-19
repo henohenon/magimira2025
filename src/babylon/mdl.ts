@@ -81,7 +81,7 @@ events.on("onSceneDefinition", async ({ scene }) => {
 	// Load room model
 	await loadModel("/room.glb", scene);
 
-	hideModel("dotmiku-tanabata");
+	setModelVisibility("dotmiku-tanabata", false);
 
 	// Emit available model names
 	const modelNames = getModelNames();
@@ -123,43 +123,44 @@ function getMeshes(mdlName: string): AbstractMesh[] | undefined {
 }
 
 /**
- * Show a model by making all its meshes visible
- * @param modelName Name of the model to show
- * @returns true if model was found and shown, false otherwise
+ * Set a model's visibility
+ * @param modelName Name of the model to show/hide
+ * @param visible Whether the model should be visible (true) or hidden (false)
+ * @returns true if model was found and visibility was set, false otherwise
  */
-export function showModel(modelName: string): boolean {
+export function setModelVisibility(modelName: string, visible: boolean): boolean {
 	const meshes = getMeshes(modelName);
 	if (!meshes) return false;
 
 	for (const mesh of meshes) {
-		mesh.isVisible = true;
+		mesh.isVisible = visible;
 	}
 
 	// Emit event for visibility change
-	events.emit("onModelVisibilityChanged", { modelName, visible: true });
+	events.emit("onModelVisibilityChanged", { modelName, visible });
 
-	console.log(`Model "${modelName}" is now visible.`);
+	console.log(`Model "${modelName}" is now ${visible ? 'visible' : 'hidden'}.`);
 	return true;
+}
+
+/**
+ * Show a model by making all its meshes visible
+ * @param modelName Name of the model to show
+ * @returns true if model was found and shown, false otherwise
+ * @deprecated Use setModelVisibility(modelName, true) instead
+ */
+export function showModel(modelName: string): boolean {
+	return setModelVisibility(modelName, true);
 }
 
 /**
  * Hide a model by making all its meshes invisible
  * @param modelName Name of the model to hide
  * @returns true if model was found and hidden, false otherwise
+ * @deprecated Use setModelVisibility(modelName, false) instead
  */
 export function hideModel(modelName: string): boolean {
-	const meshes = getMeshes(modelName);
-	if (!meshes) return false;
-
-	for (const mesh of meshes) {
-		mesh.isVisible = false;
-	}
-
-	// Emit event for visibility change
-	events.emit("onModelVisibilityChanged", { modelName, visible: false });
-
-	console.log(`Model "${modelName}" is now hidden.`);
-	return true;
+	return setModelVisibility(modelName, false);
 }
 
 /**
@@ -168,22 +169,13 @@ export function hideModel(modelName: string): boolean {
  * @returns true if model was found and toggled, false otherwise
  */
 export function toggleModelVisibility(modelName: string): boolean {
+	// Check if model exists
 	const meshes = getMeshes(modelName);
 	if (!meshes) return false;
 
-	// Check current visibility (use first mesh as reference)
-	const isCurrentlyVisible = meshes[0].isVisible;
-
-	// Toggle visibility for all meshes
-	for (const mesh of meshes) {
-		mesh.isVisible = !isCurrentlyVisible;
-	}
-
-	// Emit event for visibility change
-	events.emit("onModelVisibilityChanged", { modelName, visible: !isCurrentlyVisible });
-
-	console.log(`Model "${modelName}" is now ${!isCurrentlyVisible ? 'visible' : 'hidden'}.`);
-	return true;
+	// Check current visibility and toggle it
+	const isCurrentlyVisible = isModelVisible(modelName);
+	return setModelVisibility(modelName, !isCurrentlyVisible);
 }
 
 /**
