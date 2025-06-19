@@ -10,8 +10,7 @@ import type {
 } from "prismatix-input/web-native";
 import type {Subject} from "prismatix-input/subject";
 import {
-    type CounterInputEvent,
-    type CounterMiddleware,
+    type CounterInputEvent, type CounterMiddleware,
     counterMiddleware,
     type DurationInputEvent,
     repeatInput,

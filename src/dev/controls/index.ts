@@ -5,6 +5,7 @@ import "./spectrum.ts";
 import "./ripple.ts";
 import "./models.ts";
 import "./update.ts";
+import "./glitch.ts";
 
 import type {Accordion} from "../web-components/accordion.ts";
 

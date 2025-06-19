@@ -1,9 +1,17 @@
 @import "tailwindcss";
 
 aside button {
-    @apply bg-gray-600 w-full h-8 rounded cursor-pointer hover:bg-gray-500 active:bg-blue-400;
+    @apply bg-gray-600 w-full h-8 rounded cursor-pointer;
 }
 
-aside label{
+aside button:hover {
+    @apply bg-gray-500;
+}
+
+aside button:active {
+    @apply bg-blue-400;
+}
+
+aside label {
     @apply block text-gray-400 text-xs mb-1;
 }
