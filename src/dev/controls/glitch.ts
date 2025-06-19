@@ -37,7 +37,8 @@ glitchDemoButton?.addEventListener('click', () => {
 });
 
 // 手動生成
-glitchManualGenerateButton?.addEventListener('click', () => {    console.log('手動生成ボタンがクリックされました');
+glitchManualGenerateButton?.addEventListener('click', () => {
+    console.log('手動生成ボタンがクリックされました');
     const x = parseFloat(glitchPositionInput?.valueX || '100');
     const y = parseFloat(glitchPositionInput?.valueY || '100');
     const width = parseFloat(glitchSizeInput?.valueX || '200');
