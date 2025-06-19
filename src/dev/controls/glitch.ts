@@ -32,12 +32,12 @@ glitchDemoButton?.addEventListener('click', () => {
 
     console.log(`デモエフェクト生成: x=${x}, y=${y}, size=${width}x${height}`);
     addGlitchEffect(x, y, width, height, lifeTime, density);
-    updateGlitchCount();
     console.log(`現在のアクティブ数: ${getActiveGlitchCount()}`);
 });
 
 // 手動生成
-glitchManualGenerateButton?.addEventListener('click', () => {    console.log('手動生成ボタンがクリックされました');
+glitchManualGenerateButton?.addEventListener('click', () => {
+    console.log('手動生成ボタンがクリックされました');
     const x = parseFloat(glitchPositionInput?.valueX || '100');
     const y = parseFloat(glitchPositionInput?.valueY || '100');
     const width = parseFloat(glitchSizeInput?.valueX || '200');
@@ -48,7 +48,6 @@ glitchManualGenerateButton?.addEventListener('click', () => {    console.log('�
 
     console.log(`手動エフェクト生成: x=${x}, y=${y}, size=${width}x${height}, life=${lifeTime}, density=${density}, type=${type}`);
     addGlitchEffect(x, y, width, height, lifeTime, density, type as 'classic' | 'pixelated' | 'chromatic' | 'digital' | 'mebiton');
-    updateGlitchCount();
     console.log(`現在のアクティブ数: ${getActiveGlitchCount()}`);
 });
 
@@ -57,7 +56,6 @@ glitchPresetWeak?.addEventListener('click', () => {
     const x = Math.random() * (window.innerWidth - 150);
     const y = Math.random() * (window.innerHeight - 80);
     addGlitchEffect(x, y, 150, 80, 4, 0.2, 'classic');
-    updateGlitchCount();
 });
 
 // プリセット: 強いグリッチ
@@ -65,7 +63,6 @@ glitchPresetStrong?.addEventListener('click', () => {
     const x = Math.random() * (window.innerWidth - 300);
     const y = Math.random() * (window.innerHeight - 200);
     addGlitchEffect(x, y, 300, 200, 8, 0.9, 'mebiton'); // メビトンフューチャーズ使用
-    updateGlitchCount();
 });
 
 // プリセット: 中央グリッチ
@@ -73,7 +70,6 @@ glitchPresetCenter?.addEventListener('click', () => {
     const centerX = window.innerWidth / 2 - 100;
     const centerY = window.innerHeight / 2 - 75;
     addGlitchEffect(centerX, centerY, 200, 150, 5, 0.6, 'chromatic');
-    updateGlitchCount();
 });
 
 // プリセット: ランダム大量生成
@@ -89,7 +85,6 @@ glitchPresetRandom?.addEventListener('click', () => {
             const density = Math.random();
 
             addGlitchEffect(x, y, width, height, lifeTime, density);
-            updateGlitchCount();
         }, i * 200); // 200ms間隔で生成
     }
 });
@@ -97,18 +92,14 @@ glitchPresetRandom?.addEventListener('click', () => {
 // すべてのグリッチエフェクトをクリア
 glitchClearButton?.addEventListener('click', () => {
     clearGlitchEffects();
-    updateGlitchCount();
 });
 
 // グリッチエフェクト数を更新
-function updateGlitchCount() {
-    if (glitchCountElement) {
-        glitchCountElement.textContent = getActiveGlitchCount().toString();
-    }
+export const updateGlitchCount = () => {
+    if (!glitchCountElement) return;
+    glitchCountElement.textContent = getActiveGlitchCount().toString();
 }
 
-// 定期的にカウントを更新
-setInterval(updateGlitchCount, 1000);
 
 
 
@@ -117,7 +108,6 @@ setInterval(updateGlitchCount, 1000);
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         clearGlitchEffects();
-        updateGlitchCount();
         console.log('ESCキーでグリッチエフェクトを緊急停止しました');
     }
 });

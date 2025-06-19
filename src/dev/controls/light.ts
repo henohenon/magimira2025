@@ -17,12 +17,12 @@
     getLightDirection,
     getLightPosition
 } from "~/babylon/light.ts";
+import {setLightingPreset, switchLight} from "~/game/light.ts";
+
 import type {ToggleSwitch} from "../web-components/toggle-switch.ts";
 import type {ColorPicker} from "../web-components/color-picker.ts";
 import type {NumberInput} from "../web-components/number-input.ts";
 import type {TripleInput} from "../web-components/triple-input.ts";
-import {setLightingPreset, switchLight} from "~/game/light.ts";
-import {events as babylonEvents} from "~/babylon/events.ts";
 
 const spotLightEnable = document.getElementById("spot-light-enable") as ToggleSwitch;
 const spotLightDiffuse = document.getElementById("spot-light-diffuse") as ColorPicker;
@@ -78,119 +78,90 @@ if (!spotLightEnable || !pointLightEnable || !hemisphericLightEnable ||
 
 spotLightEnable.subscribe(toggle => {
     setLightEnabled("spot", toggle);
-    updateLightInfo();
 });
 pointLightEnable.subscribe(toggle => {
     setLightEnabled("point", toggle);
-    updateLightInfo();
 });
 hemisphericLightEnable.subscribe(toggle => {
     setLightEnabled("hemispheric", toggle);
-    updateLightInfo();
 });
 
 spotLightDiffuse.subscribe(color => {
     if (!color) return;
     setLightDiffuse("spot", color);
-    updateLightInfo();
 });
 pointLightDiffuse.subscribe(color => {
     if (!color) return;
     setLightDiffuse("point", color);
-    updateLightInfo();
 });
 hemisphericLightDiffuse.subscribe(color => {
     if (!color) return;
     setLightDiffuse("hemispheric", color);
-    updateLightInfo();
 });
 hemisphericLightGroundColor.subscribe(color => {
     if (!color) return;
     setHemisphericGroundColor(color);
-    updateLightInfo();
 });
 
 spotLightIntensity.subscribe(value => {
     setLightIntensity("spot", value);
-    updateLightInfo();
 });
 pointLightIntensity.subscribe(value => {
     setLightIntensity("point", value);
-    updateLightInfo();
 });
 hemisphericLightIntensity.subscribe(value => {
     setLightIntensity("hemispheric", value);
-    updateLightInfo();
 });
 
 spotLightAddPositionButton.addEventListener("click", () => {
     addLightPosition("spot", spotLightAddPositionInput.value1, spotLightAddPositionInput.value2, spotLightAddPositionInput.value3);
-    updateLightInfo();
 });
 pointLightAddPositionButton.addEventListener("click", () => {
     addLightPosition("point", pointLightAddPositionInput.value1, pointLightAddPositionInput.value2, pointLightAddPositionInput.value3);
-    updateLightInfo();
 });
 hemisphericLightAddDirectionButton.addEventListener("click", () => {
     addLightDirection("hemispheric", hemisphericLightAddDirectionInput.value1, hemisphericLightAddDirectionInput.value2, hemisphericLightAddDirectionInput.value3);
-    updateLightInfo();
 });
 
 // Add input data sync for position and direction inputs
 spotLightSetPositionInput.subscribe((x, y, z) => {
     setLightPosition("spot", x, y, z);
-    updateLightInfo();
 });
 
 pointLightSetPositionInput.subscribe((x, y, z) => {
     setLightPosition("point", x, y, z);
-    updateLightInfo();
 });
 
 
 hemisphericLightSetDirectionInput.subscribe((x, y, z) => {
     setLightDirection("hemispheric", x, y, z);
-    updateLightInfo();
 });
 
 presetDefault.addEventListener("click", () => {
     resetSpot()
     resetPoint();
     resetHemispheric();
-    updateLightInfo();
 });
 presetPoint.addEventListener("click", () => {
     switchLight("point");
-    updateLightInfo();
 });
 presetSpot.addEventListener("click", () => {
     switchLight("spot");
-    updateLightInfo();
 });
 presetHemispheric.addEventListener("click", () => {
     switchLight("hemispheric");
-    updateLightInfo();
 });
 presetDay.addEventListener("click", () => {
     setLightingPreset("day");
-    updateLightInfo();
 });
 presetNight.addEventListener("click", () => {
     setLightingPreset("night");
-    updateLightInfo();
 });
 presetSunset.addEventListener("click", () => {
     setLightingPreset("sunset");
-    updateLightInfo();
 });
 presetDawn.addEventListener("click", () => {
     setLightingPreset("dawn");
-    updateLightInfo();
-});
-
-// Initialize light controls when scene is loaded
-babylonEvents.on("onSceneLoaded", () => {
-    updateLightInfo();
 });
 
 // Function to update light controls in the UI with current light properties

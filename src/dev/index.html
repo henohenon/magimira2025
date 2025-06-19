@@ -12,243 +12,231 @@
 
 <body class="m-0 w-screen h-screen overflow-hidden flex">
     <aside class="w-64 h-screen bg-gray-800 text-white overflow-y-auto p-4">
-        <dev-accordion class="space-y-2">
-            <button id="close-all-button">close all</button>
-            <div class="dev-section">
-                <toggle-switch id="auto-start-toggle" label="auto-start"></toggle-switch>
-                <drop-down id="camera-action-dropdown" label="auto-start-camera-action" placeholder="Select a auto-start camera action"></drop-down>
-                <label>pause/unpause</label>
-                <button id="pause-unpause-button">pause/unpause</button>
-                <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
-                <input-slider id="time-input-slider" label="time" min="0" max="position-max" step="1" value="0"></input-slider>
-                <dev-accordion summary="camera actions" id="camera-action-timestamps-accordion">                </dev-accordion>
-            </div>
-            <div class="dev-section" id="models-section">
-                <h3 class="dev-section-title">models</h3>
-                <dev-accordion summary="dotmiku" id="model-accordion-dotmiku">
-                    <toggle-switch id="model-visibility-dotmiku" label="enable"></toggle-switch>
-                    <triple-input id="model-add-position-dotmiku" label="add position"></triple-input>
-                    <button id="model-add-position-button-dotmiku">AddPosition</button>
-                    <triple-input id="model-set-position-dotmiku" label="set position"></triple-input>
-                    <triple-input id="model-add-rotation-dotmiku" label="add rotation"></triple-input>
-                    <button id="model-add-rotation-button-dotmiku">AddRotation</button>
-                    <triple-input id="model-set-rotation-dotmiku" label="set rotation"></triple-input>
-                    <dev-accordion summary="animations" id="animations-accordion-dotmiku"></dev-accordion>
-                </dev-accordion>
-                <dev-accordion summary="dotmiku-tanabata" id="model-accordion-dotmiku-tanabata">
-                    <toggle-switch id="model-visibility-dotmiku-tanabata" label="enable"></toggle-switch>
-                    <triple-input id="model-add-position-dotmiku-tanabata" label="add position"></triple-input>
-                    <button id="model-add-position-button-dotmiku-tanabata">AddPosition</button>
-                    <triple-input id="model-set-position-dotmiku-tanabata" label="set position"></triple-input>
-                    <triple-input id="model-add-rotation-dotmiku-tanabata" label="add rotation"></triple-input>
-                    <button id="model-add-rotation-button-dotmiku-tanabata">AddRotation</button>
-                    <triple-input id="model-set-rotation-dotmiku-tanabata" label="set rotation"></triple-input>
-                    <dev-accordion summary="animations" id="animations-accordion-dotmiku-tanabata"></dev-accordion>
-                </dev-accordion>
-                <dev-accordion summary="room" id="model-accordion-room">
-                    <toggle-switch id="model-visibility-room" label="enable"></toggle-switch>
-                    <triple-input id="model-add-position-room" label="add position"></triple-input>
-                    <button id="model-add-position-button-room">AddPosition</button>
-                    <triple-input id="model-set-position-room" label="set position"></triple-input>
-                    <triple-input id="model-add-rotation-room" label="add rotation"></triple-input>
-                    <button id="model-add-rotation-button-room">AddRotation</button>
-                    <triple-input id="model-set-rotation-room" label="set rotation"></triple-input>
-                </dev-accordion>
-            </div>
-            <div class="dev-section" id="camera-section">
-                <h3 class="dev-section-title">camera</h3>
-                <drop-down id="camera-active-type" label="Camera Type" data-options="arc, free" value="arc"></drop-down>
-                <dev-accordion summary="Arc Camera Controls" id="arc-camera-controls-section">
-                    <triple-input id="camera-arc-position-add" label="Add Target Position"></triple-input>
-                    <button id="camera-arc-position-add-btn">Add Position</button>
-                    <triple-input id="camera-arc-position-set" label="Set Target Position"></triple-input>
-                    <triple-input id="camera-arc-rotation-add" label="Add Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
-                    <button id="camera-arc-rotation-add-btn">Add Rotation</button>
-                    <triple-input id="camera-arc-rotation-set" label="Set Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
-                </dev-accordion>
-                <dev-accordion summary="Free Camera Controls" id="free-camera-controls-section">
-                    <triple-input id="camera-free-position-add" label="Add Camera Position"></triple-input>
-                    <button id="camera-free-position-add-btn">Add Position</button>
-                    <triple-input id="camera-free-position-set" label="Set Camera Position"></triple-input>
-                    <triple-input id="camera-free-rotation-add" label="Add Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
-                    <button id="camera-free-rotation-add-btn">Add Rotation</button>
-                    <triple-input id="camera-free-rotation-set" label="Set Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
-                </dev-accordion>
-            </div>
-            <div class="dev-section" id="light-section">
-                <h3 class="dev-section-title">light</h3>
-                <dev-accordion summary="spot light">
-                    <toggle-switch id="spot-light-enable" label="enable"></toggle-switch>
-                    <color-picker id="spot-light-diffuse" label="diffuse"></color-picker>
-                    <number-input id="spot-light-intensity" label="intensity" min="0" step="0.1" value="0.7"></number-input>
-                    <triple-input id="spot-light-add-position-input" label="add position"></triple-input>
-                    <button id="spot-light-add-position-button">AddPosition</button>
-                    <triple-input id="spot-light-set-position-input" label="set position"></triple-input>
-                </dev-accordion>
-                <dev-accordion summary="point light">
-                    <toggle-switch id="point-light-enable" label="enable"></toggle-switch>
-                    <color-picker id="point-light-diffuse" label="diffuse"></color-picker>
-                    <number-input id="point-light-intensity" label="intensity" min="0" step="0.1" value="0.7"></number-input>
-                    <triple-input id="point-light-add-position-input" label="add light position"></triple-input>
-                    <button id="point-light-add-position-button">AddPosition</button>
-                    <triple-input id="point-light-set-position-input" label="set position"></triple-input>
-                </dev-accordion>
-                <dev-accordion summary="hemispheric light">
-                    <toggle-switch id="hemispheric-light-enable" label="enable"></toggle-switch>
-                    <color-picker id="hemispheric-light-diffuse" label="diffuse"></color-picker>
-                    <color-picker id="hemispheric-light-ground-color" label="ground color"></color-picker>
-                    <number-input id="hemispheric-light-intensity" label="intensity" min="0" step="0.1" value="0.7"></number-input>
-                    <triple-input id="hemispheric-light-add-direction-input" label="add light direction"></triple-input>
-                    <button id="hemispheric-light-add-direction-button">AddDirection</button>
-                    <triple-input id="hemispheric-light-set-direction-input" label="set direction"></triple-input>
-                </dev-accordion>
-                <dev-accordion summary="light preset">
-                    <button id="preset-default">
-                        🔄 デフォルトに戻す
-                    </button>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button id="preset-point">point light</button>
-                        <button id="preset-spot">spot light</button>
-                        <button id="preset-hemispheric">hemispheric light</button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button id="preset-day" class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white py-2 px-3 rounded shadow-md transition-all">☀️ 昼間<br><span class="text-xs opacity-80">明るく自然な光</span></button>
-                        <button id="preset-night" class="bg-gradient-to-r from-blue-900 to-indigo-900 hover:from-blue-800 hover:to-indigo-800 text-white py-2 px-3 rounded shadow-md transition-all">🌙 夜間<br><span class="text-xs opacity-80">神秘的な月明かり</span></button>
-                        <button id="preset-sunset" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-2 px-3 rounded shadow-md transition-all">🌅 夕焼け<br><span class="text-xs opacity-80">ドラマチックな夕日</span></button>
-                        <button id="preset-dawn" class="bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white py-2 px-3 rounded shadow-md transition-all">🌄 朝焼け<br><span class="text-xs opacity-80">希望の朝光</span></button>
-                    </div>
-                </dev-accordion>
-            </div>
-            <div class="dev-section" id="spectrum-section">
-                <h3 class="dev-section-title">spectrum</h3>
-                <dev-accordion summary="circle spectrum">
-                    <toggle-switch id="circle-spectrum-enable" label="enable"></toggle-switch>
-                    <color-picker id="circle-spectrum-color" label="color"></color-picker>
-                    <input-slider id="circle-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
-                    <input-slider id="circle-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
-                    <input-slider id="circle-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
-                    <number-input id="circle-spectrum-min-radius" label="min radius" min="0" step="0.01" value="0.5"></number-input>
-                    <number-input id="circle-spectrum-max-radius" label="max-radius" step="1" value="200"></number-input>
-                    <label>add frequency</label>
-                    <input-slider id="circle-spectrum-rate" label="rate" min="0" max="1" step="0.01" value="0.5"></input-slider>
-                    <number-input id="circle-spectrum-strength" label="strength" min="0" max="1" step="0.01" value="0.5"></number-input>
-                    <number-input id="circle-spectrum-range" label="range" min="0" max="20" step="1" value="0"></number-input>
-                    <button id="circle-spectrum-add-frequency-button">Add Frequency</button>
-                </dev-accordion>
-                <dev-accordion summary="vertical spectrum">
-                    <toggle-switch id="vertical-spectrum-enable" label="enable"></toggle-switch>
-                    <color-picker id="vertical-spectrum-color" label="color"></color-picker>
-                    <input-slider id="vertical-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
-                    <input-slider id="vertical-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
-                    <input-slider id="vertical-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
-                    <number-input id="vertical-spectrum-height" label="height" min="0" step="1" value="300"></number-input>
-                    <label>add frequency</label>
-                    <input-slider id="vertical-spectrum-rate" label="rate" min="0" max="1" step="0.01" value="0.5"></input-slider>
-                    <number-input id="vertical-spectrum-strength" label="strength" min="0" max="1" step="0.01" value="0.5"></number-input>
-                    <number-input id="vertical-spectrum-range" label="range" min="0" max="20" step="1" value="0"></number-input>
-                    <button id="vertical-spectrum-add-frequency-button">Add Frequency</button>
-                </dev-accordion>
-                <dev-accordion summary="horizontal spectrum">
-                    <toggle-switch id="horizontal-spectrum-enable" label="enable"></toggle-switch>
-                    <color-picker id="horizontal-spectrum-color" label="color"></color-picker>
-                    <input-slider id="horizontal-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
-                    <input-slider id="horizontal-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
-                    <input-slider id="horizontal-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
-                    <number-input id="horizontal-spectrum-width" label="width" min="0" step="1" value="300"></number-input>
-                    <label>add frequency</label>
-                    <input-slider id="horizontal-spectrum-rate" label="rate" min="0" max="1" step="0.01" value="0.5"></input-slider>
-                    <number-input id="horizontal-spectrum-strength" label="strength" min="0" max="1" step="0.01" value="0.5"></number-input>
-                    <number-input id="horizontal-spectrum-range" label="range" min="0" max="20" step="1" value="0"></number-input>
-                    <button id="horizontal-spectrum-add-frequency-button">Add Frequency</button>
-                </dev-accordion>
-            </div>
-            <div class="dev-section" id="ripple-effects-section">
-                <h3 class="dev-section-title">ripple effects</h3>
-                <dev-accordion summary="circle ripple">
-                    <double-input id="circle-ripple-position-input" label="position"></double-input>
-                    <number-input id="circle-ripple-lifetime-input" label="lifetime" value="1000"></number-input>
-                    <number-input id="circle-ripple-default-size-input" label="default size" value="0"></number-input>
-                    <number-input id="circle-ripple-size-delta-input" label="size delta" value="100"></number-input>
-                    <number-input id="circle-ripple-default-opacity-input" label="default opacity" value="1"></number-input>
-                    <number-input id="circle-ripple-opacity-delta-input" label="opacity delta" value="0"></number-input>
-                    <color-picker id="circle-ripple-color-input" label="color"></color-picker>
-                    <button id="circle-ripple-generate-button">generate</button>
-                </dev-accordion>
-                <dev-accordion summary="square ripple">
-                    <double-input id="square-ripple-position-input" label="position"></double-input>
-                    <number-input id="square-ripple-lifetime-input" label="lifetime" value="1000"></number-input>
-                    <number-input id="square-ripple-default-size-input" label="default size" value="0"></number-input>
-                    <number-input id="square-ripple-size-delta-input" label="size delta" value="100"></number-input>
-                    <number-input id="square-ripple-default-opacity-input" label="default opacity" value="1"></number-input>
-                    <number-input id="square-ripple-opacity-delta-input" label="opacity delta" value="0"></number-input>
-                    <color-picker id="square-ripple-color-input" label="color"></color-picker>
-                    <input-slider id="square-ripple-angle-input" label="angle" min="0" max="360" value="45"></input-slider>
-                    <button id="square-ripple-generate-button">generate</button>                </dev-accordion>
-            </div>
-            <dev-accordion summary="glitch effects">
-                <div class="mb-4 p-2 bg-gray-900 rounded">
-                    <p class="text-xs text-gray-400 mb-2">アクティブなグリッチ数:</p>
-                    <span id="glitch-count" class="text-lg text-green-400 font-bold">0</span>
-                </div>
-                  <!-- 手動グリッチ生成 -->
-                <dev-accordion summary="manual glitch generation">
-                    <double-input id="glitch-position-input" label="position (x, y)" value-x="100" value-y="100"></double-input>
-                    <double-input id="glitch-size-input" label="size (width, height)" value-x="200" value-y="100"></double-input>
-                    <input-slider id="glitch-lifetime-input" label="lifetime (seconds)" min="0.5" max="30" step="0.1" value="8"></input-slider>
-                    <input-slider id="glitch-density-input" label="density" min="0" max="1" step="0.05" value="0.5"></input-slider>
-                    <div class="mb-3">
-                        <label class="block text-sm text-gray-300 mb-2">グリッチタイプ:</label>                        <select id="glitch-type-select" class="w-full bg-gray-800 text-white border border-gray-600 rounded px-2 py-1 text-sm">
-                            <option value="mebiton">💖 メビトンフューチャーズ (特別)</option>
-                            <option value="digital">🎮 デジタル</option>
-                            <option value="pixelated">🔲 ピクセル化</option>
-                            <option value="chromatic">🌈 クロマティック</option>
-                            <option value="classic">⚪ クラシック</option>
-                        </select>
-                    </div>
-                    <button id="glitch-manual-generate-button" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-2 px-3 rounded shadow-md transition-all">
-                        🎯 手動生成
-                    </button>
-                </dev-accordion>
-                  <!-- プリセットボタン -->
-                <dev-accordion summary="glitch presets">
-                    <div class="grid grid-cols-2 gap-2 mb-2">
-                        <button id="glitch-preset-weak" class="bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white py-2 px-2 rounded text-xs transition-all">
-                            💫 弱いグリッチ
-                        </button>
-                        <button id="glitch-preset-strong" class="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white py-2 px-2 rounded text-xs transition-all">
-                            ⚡ 強いグリッチ
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 mb-2">
-                        <button id="glitch-preset-center" class="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white py-2 px-2 rounded text-xs transition-all">
-                            🎯 中央グリッチ
-                        </button>
-                        <button id="glitch-preset-random" class="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white py-2 px-2 rounded text-xs transition-all">
-                            🎲 ランダム
-                        </button>
-                    </div>
-                </dev-accordion>
+        <button id="close-all-button">close all</button>
+        <div class="dev-section">
+            <toggle-switch id="auto-start-toggle" label="auto-start"></toggle-switch>
+            <drop-down id="camera-action-dropdown" label="auto-start-camera-action" placeholder="Select a auto-start camera action"></drop-down>
+            <label>pause/unpause</label>
+            <button id="pause-unpause-button">pause/unpause</button>
+            <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
+            <input-slider id="time-input-slider" label="time" min="0" max="position-max" step="1" value="0"></input-slider>
+            <dev-accordion summary="camera actions" id="camera-action-timestamps-accordion">                </dev-accordion>
+        </div>
+        <div class="dev-section" id="models-section">
+            <h3 class="dev-section-title">models</h3>
+            <dev-accordion summary="dotmiku" id="model-accordion-dotmiku">
+                <toggle-switch id="model-visibility-dotmiku" label="enable"></toggle-switch>
+                <triple-input id="model-add-position-dotmiku" label="add position"></triple-input>
+                <button id="model-add-position-button-dotmiku">AddPosition</button>
+                <triple-input id="model-set-position-dotmiku" label="set position"></triple-input>
+                <triple-input id="model-add-rotation-dotmiku" label="add rotation"></triple-input>
+                <button id="model-add-rotation-button-dotmiku">AddRotation</button>
+                <triple-input id="model-set-rotation-dotmiku" label="set rotation"></triple-input>
+                <dev-accordion summary="animations" id="animations-accordion-dotmiku"></dev-accordion>
             </dev-accordion>
-                <!-- コントロールボタン -->
-                <div class="grid grid-cols-2 gap-2 mb-4">
-                    <button id="glitch-demo-button" class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white py-2 px-3 rounded shadow-md transition-all">
-                        ✨ デモ生成
-                    </button>
-                    <button id="glitch-clear-button" class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white py-2 px-3 rounded shadow-md transition-all">
-                        🗑️ 全クリア
-                    </button>
-                </div>                <div class="text-xs text-gray-400 p-2 bg-gray-900 rounded">
-                    <p class="mb-1">コンソールでテスト:</p>
-                    <code class="text-green-400">addGlitchEffect(x, y, width, height, lifeTime, density)</code>
-                    <br>
-                    <code class="text-green-400">testGlitch()</code>
-                    <br>
-                    <code class="text-green-400">enableClickGlitch()</code>
-                    <p class="mt-2 text-xs">クリックでグリッチ生成を有効化</p>
-                    <p class="mt-1 text-xs text-red-400">⚠️ ESCキーで緊急停止</p>
+            <dev-accordion summary="dotmiku-tanabata" id="model-accordion-dotmiku-tanabata">
+                <toggle-switch id="model-visibility-dotmiku-tanabata" label="enable"></toggle-switch>
+                <triple-input id="model-add-position-dotmiku-tanabata" label="add position"></triple-input>
+                <button id="model-add-position-button-dotmiku-tanabata">AddPosition</button>
+                <triple-input id="model-set-position-dotmiku-tanabata" label="set position"></triple-input>
+                <triple-input id="model-add-rotation-dotmiku-tanabata" label="add rotation"></triple-input>
+                <button id="model-add-rotation-button-dotmiku-tanabata">AddRotation</button>
+                <triple-input id="model-set-rotation-dotmiku-tanabata" label="set rotation"></triple-input>
+                <dev-accordion summary="animations" id="animations-accordion-dotmiku-tanabata"></dev-accordion>
+            </dev-accordion>
+            <dev-accordion summary="room" id="model-accordion-room">
+                <toggle-switch id="model-visibility-room" label="enable"></toggle-switch>
+                <triple-input id="model-add-position-room" label="add position"></triple-input>
+                <button id="model-add-position-button-room">AddPosition</button>
+                <triple-input id="model-set-position-room" label="set position"></triple-input>
+                <triple-input id="model-add-rotation-room" label="add rotation"></triple-input>
+                <button id="model-add-rotation-button-room">AddRotation</button>
+                <triple-input id="model-set-rotation-room" label="set rotation"></triple-input>
+            </dev-accordion>
+        </div>
+        <div class="dev-section" id="camera-section">
+            <h3 class="dev-section-title">camera</h3>
+            <drop-down id="camera-active-type" label="Camera Type" data-options="arc, free" value="arc"></drop-down>
+            <dev-accordion summary="Arc Camera Controls" id="arc-camera-controls-section">
+                <triple-input id="camera-arc-position-add" label="Add Target Position"></triple-input>
+                <button id="camera-arc-position-add-btn">Add Position</button>
+                <triple-input id="camera-arc-position-set" label="Set Target Position"></triple-input>
+                <triple-input id="camera-arc-rotation-add" label="Add Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
+                <button id="camera-arc-rotation-add-btn">Add Rotation</button>
+                <triple-input id="camera-arc-rotation-set" label="Set Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
+            </dev-accordion>
+            <dev-accordion summary="Free Camera Controls" id="free-camera-controls-section">
+                <triple-input id="camera-free-position-add" label="Add Camera Position"></triple-input>
+                <button id="camera-free-position-add-btn">Add Position</button>
+                <triple-input id="camera-free-position-set" label="Set Camera Position"></triple-input>
+                <triple-input id="camera-free-rotation-add" label="Add Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
+                <button id="camera-free-rotation-add-btn">Add Rotation</button>
+                <triple-input id="camera-free-rotation-set" label="Set Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
+            </dev-accordion>
+        </div>
+        <div class="dev-section" id="light-section">
+            <h3 class="dev-section-title">light</h3>
+            <dev-accordion summary="spot light">
+                <toggle-switch id="spot-light-enable" label="enable"></toggle-switch>
+                <color-picker id="spot-light-diffuse" label="diffuse"></color-picker>
+                <number-input id="spot-light-intensity" label="intensity" min="0" step="0.1" value="0.7"></number-input>
+                <triple-input id="spot-light-add-position-input" label="add position"></triple-input>
+                <button id="spot-light-add-position-button">AddPosition</button>
+                <triple-input id="spot-light-set-position-input" label="set position"></triple-input>
+            </dev-accordion>
+            <dev-accordion summary="point light">
+                <toggle-switch id="point-light-enable" label="enable"></toggle-switch>
+                <color-picker id="point-light-diffuse" label="diffuse"></color-picker>
+                <number-input id="point-light-intensity" label="intensity" min="0" step="0.1" value="0.7"></number-input>
+                <triple-input id="point-light-add-position-input" label="add light position"></triple-input>
+                <button id="point-light-add-position-button">AddPosition</button>
+                <triple-input id="point-light-set-position-input" label="set position"></triple-input>
+            </dev-accordion>
+            <dev-accordion summary="hemispheric light">
+                <toggle-switch id="hemispheric-light-enable" label="enable"></toggle-switch>
+                <color-picker id="hemispheric-light-diffuse" label="diffuse"></color-picker>
+                <color-picker id="hemispheric-light-ground-color" label="ground color"></color-picker>
+                <number-input id="hemispheric-light-intensity" label="intensity" min="0" step="0.1" value="0.7"></number-input>
+                <triple-input id="hemispheric-light-add-direction-input" label="add light direction"></triple-input>
+                <button id="hemispheric-light-add-direction-button">AddDirection</button>
+                <triple-input id="hemispheric-light-set-direction-input" label="set direction"></triple-input>
+            </dev-accordion>
+            <dev-accordion summary="light preset">
+                <button id="preset-default">
+                    🔄 デフォルトに戻す
+                </button>
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="preset-point">point light</button>
+                    <button id="preset-spot">spot light</button>
+                    <button id="preset-hemispheric">hemispheric light</button>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="preset-day" class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white py-2 px-3 rounded shadow-md transition-all">☀️ 昼間<br><span class="text-xs opacity-80">明るく自然な光</span></button>
+                    <button id="preset-night" class="bg-gradient-to-r from-blue-900 to-indigo-900 hover:from-blue-800 hover:to-indigo-800 text-white py-2 px-3 rounded shadow-md transition-all">🌙 夜間<br><span class="text-xs opacity-80">神秘的な月明かり</span></button>
+                    <button id="preset-sunset" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-2 px-3 rounded shadow-md transition-all">🌅 夕焼け<br><span class="text-xs opacity-80">ドラマチックな夕日</span></button>
+                    <button id="preset-dawn" class="bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white py-2 px-3 rounded shadow-md transition-all">🌄 朝焼け<br><span class="text-xs opacity-80">希望の朝光</span></button>
                 </div>
             </dev-accordion>
         </div>
+        <div class="dev-section" id="spectrum-section">
+            <h3 class="dev-section-title">spectrum</h3>
+            <dev-accordion summary="circle spectrum">
+                <toggle-switch id="circle-spectrum-enable" label="enable"></toggle-switch>
+                <color-picker id="circle-spectrum-color" label="color"></color-picker>
+                <input-slider id="circle-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
+                <input-slider id="circle-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                <input-slider id="circle-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                <number-input id="circle-spectrum-min-radius" label="min radius" min="0" step="0.01" value="0.5"></number-input>
+                <number-input id="circle-spectrum-max-radius" label="max-radius" step="1" value="200"></number-input>
+                <label>add frequency</label>
+                <input-slider id="circle-spectrum-rate" label="rate" min="0" max="1" step="0.01" value="0.5"></input-slider>
+                <number-input id="circle-spectrum-strength" label="strength" min="0" max="1" step="0.01" value="0.5"></number-input>
+                <number-input id="circle-spectrum-range" label="range" min="0" max="20" step="1" value="0"></number-input>
+                <button id="circle-spectrum-add-frequency-button">Add Frequency</button>
+            </dev-accordion>
+            <dev-accordion summary="vertical spectrum">
+                <toggle-switch id="vertical-spectrum-enable" label="enable"></toggle-switch>
+                <color-picker id="vertical-spectrum-color" label="color"></color-picker>
+                <input-slider id="vertical-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
+                <input-slider id="vertical-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                <input-slider id="vertical-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                <number-input id="vertical-spectrum-height" label="height" min="0" step="1" value="300"></number-input>
+                <label>add frequency</label>
+                <input-slider id="vertical-spectrum-rate" label="rate" min="0" max="1" step="0.01" value="0.5"></input-slider>
+                <number-input id="vertical-spectrum-strength" label="strength" min="0" max="1" step="0.01" value="0.5"></number-input>
+                <number-input id="vertical-spectrum-range" label="range" min="0" max="20" step="1" value="0"></number-input>
+                <button id="vertical-spectrum-add-frequency-button">Add Frequency</button>
+            </dev-accordion>
+            <dev-accordion summary="horizontal spectrum">
+                <toggle-switch id="horizontal-spectrum-enable" label="enable"></toggle-switch>
+                <color-picker id="horizontal-spectrum-color" label="color"></color-picker>
+                <input-slider id="horizontal-spectrum-hue-offset" label="color delta" min="0" max="1024" step="1" value="0"></input-slider>
+                <input-slider id="horizontal-spectrum-opacity" label="opacity" min="0" max="100" step="1" value="0"></input-slider>
+                <input-slider id="horizontal-spectrum-line-counts" label="line counts" min="0" max="39" step="1" value="39"></input-slider>
+                <number-input id="horizontal-spectrum-width" label="width" min="0" step="1" value="300"></number-input>
+                <label>add frequency</label>
+                <input-slider id="horizontal-spectrum-rate" label="rate" min="0" max="1" step="0.01" value="0.5"></input-slider>
+                <number-input id="horizontal-spectrum-strength" label="strength" min="0" max="1" step="0.01" value="0.5"></number-input>
+                <number-input id="horizontal-spectrum-range" label="range" min="0" max="20" step="1" value="0"></number-input>
+                <button id="horizontal-spectrum-add-frequency-button">Add Frequency</button>
+            </dev-accordion>
+        </div>
+        <div class="dev-section" id="ripple-effects-section">
+            <h3 class="dev-section-title">ripple effects</h3>
+            <dev-accordion summary="circle ripple">
+                <double-input id="circle-ripple-position-input" label="position"></double-input>
+                <number-input id="circle-ripple-lifetime-input" label="lifetime" value="1000"></number-input>
+                <number-input id="circle-ripple-default-size-input" label="default size" value="0"></number-input>
+                <number-input id="circle-ripple-size-delta-input" label="size delta" value="100"></number-input>
+                <number-input id="circle-ripple-default-opacity-input" label="default opacity" value="1"></number-input>
+                <number-input id="circle-ripple-opacity-delta-input" label="opacity delta" value="0"></number-input>
+                <color-picker id="circle-ripple-color-input" label="color"></color-picker>
+                <button id="circle-ripple-generate-button">generate</button>
+            </dev-accordion>
+            <dev-accordion summary="square ripple">
+                <double-input id="square-ripple-position-input" label="position"></double-input>
+                <number-input id="square-ripple-lifetime-input" label="lifetime" value="1000"></number-input>
+                <number-input id="square-ripple-default-size-input" label="default size" value="0"></number-input>
+                <number-input id="square-ripple-size-delta-input" label="size delta" value="100"></number-input>
+                <number-input id="square-ripple-default-opacity-input" label="default opacity" value="1"></number-input>
+                <number-input id="square-ripple-opacity-delta-input" label="opacity delta" value="0"></number-input>
+                <color-picker id="square-ripple-color-input" label="color"></color-picker>
+                <input-slider id="square-ripple-angle-input" label="angle" min="0" max="360" value="45"></input-slider>
+                <button id="square-ripple-generate-button">generate</button>                </dev-accordion>
+        </div>
+        <dev-accordion summary="glitch effects">
+            <div class="mb-4 p-2 bg-gray-900 rounded">
+                <p class="text-xs text-gray-400 mb-2">アクティブなグリッチ数:</p>
+                <span id="glitch-count" class="text-lg text-green-400 font-bold">0</span>
+            </div>
+              <!-- 手動グリッチ生成 -->
+            <dev-accordion summary="manual glitch generation">
+                <double-input id="glitch-position-input" label="position (x, y)" value-x="100" value-y="100"></double-input>
+                <double-input id="glitch-size-input" label="size (width, height)" value-x="200" value-y="100"></double-input>
+                <input-slider id="glitch-lifetime-input" label="lifetime (seconds)" min="0.5" max="30" step="0.1" value="8"></input-slider>
+                <input-slider id="glitch-density-input" label="density" min="0" max="1" step="0.05" value="0.5"></input-slider>
+                <div class="mb-3">
+                    <label class="block text-sm text-gray-300 mb-2">グリッチタイプ:</label>                        <select id="glitch-type-select" class="w-full bg-gray-800 text-white border border-gray-600 rounded px-2 py-1 text-sm">
+                        <option value="mebiton">💖 メビトンフューチャーズ (特別)</option>
+                        <option value="digital">🎮 デジタル</option>
+                        <option value="pixelated">🔲 ピクセル化</option>
+                        <option value="chromatic">🌈 クロマティック</option>
+                        <option value="classic">⚪ クラシック</option>
+                    </select>
+                </div>
+                <button id="glitch-manual-generate-button" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-2 px-3 rounded shadow-md transition-all">
+                    🎯 手動生成
+                </button>
+            </dev-accordion>
+              <!-- プリセットボタン -->
+            <dev-accordion summary="glitch presets">
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                    <button id="glitch-preset-weak" class="bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white py-2 px-2 rounded text-xs transition-all">
+                        💫 弱いグリッチ
+                    </button>
+                    <button id="glitch-preset-strong" class="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white py-2 px-2 rounded text-xs transition-all">
+                        ⚡ 強いグリッチ
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                    <button id="glitch-preset-center" class="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white py-2 px-2 rounded text-xs transition-all">
+                        🎯 中央グリッチ
+                    </button>
+                    <button id="glitch-preset-random" class="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white py-2 px-2 rounded text-xs transition-all">
+                        🎲 ランダム
+                    </button>
+                </div>
+            </dev-accordion>
+            <!-- コントロールボタン -->
+            <div class="grid grid-cols-2 gap-2 mb-4">
+                <button id="glitch-demo-button" class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white py-2 px-3 rounded shadow-md transition-all">
+                    ✨ デモ生成
+                </button>
+                <button id="glitch-clear-button" class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white py-2 px-3 rounded shadow-md transition-all">
+                    🗑️ 全クリア
+                </button>
+            </div>
+        </dev-accordion>
     </aside>
     <div class="relative flex-1">
         <canvas id="babylon-canvas" class="absolute m-0 inset-0 w-full h-full -z-10"></canvas>
