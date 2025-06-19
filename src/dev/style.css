@@ -1,25 +1,17 @@
 @import "tailwindcss";
 
 aside button {
-    background-color: rgb(75 85 99); /* bg-gray-600 */
-    width: 100%; /* w-full */
-    height: 2rem; /* h-8 */
-    border-radius: 0.25rem; /* rounded */
-    cursor: pointer; /* cursor-pointer */
+    @apply bg-gray-600 w-full h-8 rounded cursor-pointer;
 }
 
 aside button:hover {
-    background-color: rgb(107 114 128); /* hover:bg-gray-500 */
+    @apply bg-gray-500;
 }
 
 aside button:active {
-    background-color: rgb(96 165 250); /* active:bg-blue-400 */
+    @apply bg-blue-400;
 }
 
 aside label {
-    display: block; /* block */
-    color: rgb(156 163 175); /* text-gray-400 */
-    font-size: 0.75rem; /* text-xs */
-    line-height: 1rem;
-    margin-bottom: 0.25rem; /* mb-1 */
+    @apply block text-gray-400 text-xs mb-1;
 }
