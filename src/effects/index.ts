@@ -4,8 +4,6 @@ import {drawFrequencySpectrum} from "./spectrum";
 import {drawRipples} from "./ripple";
 import {drawGlitchEffects} from "./glitch";
 
-// グリッチエフェクト関数を再エクスポート
-export {addGlitchEffect, clearGlitchEffects, getActiveGlitchCount} from "./glitch";
 
 const canvas = document.getElementById('effects-canvas') as HTMLCanvasElement;
 if (!canvas) {
