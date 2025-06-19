@@ -2,7 +2,7 @@
 
 import {drawFrequencySpectrum} from "./spectrum";
 import {drawRipples} from "./ripple";
-import {drawGlitchEffects, addGlitchEffect} from "./glitch";
+import {drawGlitchEffects} from "./glitch";
 
 // グリッチエフェクト関数を再エクスポート
 export {addGlitchEffect, clearGlitchEffects, getActiveGlitchCount} from "./glitch";
@@ -22,16 +22,6 @@ const resizeCanvas = () => {
     canvas.height = window.innerHeight;
     
     console.log("Canvas resized to:", canvas.width, canvas.height);
-    
-    // キャンバスの状態をリセット
-    canvasContext.globalCompositeOperation = 'source-over';
-    canvasContext.globalAlpha = 1.0;
-    canvasContext.setTransform(1, 0, 0, 1, 0, 0);    // テスト用のグリッチエフェクトを自動生成
-    setTimeout(() => {
-        console.log("メビトンフューチャーズ・グリッチエフェクトを生成中...");
-        addGlitchEffect(50, 50, 300, 200, 30, 0.8, 'mebiton'); // メビトンフューチャーズタイプで30秒間持続
-        console.log("メビトンフューチャーズ・エフェクト生成完了！");
-    }, 1000);
 };
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
