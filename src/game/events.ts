@@ -29,9 +29,6 @@ export const checkCameraActions = (position: number): void => {
         action,
         position
       });
-      if(action.name === "first") {
-        continue;
-      }
       // Mark the action as executed
       action.executed = true;
     }

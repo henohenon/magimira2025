@@ -50,17 +50,17 @@ clearAllEffects();
 
 const presets = [
     () => {
-        switchCamera("side");
+        switchCamera("arc");
         enableCircleRipple();
         enableCircleSpectrum()
     },
     () => {
-        switchCamera("top");
+        switchCamera("free");
         enableSquareRipple();
         enableHorizontalSpectrum();
     },
     () => {
-        switchCamera("default");
+        switchCamera("arc");
         enableSquareRipple();
         enableVerticalSpectrum();
     }
