@@ -5,6 +5,7 @@ import {updateModelInfo} from "./models";
 import {updateCameraInfo} from "./camera";
 import {updateTextAliveInfo} from "./text-alive";
 import {updateLightInfo} from "~/dev/controls/light.ts";
+import {updateGlitchCount} from "./glitch";
 
 setUpdateLogic((currentPosition, delta) => {
     // Update camera position and rotation info
@@ -12,6 +13,7 @@ setUpdateLogic((currentPosition, delta) => {
     updateCameraInfo();
     updateModelInfo();
     updateLightInfo();
+    updateGlitchCount();
 
     gameUpdate(currentPosition, delta);
 });
