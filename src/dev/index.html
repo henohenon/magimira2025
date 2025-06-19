@@ -15,11 +15,13 @@
         <div class="space-y-2">
             <button id="close-all-button">close all</button>
             <div class="dev-section">
-                <h3 class="dev-section-title">text alive</h3>
-                <button id="force-start-button">start</button>
+                <toggle-switch id="auto-start-toggle" label="auto-start"></toggle-switch>
+                <drop-down id="camera-action-dropdown" label="auto-start-camera-action" placeholder="Select a auto-start camera action"></drop-down>
+                <label>pause/unpause</label>
                 <button id="pause-unpause-button">pause/unpause</button>
                 <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
                 <input-slider id="time-input-slider" label="time" min="0" max="position-max" step="1" value="0"></input-slider>
+                <dev-accordion summary="camera actions" id="camera-action-timestamps-accordion">                </dev-accordion>
             </div>
             <div class="dev-section" id="models-section">
                 <h3 class="dev-section-title">models</h3>
