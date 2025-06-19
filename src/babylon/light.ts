@@ -103,3 +103,31 @@ export function setLightPosition(lightType: PositionLightType, x: number, y: num
     const light = lights[lightType] as SpotLight | PointLight;
     light.position.set(x, y, z);
 }
+
+// Getter functions for light properties
+export function getLightEnabled(lightType: LightType): boolean {
+    return lights[lightType].isEnabled();
+}
+
+export function getLightDiffuse(lightType: LightType): Color3 {
+    return lights[lightType].diffuse;
+}
+
+export function getHemisphericGroundColor(): Color3 {
+    const hemi = lights.hemispheric as HemisphericLight;
+    return hemi.groundColor;
+}
+
+export function getLightIntensity(lightType: LightType): number {
+    return lights[lightType].intensity;
+}
+
+export function getLightDirection(lightType: DirectionLightType): Vector3 {
+    const light = lights[lightType] as SpotLight | HemisphericLight;
+    return light.direction;
+}
+
+export function getLightPosition(lightType: PositionLightType): Vector3 {
+    const light = lights[lightType] as SpotLight | PointLight;
+    return light.position;
+}

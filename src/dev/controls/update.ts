@@ -1,6 +1,7 @@
 ﻿import type { InputAndSlider } from "../web-components/input-slider";
 import {updateCameraInfo} from "./camera.ts";
 import {updateModelInfo} from "~/dev/controls/models.ts";
+import {updateLightInfo} from "~/dev/controls/light.ts";
 import {setUpdateLogic} from "~/update";
 import {gameUpdate} from "~/game/update.ts";
 
@@ -15,6 +16,7 @@ setUpdateLogic((currentPosition, delta) => {
     // Update camera position and rotation info
     updateCameraInfo();
     updateModelInfo();
+    updateLightInfo();
 
     gameUpdate(currentPosition, delta);
 });
