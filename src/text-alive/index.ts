@@ -44,6 +44,15 @@ player.addListener({
 	onSongMapLoad: (songMap: ISongMap) => {
 		// Cache the song map
 		segments = songMap.segments.map(s => s.segments).flat();
+	},
+	onPause: () => {
+		events.emit("onPause");
+	},
+	onPlay: () => {
+		events.emit("onPlay", { position: player.timer.position });
+	},
+	onMediaSeek: (position: number) => {
+		events.emit("onSeek", { position });
 	}
 });
 

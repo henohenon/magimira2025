@@ -12,103 +12,95 @@
 
 <body class="m-0 w-screen h-screen overflow-hidden flex">
     <aside class="w-64 h-screen bg-gray-800 text-white overflow-y-auto p-4">
-        <div class="space-y-2">
+        <dev-accordion class="space-y-2">
             <button id="close-all-button">close all</button>
-            <dev-accordion summary="text alive" open>
-                <button id="force-start-button">start</button>
+            <div class="dev-section">
+                <toggle-switch id="auto-start-toggle" label="auto-start"></toggle-switch>
+                <drop-down id="camera-action-dropdown" label="auto-start-camera-action" placeholder="Select a auto-start camera action"></drop-down>
+                <label>pause/unpause</label>
                 <button id="pause-unpause-button">pause/unpause</button>
                 <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
-                <input-slider id="time-input-slider" label="time" min="0" max="100" step="1" value="100"></input-slider>
-            </dev-accordion>
-            <dev-accordion summary="models" id="models-accordion">
+                <input-slider id="time-input-slider" label="time" min="0" max="position-max" step="1" value="0"></input-slider>
+                <dev-accordion summary="camera actions" id="camera-action-timestamps-accordion">                </dev-accordion>
+            </div>
+            <div class="dev-section" id="models-section">
+                <h3 class="dev-section-title">models</h3>
                 <dev-accordion summary="dotmiku" id="model-accordion-dotmiku">
                     <toggle-switch id="model-visibility-dotmiku" label="enable"></toggle-switch>
+                    <triple-input id="model-add-position-dotmiku" label="add position"></triple-input>
+                    <button id="model-add-position-button-dotmiku">AddPosition</button>
+                    <triple-input id="model-set-position-dotmiku" label="set position"></triple-input>
+                    <triple-input id="model-add-rotation-dotmiku" label="add rotation"></triple-input>
+                    <button id="model-add-rotation-button-dotmiku">AddRotation</button>
+                    <triple-input id="model-set-rotation-dotmiku" label="set rotation"></triple-input>
                     <dev-accordion summary="animations" id="animations-accordion-dotmiku"></dev-accordion>
                 </dev-accordion>
                 <dev-accordion summary="dotmiku-tanabata" id="model-accordion-dotmiku-tanabata">
                     <toggle-switch id="model-visibility-dotmiku-tanabata" label="enable"></toggle-switch>
+                    <triple-input id="model-add-position-dotmiku-tanabata" label="add position"></triple-input>
+                    <button id="model-add-position-button-dotmiku-tanabata">AddPosition</button>
+                    <triple-input id="model-set-position-dotmiku-tanabata" label="set position"></triple-input>
+                    <triple-input id="model-add-rotation-dotmiku-tanabata" label="add rotation"></triple-input>
+                    <button id="model-add-rotation-button-dotmiku-tanabata">AddRotation</button>
+                    <triple-input id="model-set-rotation-dotmiku-tanabata" label="set rotation"></triple-input>
                     <dev-accordion summary="animations" id="animations-accordion-dotmiku-tanabata"></dev-accordion>
                 </dev-accordion>
                 <dev-accordion summary="room" id="model-accordion-room">
                     <toggle-switch id="model-visibility-room" label="enable"></toggle-switch>
+                    <triple-input id="model-add-position-room" label="add position"></triple-input>
+                    <button id="model-add-position-button-room">AddPosition</button>
+                    <triple-input id="model-set-position-room" label="set position"></triple-input>
+                    <triple-input id="model-add-rotation-room" label="add rotation"></triple-input>
+                    <button id="model-add-rotation-button-room">AddRotation</button>
+                    <triple-input id="model-set-rotation-room" label="set rotation"></triple-input>
                 </dev-accordion>
-            </dev-accordion>
-            <dev-accordion summary="camera">
-                <drop-down id="active-camera-dropdown" label="select active camera" data-options="default, front, side, top" value="default"></drop-down>
-                <triple-input id="camera-add-position-input" label="add position"></triple-input>
-                <button id="camera-add-position-button">AddPosition</button>
-                <triple-input id="camera-set-position-input" label="set position"></triple-input>
-                <button id="camera-set-position-button">SetPosition</button>
-                <triple-input id="camera-add-rotation-input" label="add rotation"></triple-input>
-                <button id="camera-add-rotation-button">AddRotation</button>
-                <triple-input id="camera-set-rotation-input" label="set rotation"></triple-input>
-                <button id="camera-set-rotation-button">SetRotation</button>
-                <label>reset camera</label>
-                <button id="camera-reset-button">ResetCamera</button>
-                <div id="camera-position-info" class="mb-2 p-2 bg-gray-900 rounded">
-                    <p class="text-xs text-gray-400 mb-1">位置情報:</p>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-xs text-gray-300">X: </span>
-                        <span id="camera-pos-x-info" class="text-xs text-white">-</span>
-                    </div>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-xs text-gray-300">Y: </span>
-                        <span id="camera-pos-y-info" class="text-xs text-white">-</span>
-                    </div>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-xs text-gray-300">Z: </span>
-                        <span id="camera-pos-z-info" class="text-xs text-white">-</span>
-                    </div>
-                </div>
-                <div id="camera-rotation-info" class="mb-2 p-2 bg-gray-900 rounded">
-                    <p class="text-xs text-gray-400 mb-1">回転情報:</p>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-xs text-gray-300">Alpha: </span>
-                        <span id="camera-rot-alpha-info" class="text-xs text-white">-</span>
-                    </div>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-xs text-gray-300">Beta: </span>
-                        <span id="camera-rot-beta-info" class="text-xs text-white">-</span>
-                    </div>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-xs text-gray-300">Radius: </span>
-                        <span id="camera-rot-radius-info" class="text-xs text-white">-</span>
-                    </div>
-                </div>
-            </dev-accordion>
-            <dev-accordion summary="light">
+            </div>
+            <div class="dev-section" id="camera-section">
+                <h3 class="dev-section-title">camera</h3>
+                <drop-down id="camera-active-type" label="Camera Type" data-options="arc, free" value="arc"></drop-down>
+                <dev-accordion summary="Arc Camera Controls" id="arc-camera-controls-section">
+                    <triple-input id="camera-arc-position-add" label="Add Target Position"></triple-input>
+                    <button id="camera-arc-position-add-btn">Add Position</button>
+                    <triple-input id="camera-arc-position-set" label="Set Target Position"></triple-input>
+                    <triple-input id="camera-arc-rotation-add" label="Add Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
+                    <button id="camera-arc-rotation-add-btn">Add Rotation</button>
+                    <triple-input id="camera-arc-rotation-set" label="Set Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
+                </dev-accordion>
+                <dev-accordion summary="Free Camera Controls" id="free-camera-controls-section">
+                    <triple-input id="camera-free-position-add" label="Add Camera Position"></triple-input>
+                    <button id="camera-free-position-add-btn">Add Position</button>
+                    <triple-input id="camera-free-position-set" label="Set Camera Position"></triple-input>
+                    <triple-input id="camera-free-rotation-add" label="Add Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
+                    <button id="camera-free-rotation-add-btn">Add Rotation</button>
+                    <triple-input id="camera-free-rotation-set" label="Set Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
+                </dev-accordion>
+            </div>
+            <div class="dev-section" id="light-section">
+                <h3 class="dev-section-title">light</h3>
                 <dev-accordion summary="spot light">
                     <toggle-switch id="spot-light-enable" label="enable"></toggle-switch>
                     <color-picker id="spot-light-diffuse" label="diffuse"></color-picker>
-                    <color-picker id="spot-light-ground-color" label="ground color"></color-picker>
-                    <input-slider id="spot-light-intensity" label="intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <number-input id="spot-light-intensity" label="intensity" min="0" step="0.1" value="0.7"></number-input>
                     <triple-input id="spot-light-add-position-input" label="add position"></triple-input>
                     <button id="spot-light-add-position-button">AddPosition</button>
                     <triple-input id="spot-light-set-position-input" label="set position"></triple-input>
-                    <button id="spot-light-set-position-button">SetPosition</button>
                 </dev-accordion>
                 <dev-accordion summary="point light">
                     <toggle-switch id="point-light-enable" label="enable"></toggle-switch>
                     <color-picker id="point-light-diffuse" label="diffuse"></color-picker>
-                    <input-slider id="point-light-intensity" label="intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <number-input id="point-light-intensity" label="intensity" min="0" step="0.1" value="0.7"></number-input>
                     <triple-input id="point-light-add-position-input" label="add light position"></triple-input>
                     <button id="point-light-add-position-button">AddPosition</button>
                     <triple-input id="point-light-set-position-input" label="set position"></triple-input>
-                    <button id="point-light-set-position-button">SetPosition</button>
-                    <triple-input id="point-light-add-direction-input" label="add light direction"></triple-input>
-                    <button id="point-light-add-direction-button">AddDirection</button>
-                    <triple-input id="point-light-set-direction-input" label="set direction"></triple-input>
-                    <button id="point-light-set-direction-button">SetDirection</button>
                 </dev-accordion>
                 <dev-accordion summary="hemispheric light">
                     <toggle-switch id="hemispheric-light-enable" label="enable"></toggle-switch>
                     <color-picker id="hemispheric-light-diffuse" label="diffuse"></color-picker>
                     <color-picker id="hemispheric-light-ground-color" label="ground color"></color-picker>
-                    <input-slider id="hemispheric-light-intensity" label="intensity" min="0" max="2" step="0.1" value="0.7"></input-slider>
+                    <number-input id="hemispheric-light-intensity" label="intensity" min="0" step="0.1" value="0.7"></number-input>
                     <triple-input id="hemispheric-light-add-direction-input" label="add light direction"></triple-input>
                     <button id="hemispheric-light-add-direction-button">AddDirection</button>
                     <triple-input id="hemispheric-light-set-direction-input" label="set direction"></triple-input>
-                    <button id="hemispheric-light-set-direction-button">SetDirection</button>
                 </dev-accordion>
                 <dev-accordion summary="light preset">
                     <button id="preset-default">
@@ -126,8 +118,9 @@
                         <button id="preset-dawn" class="bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white py-2 px-3 rounded shadow-md transition-all">🌄 朝焼け<br><span class="text-xs opacity-80">希望の朝光</span></button>
                     </div>
                 </dev-accordion>
-            </dev-accordion>
-            <dev-accordion summary="spectrum">
+            </div>
+            <div class="dev-section" id="spectrum-section">
+                <h3 class="dev-section-title">spectrum</h3>
                 <dev-accordion summary="circle spectrum">
                     <toggle-switch id="circle-spectrum-enable" label="enable"></toggle-switch>
                     <color-picker id="circle-spectrum-color" label="color"></color-picker>
@@ -168,8 +161,9 @@
                     <number-input id="horizontal-spectrum-range" label="range" min="0" max="20" step="1" value="0"></number-input>
                     <button id="horizontal-spectrum-add-frequency-button">Add Frequency</button>
                 </dev-accordion>
-            </dev-accordion>
-            <dev-accordion summary="ripple effects">
+            </div>
+            <div class="dev-section" id="ripple-effects-section">
+                <h3 class="dev-section-title">ripple effects</h3>
                 <dev-accordion summary="circle ripple">
                     <double-input id="circle-ripple-position-input" label="position"></double-input>
                     <number-input id="circle-ripple-lifetime-input" label="lifetime" value="1000"></number-input>
@@ -190,7 +184,8 @@
                     <color-picker id="square-ripple-color-input" label="color"></color-picker>
                     <input-slider id="square-ripple-angle-input" label="angle" min="0" max="360" value="45"></input-slider>
                     <button id="square-ripple-generate-button">generate</button>                </dev-accordion>
-            </dev-accordion>            <dev-accordion summary="glitch effects">
+            </div>
+            <dev-accordion summary="glitch effects">
                 <div class="mb-4 p-2 bg-gray-900 rounded">
                     <p class="text-xs text-gray-400 mb-2">アクティブなグリッチ数:</p>
                     <span id="glitch-count" class="text-lg text-green-400 font-bold">0</span>
@@ -233,6 +228,7 @@
                         </button>
                     </div>
                 </dev-accordion>
+            </dev-accordion>
                 <!-- コントロールボタン -->
                 <div class="grid grid-cols-2 gap-2 mb-4">
                     <button id="glitch-demo-button" class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white py-2 px-3 rounded shadow-md transition-all">
@@ -256,7 +252,7 @@
     </aside>
     <div class="relative flex-1">
         <canvas id="babylon-canvas" class="absolute m-0 inset-0 w-full h-full -z-10"></canvas>
-        <canvas id="effects-canvas" class="absolute m-0 inset-0 w-full h-full z-10 pointer-events-none"></canvas>
+        <canvas id="effects-canvas" class="absolute m-0 inset-0 w-full h-full -z-9"></canvas>
         <div id="app" class="absolute inset-0 w-full h-full">
             <div id="init" class="fade flex h-full justify-center items-center flex-col">
                 <h1 class="text-white text-7xl italic font-serif">Listen with Miku</h1>

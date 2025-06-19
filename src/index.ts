@@ -9,9 +9,7 @@ import {
     playingContainerFadeIn,
     textaliveBannerFadeOut
 } from "~/effects/dom";
-import {playAnimation} from "~/babylon/mdl.ts";
 import {player} from "~/text-alive";
-import {startUpdateCycle} from "~/game/update.ts";
 
 
 let babylonLoaded = false;
@@ -33,19 +31,14 @@ const updateLoading = () => {
         throw new Error("Start button not found");
     }
     startButton.addEventListener("click", () => {
-        playingContainerFadeIn();
-        initContainerFadeOut();
-        textaliveBannerFadeOut();
-
-        playAnimation("dotmiku", "startListen");
-        setTimeout(() => {
-            textaliveEvents.emit("onGameStart");
-        }, 3000);
+        player.requestMediaSeek(0);
+        textaliveEvents.emit("onGameStart");
     });
 }
 
 textaliveEvents.on("onGameStart", () => {
-    player.requestMediaSeek(0);
+    playingContainerFadeIn();
+    initContainerFadeOut();
+    textaliveBannerFadeOut();
     player.requestPlay();
-    startUpdateCycle();
 });

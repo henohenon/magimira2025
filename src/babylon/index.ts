@@ -32,3 +32,7 @@ scene.executeWhenReady(()=>{
 
 engine.runRenderLoop(() => scene.render());
 window.addEventListener("resize", () => engine.resize());
+
+
+export const degToRad = (deg: number) => deg * Math.PI / 180;
+export const radToDeg = (rad: number) => rad * 180 / Math.PI;

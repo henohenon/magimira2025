@@ -1,54 +1,142 @@
 ﻿import {
-    addCameraPosition,
-    setCameraPosition,
-    addCameraRotation,
-    setCameraRotation,
+    addArcSphericalCoordinates,
+    addArcTargetPosition,
+    addFreePosition,
+    addFreeRotation,
+    type CameraType,
+    getActiveCameraType,
+    getArcSphericalCoordinates,
+    getArcTargetPosition,
+    getFreePosition,
+    getFreeRotation,
+    setArcSphericalCoordinates,
+    setArcTargetPosition,
+    setFreePosition,
+    setFreeRotation,
     switchCamera,
-    resetCameraToInitial,
-    type CameraType
-} from "~/babylon/camera.ts";
+} from "~/babylon/camera";
 import type {Dropdown} from "../web-components/dropdown.ts";
 import type {TripleInput} from "../web-components/triple-input.ts";
 
-const activeCameraDropdown = document.getElementById("active-camera-dropdown") as Dropdown;
-const cameraAddPositionInput = document.getElementById("camera-add-position-input") as TripleInput;
-const cameraAddPositionButton = document.getElementById("camera-add-position-button") as HTMLButtonElement;
-const cameraSetPositionInput = document.getElementById("camera-set-position-input") as TripleInput;
-const cameraSetPositionButton = document.getElementById("camera-set-position-button") as HTMLButtonElement;
-const cameraAddRotationInput = document.getElementById("camera-add-rotation-input") as TripleInput;
-const cameraAddRotationButton = document.getElementById("camera-add-rotation-button") as HTMLButtonElement;
-const cameraSetRotationInput = document.getElementById("camera-set-rotation-input") as TripleInput;
-const cameraSetRotationButton = document.getElementById("camera-set-rotation-button") as HTMLButtonElement;
-const cameraResetButton = document.getElementById("camera-reset-button") as HTMLButtonElement;
+// Get active camera dropdown
+const activeCameraDropdown = document.getElementById("camera-active-type") as Dropdown;
 
-if (!activeCameraDropdown || !cameraAddPositionInput || !cameraAddPositionButton ||
-    !cameraSetPositionInput || !cameraSetPositionButton || !cameraAddRotationInput ||
-    !cameraAddRotationButton || !cameraSetRotationInput || !cameraSetRotationButton ||
-    !cameraResetButton) {
-    throw new Error("Camera controls not found");
+// Get arc camera controls
+const arcCameraAddPositionInput = document.getElementById("camera-arc-position-add") as TripleInput;
+const arcCameraAddPositionButton = document.getElementById("camera-arc-position-add-btn") as HTMLButtonElement;
+const arcCameraSetPositionInput = document.getElementById("camera-arc-position-set") as TripleInput;
+const arcCameraAddRotationInput = document.getElementById("camera-arc-rotation-add") as TripleInput;
+const arcCameraAddRotationButton = document.getElementById("camera-arc-rotation-add-btn") as HTMLButtonElement;
+const arcCameraSetRotationInput = document.getElementById("camera-arc-rotation-set") as TripleInput;
+
+// Get free camera controls
+const freeCameraAddPositionInput = document.getElementById("camera-free-position-add") as TripleInput;
+const freeCameraAddPositionButton = document.getElementById("camera-free-position-add-btn") as HTMLButtonElement;
+const freeCameraSetPositionInput = document.getElementById("camera-free-position-set") as TripleInput;
+const freeCameraAddRotationInput = document.getElementById("camera-free-rotation-add") as TripleInput;
+const freeCameraAddRotationButton = document.getElementById("camera-free-rotation-add-btn") as HTMLButtonElement;
+const freeCameraSetRotationInput = document.getElementById("camera-free-rotation-set") as TripleInput;
+
+// Validate controls
+if (!activeCameraDropdown) {
+    throw new Error("Active camera dropdown not found");
 }
 
+// Arc camera controls validation
+if (!arcCameraAddPositionInput || !arcCameraAddPositionButton || !arcCameraSetPositionInput ||
+    !arcCameraAddRotationInput || !arcCameraAddRotationButton || !arcCameraSetRotationInput) {
+    throw new Error("Arc camera controls not found");
+}
+
+// Free camera controls validation
+if (!freeCameraAddPositionInput || !freeCameraAddPositionButton || !freeCameraSetPositionInput ||
+    !freeCameraAddRotationInput || !freeCameraAddRotationButton || !freeCameraSetRotationInput) {
+    throw new Error("Free camera controls not found");
+}
+
+// Subscribe to active camera changes
 activeCameraDropdown.subscribe((key) => {
     switchCamera(key as CameraType);
+    updateCameraInfo();
 });
 
-cameraAddPositionButton.addEventListener("click", () => {
-    console.log(activeCameraDropdown.value, cameraAddPositionInput.value1, cameraAddPositionInput.value2, cameraAddPositionInput.value3);
-    addCameraPosition(activeCameraDropdown.value as CameraType, cameraAddPositionInput.value1, cameraAddPositionInput.value2, cameraAddPositionInput.value3);
+// Arc camera event listeners
+arcCameraAddPositionButton.addEventListener("click", () => {
+    addArcTargetPosition(arcCameraAddPositionInput.value1, arcCameraAddPositionInput.value2, arcCameraAddPositionInput.value3);
+    updateCameraInfo();
 });
 
-cameraSetPositionButton.addEventListener("click", () => {
-    setCameraPosition(activeCameraDropdown.value as CameraType, cameraSetPositionInput.value1, cameraSetPositionInput.value2, cameraSetPositionInput.value3);
+// Add event listener for arc camera set position button
+arcCameraSetPositionInput.subscribe((value1, value2, value3) => {
+    setArcTargetPosition(value1, value2, value3);
+    updateCameraInfo();
 });
 
-cameraAddRotationButton.addEventListener("click", () => {
-    addCameraRotation(activeCameraDropdown.value as CameraType, cameraAddRotationInput.value1, cameraAddRotationInput.value2, cameraAddRotationInput.value3);
+arcCameraAddRotationButton.addEventListener("click", () => {
+    addArcSphericalCoordinates(arcCameraAddRotationInput.value1, arcCameraAddRotationInput.value2, arcCameraAddRotationInput.value3);
+    updateCameraInfo();
 });
 
-cameraSetRotationButton.addEventListener("click", () => {
-    setCameraRotation(activeCameraDropdown.value as CameraType, cameraSetRotationInput.value1, cameraSetRotationInput.value2, cameraSetRotationInput.value3);
+// Add event listener for arc camera set rotation button
+arcCameraSetRotationInput.subscribe((value1, value2, value3) => {
+    setArcSphericalCoordinates(value1, value2, value3);
+})
+
+// Free camera event listeners
+freeCameraAddPositionButton.addEventListener("click", () => {
+    addFreePosition(freeCameraAddPositionInput.value1, freeCameraAddPositionInput.value2, freeCameraAddPositionInput.value3);
+    updateCameraInfo();
 });
 
-cameraResetButton.addEventListener("click", () => {
-    resetCameraToInitial(activeCameraDropdown.value as CameraType);
+// Add event listener for free camera set position button
+freeCameraSetPositionInput.subscribe((value1, value2, value3) => {
+    setFreePosition(value1, value2, value3);
+    updateCameraInfo();
 });
+
+freeCameraAddRotationButton.addEventListener("click", () => {
+    addFreeRotation(freeCameraAddRotationInput.value1, freeCameraAddRotationInput.value2, freeCameraAddRotationInput.value3);
+    updateCameraInfo();
+});
+
+// Add event listener for free camera set rotation button
+freeCameraSetRotationInput.subscribe((value1, value2, value3) => {
+    setFreeRotation(value1, value2, value3);
+})
+
+// Function to update camera position and rotation inputs in the UI
+export function updateCameraInfo() {
+    // Update dropdown to match active camera
+    activeCameraDropdown.value = getActiveCameraType();
+
+    // Update arc camera position
+    const arcPosition = getArcTargetPosition();
+    if (arcPosition) {
+        arcCameraSetPositionInput.value1 = arcPosition.x;
+        arcCameraSetPositionInput.value2 = arcPosition.y;
+        arcCameraSetPositionInput.value3 = arcPosition.z;
+    }
+
+    // Update arc camera rotation (spherical coordinates)
+    const spherical = getArcSphericalCoordinates();
+    if (spherical) {
+        arcCameraSetRotationInput.value1 = spherical.alpha; // alpha (degrees)
+        arcCameraSetRotationInput.value2 = spherical.beta;  // beta (degrees)
+        arcCameraSetRotationInput.value3 = spherical.radius; // radius
+    }
+    // Update free camera position
+    const freePosition = getFreePosition();
+    if (freePosition) {
+        freeCameraSetPositionInput.value1 = freePosition.x;
+        freeCameraSetPositionInput.value2 = freePosition.y;
+        freeCameraSetPositionInput.value3 = freePosition.z;
+    }
+
+    // Update free camera rotation
+    const rotation = getFreeRotation();
+    if (rotation) {
+        freeCameraSetRotationInput.value1 = rotation.y; // yaw (y in Euler)
+        freeCameraSetRotationInput.value2 = rotation.x; // pitch (x in Euler)
+        freeCameraSetRotationInput.value3 = rotation.z; // roll (z in Euler)
+    }
+}
