@@ -12,7 +12,6 @@ import {
 import {playAnimation} from "~/babylon/mdl.ts";
 import {player} from "~/text-alive";
 import {startUpdateCycle} from "~/game/update.ts";
-import {addGlitchEffect, clearGlitchEffects, getActiveGlitchCount} from "~/effects";
 
 
 let babylonLoaded = false;
@@ -50,16 +49,3 @@ textaliveEvents.on("onGameStart", () => {
     player.requestPlay();
     startUpdateCycle();
 });
-
-// グリッチエフェクト関数をグローバルに公開
-declare global {
-    interface Window {
-        addGlitchEffect: typeof addGlitchEffect;
-        clearGlitchEffects: typeof clearGlitchEffects;
-        getActiveGlitchCount: typeof getActiveGlitchCount;
-    }
-}
-
-window.addGlitchEffect = addGlitchEffect;
-window.clearGlitchEffects = clearGlitchEffects;
-window.getActiveGlitchCount = getActiveGlitchCount;
