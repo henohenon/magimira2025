@@ -14,13 +14,15 @@
     <aside class="w-64 h-screen bg-gray-800 text-white overflow-y-auto p-4">
         <div class="space-y-2">
             <button id="close-all-button">close all</button>
-            <dev-accordion summary="text alive" open>
+            <div class="dev-section">
+                <h3 class="dev-section-title">text alive</h3>
                 <button id="force-start-button">start</button>
                 <button id="pause-unpause-button">pause/unpause</button>
                 <input-slider id="volume-input-slider" label="volume" min="0" max="100" step="1" value="100"></input-slider>
                 <input-slider id="time-input-slider" label="time" min="0" max="position-max" step="1" value="0"></input-slider>
-            </dev-accordion>
-            <dev-accordion summary="models" id="models-accordion">
+            </div>
+            <div class="dev-section" id="models-section">
+                <h3 class="dev-section-title">models</h3>
                 <dev-accordion summary="dotmiku" id="model-accordion-dotmiku">
                     <toggle-switch id="model-visibility-dotmiku" label="enable"></toggle-switch>
                     <triple-input id="model-add-position-dotmiku" label="add position"></triple-input>
@@ -50,25 +52,29 @@
                     <button id="model-add-rotation-button-room">AddRotation</button>
                     <triple-input id="model-set-rotation-room" label="set rotation"></triple-input>
                 </dev-accordion>
-            </dev-accordion>
-            <drop-down id="camera-active-type" label="Camera Type" data-options="arc, free" value="arc"></drop-down>
-            <dev-accordion summary="Arc Camera Controls">
-                <triple-input id="camera-arc-position-add" label="Add Target Position"></triple-input>
-                <button id="camera-arc-position-add-btn">Add Position</button>
-                <triple-input id="camera-arc-position-set" label="Set Target Position"></triple-input>
-                <triple-input id="camera-arc-rotation-add" label="Add Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
-                <button id="camera-arc-rotation-add-btn">Add Rotation</button>
-                <triple-input id="camera-arc-rotation-set" label="Set Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
-            </dev-accordion>
-            <dev-accordion summary="Free Camera Controls">
-                <triple-input id="camera-free-position-add" label="Add Camera Position"></triple-input>
-                <button id="camera-free-position-add-btn">Add Position</button>
-                <triple-input id="camera-free-position-set" label="Set Camera Position"></triple-input>
-                <triple-input id="camera-free-rotation-add" label="Add Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
-                <button id="camera-free-rotation-add-btn">Add Rotation</button>
-                <triple-input id="camera-free-rotation-set" label="Set Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
-            </dev-accordion>
-            <dev-accordion summary="light">
+            </div>
+            <div class="dev-section" id="camera-section">
+                <h3 class="dev-section-title">camera</h3>
+                <drop-down id="camera-active-type" label="Camera Type" data-options="arc, free" value="arc"></drop-down>
+                <dev-accordion summary="Arc Camera Controls" id="arc-camera-controls-section">
+                    <triple-input id="camera-arc-position-add" label="Add Target Position"></triple-input>
+                    <button id="camera-arc-position-add-btn">Add Position</button>
+                    <triple-input id="camera-arc-position-set" label="Set Target Position"></triple-input>
+                    <triple-input id="camera-arc-rotation-add" label="Add Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
+                    <button id="camera-arc-rotation-add-btn">Add Rotation</button>
+                    <triple-input id="camera-arc-rotation-set" label="Set Spherical Coordinates" label1="Alpha" label2="Beta" label3="Radius"></triple-input>
+                </dev-accordion>
+                <dev-accordion summary="Free Camera Controls" id="free-camera-controls-section">
+                    <triple-input id="camera-free-position-add" label="Add Camera Position"></triple-input>
+                    <button id="camera-free-position-add-btn">Add Position</button>
+                    <triple-input id="camera-free-position-set" label="Set Camera Position"></triple-input>
+                    <triple-input id="camera-free-rotation-add" label="Add Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
+                    <button id="camera-free-rotation-add-btn">Add Rotation</button>
+                    <triple-input id="camera-free-rotation-set" label="Set Camera Rotation" label1="Yaw" label2="Pitch" label3="Roll"></triple-input>
+                </dev-accordion>
+            </div>
+            <div class="dev-section" id="light-section">
+                <h3 class="dev-section-title">light</h3>
                 <dev-accordion summary="spot light">
                     <toggle-switch id="spot-light-enable" label="enable"></toggle-switch>
                     <color-picker id="spot-light-diffuse" label="diffuse"></color-picker>
@@ -118,8 +124,9 @@
                         <button id="preset-dawn" class="bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white py-2 px-3 rounded shadow-md transition-all">🌄 朝焼け<br><span class="text-xs opacity-80">希望の朝光</span></button>
                     </div>
                 </dev-accordion>
-            </dev-accordion>
-            <dev-accordion summary="spectrum">
+            </div>
+            <div class="dev-section" id="spectrum-section">
+                <h3 class="dev-section-title">spectrum</h3>
                 <dev-accordion summary="circle spectrum">
                     <toggle-switch id="circle-spectrum-enable" label="enable"></toggle-switch>
                     <color-picker id="circle-spectrum-color" label="color"></color-picker>
@@ -160,8 +167,9 @@
                     <number-input id="horizontal-spectrum-range" label="range" min="0" max="20" step="1" value="0"></number-input>
                     <button id="horizontal-spectrum-add-frequency-button">Add Frequency</button>
                 </dev-accordion>
-            </dev-accordion>
-            <dev-accordion summary="ripple effects">
+            </div>
+            <div class="dev-section" id="ripple-effects-section">
+                <h3 class="dev-section-title">ripple effects</h3>
                 <dev-accordion summary="circle ripple">
                     <double-input id="circle-ripple-position-input" label="position"></double-input>
                     <number-input id="circle-ripple-lifetime-input" label="lifetime" value="1000"></number-input>
@@ -183,7 +191,7 @@
                     <input-slider id="square-ripple-angle-input" label="angle" min="0" max="360" value="45"></input-slider>
                     <button id="square-ripple-generate-button">generate</button>
                 </dev-accordion>
-            </dev-accordion>
+            </div>
         </div>
     </aside>
     <div class="relative flex-1">
