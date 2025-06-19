@@ -60,8 +60,9 @@ volumeInputSlider?.subscribe((volume) => {
 })
 
 const timeInputSlider = document.getElementById("time-input-slider") as InputAndSlider;
-if (!timeInputSlider) {
-    throw new Error("Time controls not found");
+if (!timeInputSlider) throw new Error("Time controls not found");
+export const updateTextAliveInfo = (position: number) => {
+    timeInputSlider.value = position;
 }
 
 events.on("onAppReady", () => {
