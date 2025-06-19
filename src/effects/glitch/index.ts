@@ -1,3 +1,5 @@
+import {clamp} from "~/util.ts";
+
 interface GlitchParticle {
     x: number;
     y: number;
@@ -67,7 +69,7 @@ export function addGlitchEffect(
         height,
         lifeTime,
         maxLifeTime: lifeTime,
-        density: Math.max(0, Math.min(1, density)),
+        density: clamp(density, 0, 1),
         glitchLines: [],
         colorShift: {
             r: (Math.random() - 0.5) * 20,
@@ -91,7 +93,7 @@ export function addGlitchEffect(
  */
 function generateGlitchLines(effect: GlitchEffect): void {
     effect.glitchLines = [];
-    const lineCount = Math.max(1, Math.min(5, Math.floor(effect.height * effect.density * 0.1) + 1)); // 最低1本は生成
+    const lineCount = clamp(Math.floor(effect.height * effect.density * 0.1) + 1, 1, 5); // 最低1本は生成
     
     console.log(`グリッチライン生成: ${lineCount}本, height=${effect.height}, density=${effect.density}`);
     
@@ -143,66 +145,42 @@ function generateGlitchParticles(effect: GlitchEffect): void {
  * グリッチエフェクトを描画する
  */
 export function drawGlitchEffects(ctx: CanvasRenderingContext2D, deltaTime: number): void {
-    // 最初のいくつかの呼び出しでログ出力
-    if (Math.random() < 0.05) { // 5%の確率でログ
-        console.log(`drawGlitchEffects called: ${glitchEffects.length} effects, deltaTime: ${deltaTime}`);
-    }
-    
-    // キャンバスの境界チェック
-    if (!ctx || !ctx.canvas) {
-        console.warn('キャンバスまたはコンテキストが無効です');
-        return;
-    }
     
     const canvasWidth = ctx.canvas.width;
     const canvasHeight = ctx.canvas.height;
-      // デバッグ情報
-    if (glitchEffects.length > 0) {
-        const firstEffect = glitchEffects[0];
-        console.log(`描画中のグリッチエフェクト数: ${glitchEffects.length}, キャンバスサイズ: ${canvasWidth}x${canvasHeight}, 最初のエフェクト寿命: ${firstEffect.lifeTime.toFixed(2)}秒`);
-    }
-    
+
     // キャンバス状態を完全に保存
     ctx.save();
-    
-    // デフォルト状態にリセット
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = 1.0;
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-      try {
-        glitchEffects = glitchEffects.filter(effect => {
-            // deltaTimeをミリ秒から秒に変換
-            effect.lifeTime -= deltaTime / 1000;
-            
-            if (effect.lifeTime <= 0) {
-                console.log('グリッチエフェクトが期限切れで削除されました');
-                return false; // エフェクトを削除
-            }
-            
-            // エフェクトが画面外にある場合はスキップ
-            if (effect.x < -effect.width || effect.x > canvasWidth ||
-                effect.y < -effect.height || effect.y > canvasHeight) {
-                console.log('グリッチエフェクトが画面外のため削除されました');
-                return false;
-            }
-              // 時間経過とともにランダムにグリッチラインを更新
-            if (Math.random() < 0.3) { // 更新頻度を上げる
-                generateGlitchLines(effect);
-            }
-            
-            // パーティクルを更新
-            updateGlitchParticles(effect, deltaTime / 1000);
-            
-            // エフェクトタイプに基づいて描画
-            drawGlitchEffectByType(ctx, effect);
-            return true;
-        });
-    } catch (error) {
-        console.warn('グリッチエフェクト描画エラー:', error);
-    } finally {
-        // キャンバス状態を確実に復元
-        ctx.restore();
-    }
+
+    glitchEffects = glitchEffects.filter(effect => {
+        // deltaTimeをミリ秒から秒に変換
+        effect.lifeTime -= deltaTime / 1000;
+
+        if (effect.lifeTime <= 0) {
+            console.log('グリッチエフェクトが期限切れで削除されました');
+            return false; // エフェクトを削除
+        }
+
+        // エフェクトが画面外にある場合はスキップ
+        if (effect.x < -effect.width || effect.x > canvasWidth ||
+            effect.y < -effect.height || effect.y > canvasHeight) {
+            console.log('グリッチエフェクトが画面外のため削除されました');
+            return false;
+        }
+          // 時間経過とともにランダムにグリッチラインを更新
+        if (Math.random() < 0.3) { // 更新頻度を上げる
+            generateGlitchLines(effect);
+        }
+
+        // パーティクルを更新
+        updateGlitchParticles(effect, deltaTime / 1000);
+
+        // エフェクトタイプに基づいて描画
+        drawGlitchEffectByType(ctx, effect);
+        return true;
+    });
+
+    ctx.restore();
 }
 
 /**
@@ -371,7 +349,7 @@ function drawMebitonFuturesGlitch(ctx: CanvasRenderingContext2D, effect: GlitchE
     effect.particles.forEach((particle, index) => {
         const floatX = Math.sin(time * 0.001 + index * 0.1) * 3;
         const floatY = Math.cos(time * 0.0015 + index * 0.15) * 2;
-        const pulseSize = particle.size + Math.sin(time * 0.004 + index * 0.3) * 1;
+        const pulseSize = particle.size + Math.sin(time * 0.004 + index * 0.3);
         
         // ダイヤ型パーティクル
         ctx.fillStyle = particle.color + Math.floor(particle.life * 220).toString(16).padStart(2, '0');
@@ -422,7 +400,7 @@ function drawDigitalGlitch(ctx: CanvasRenderingContext2D, effect: GlitchEffect):
     const time = (effect.maxLifeTime - effect.lifeTime) * 1000; // アニメーション用の時間
     
     // 背景のピクセル化されたノイズ（虹色グラデーション）
-    const pixelSize = 2 + Math.sin(time * 0.001) * 1; // アニメーションするピクセルサイズ
+    const pixelSize = 2 + Math.sin(time * 0.001); // アニメーションするピクセルサイズ
     for (let x = effect.x; x < effect.x + effect.width; x += pixelSize) {
         for (let y = effect.y; y < effect.y + effect.height; y += pixelSize) {
             if (Math.random() < effect.density * 0.35) {
