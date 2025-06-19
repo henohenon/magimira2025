@@ -1,7 +1,7 @@
 ﻿import {updateTextAlive} from "~/text-alive";
 import {updateEffects} from "~/effects";
 import {checkCameraActions} from "./events";
-import {setUpdateLogic} from "~/update.ts";
+import {setUpdateLogic} from "~/update/cycle";
 
 // Set up the update logic for the game
 export const gameUpdate = (currentPosition: number, deltaTime: number) => {
