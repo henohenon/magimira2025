@@ -1,10 +1,10 @@
 import {gameUpdate} from "~/game/update";
-import {setUpdateLogic} from "~/update";
+import {setUpdateLogic} from "~/update/cycle";
 
 import {updateModelInfo} from "./models";
 import {updateCameraInfo} from "./camera";
+import {updateLightInfo} from "./light";
 import {updateTextAliveInfo} from "./text-alive";
-import {updateLightInfo} from "~/dev/controls/light.ts";
 import {updateGlitchCount} from "./glitch";
 
 setUpdateLogic((currentPosition, delta) => {
