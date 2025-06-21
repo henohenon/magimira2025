@@ -1,5 +1,5 @@
 ﻿import {player} from "~/lib/text-alive";
-import {cameraActions, events} from "~/game/events";
+import {keyFrames, events} from "~/game/events";
 
 import type {Dropdown} from "../web-components/dropdown.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";
@@ -25,21 +25,21 @@ if (autoStartToggle) {
 events.on("onLoaded", () => {
     timeInputSlider.max = player.video.duration;
     if (autoStart) {
-        // Check if there's a default camera action selected in the dropdown
-        if (cameraActionDropdown.value) {
-            // Find the corresponding camera action
-            const actionName = cameraActionDropdown.value.split(' (')[0];
+        // Check if there's a default key frame selected in the dropdown
+        if (keyFrameDropdown.value) {
+            // Find the corresponding key frame
+            const actionName = keyFrameDropdown.value.split(' (')[0];
             const action = sortedActions.find(a => a.name === actionName);
 
             if (action) {
-                // Seek to the camera action position
+                // Seek to the key frame position
                 player.requestMediaSeek(action.position);
             } else {
-                // Fallback to beginning if action not found
+                // Fallback to beginning if key frame not found
                 player.requestMediaSeek(0);
             }
         } else {
-            // No camera action selected, start from beginning
+            // No key frame selected, start from beginning
             player.requestMediaSeek(0);
         }
         events.emit("onGameStart");
@@ -78,51 +78,51 @@ function formatTime(ms: number): string {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-// Get the details element inside the camera action timestamps accordion
-const cameraActionAccordionDetails = document.querySelector('#camera-action-timestamps-accordion details') as HTMLElement;
+// Get the details element inside the key frame timestamps accordion
+const keyFrameAccordionDetails = document.querySelector('#key-frame-timestamps-accordion details') as HTMLElement;
 
-// Function to generate timestamp buttons for each camera action
-if (!cameraActionAccordionDetails) throw new Error("Camera action timestamps accordion details not found");
+// Function to generate timestamp buttons for each key frame
+if (!keyFrameAccordionDetails) throw new Error("Key frame timestamps accordion details not found");
 
-// Sort camera actions by position
-const sortedActions = [...cameraActions].sort((a, b) => a.position - b.position);
+// Sort key frames by position
+const sortedActions = [...keyFrames].sort((a, b) => a.position - b.position);
 
 // Get the dropdown element
-const cameraActionDropdown = document.getElementById('camera-action-dropdown') as Dropdown;
-if (!cameraActionDropdown) throw new Error("Camera action dropdown not found");
+const keyFrameDropdown = document.getElementById('key-frame-dropdown') as Dropdown;
+if (!keyFrameDropdown) throw new Error("Key frame dropdown not found");
 
-// Create options string from camera actions
+// Create options string from key frames
 const optionsStr = sortedActions.map(action => `${action.name} (${formatTime(action.position)})`).join(',');
 
 // Set the data-options attribute dynamically
-cameraActionDropdown.setDataOptions(optionsStr);
+keyFrameDropdown.setDataOptions(optionsStr);
 
-// Load default camera action from localStorage if available
-const savedDefaultCameraAction = localStorage.getItem("defaultCameraAction");
-if (savedDefaultCameraAction) {
+// Load default key frame from localStorage if available
+const savedDefaultKeyFrame = localStorage.getItem("defaultKeyFrame");
+if (savedDefaultKeyFrame) {
     // Find if the saved action still exists in the current options
     const optionsArray = optionsStr.split(',').map(s => s.trim());
-    if (optionsArray.includes(savedDefaultCameraAction)) {
-        cameraActionDropdown.value = savedDefaultCameraAction;
+    if (optionsArray.includes(savedDefaultKeyFrame)) {
+        keyFrameDropdown.value = savedDefaultKeyFrame;
     }
 }
 
 // Subscribe to dropdown changes to save the selected value
-cameraActionDropdown.subscribe((value) => {
+keyFrameDropdown.subscribe((value) => {
     if (value) {
-        localStorage.setItem("defaultCameraAction", value);
+        localStorage.setItem("defaultKeyFrame", value);
     }
 });
 
-// Create a button for each camera action
+// Create a button for each key frame
 sortedActions.forEach(action => {
     const button = document.createElement('button');
     button.textContent = `${action.name} (${formatTime(action.position)})`;
 
-    // Add click event listener to seek to the camera action position and play
+    // Add click event listener to seek to the key frame position and play
     button.addEventListener('click', () => {
         player.requestMediaSeek(action.position);
     });
 
-    cameraActionAccordionDetails.appendChild(button);
+    keyFrameAccordionDetails.appendChild(button);
 });

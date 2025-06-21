@@ -2,7 +2,7 @@
 import {updateEffects} from "~/lib/effects";
 import {setUpdateLogic} from "~/lib/update/cycle";
 
-import {checkCameraActions} from "./events";
+import {checkKeyFrames} from "./events";
 
 // Set up the update logic for the game
 export const gameUpdate = (currentPosition: number, deltaTime: number) => {
@@ -11,8 +11,8 @@ export const gameUpdate = (currentPosition: number, deltaTime: number) => {
     updateTextAlive(lastPosition, currentPosition);
     updateEffects(deltaTime);
 
-    // Check for camera actions at the current position
-    checkCameraActions(currentPosition);
+    // Check for key frames at the current position
+    checkKeyFrames(currentPosition);
 };
 
 setUpdateLogic(gameUpdate);

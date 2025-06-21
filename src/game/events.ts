@@ -1,37 +1,37 @@
 ﻿import mitt, { type Emitter } from 'mitt';
 
-type CameraAction = {
+type KeyFrame = {
   name: string;
   position: number;
-  executed?: boolean; // Track if the action has been executed
+  executed?: boolean; // Track if the key frame has been executed
 };
 
 type Events = {
   onLoaded: undefined;
   onGameStart: undefined;
-  onCameraAction: {
-    action: CameraAction;
+  onKeyFrame: {
+    action: KeyFrame;
     position: number;
   };
 }
 
 export const events: Emitter<Events> = mitt<Events>();
 
-// Array of camera actions with their trigger positions
-export const cameraActions: CameraAction[] = [
+// Array of key frames with their trigger positions
+export const keyFrames: KeyFrame[] = [
   { name: "2C", position: 11000 },
   { name: "first", position: 21000 }
 ];
 
-export const checkCameraActions = (position: number): void => {
-  for (const action of cameraActions) {
+export const checkKeyFrames = (position: number): void => {
+  for (const action of keyFrames) {
     if (action.executed) continue;
     if (action.position <= position) {
-      events.emit('onCameraAction', {
+      events.emit('onKeyFrame', {
         action,
         position
       });
-      // Mark the action as executed
+      // Mark the key frame as executed
       action.executed = true;
     }
   }

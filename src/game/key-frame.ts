@@ -21,11 +21,11 @@ babylonEvents.on("onModelsLoaded", () => {
 
 let intensity = 0.08;
 
-// Listen for camera action events
-events.on("onCameraAction", ({action, position}) => {
-    console.log(`Camera action: ${action.name} at position ${position}`);
+// Listen for key frame events
+events.on("onKeyFrame", ({action, position}) => {
+    console.log(`Key frame: ${action.name} at position ${position}`);
 
-    // Handle different camera actions
+    // Handle different key frames
     switch(action.name) {
         case "2C":
             //setFreePosition(2.5, 1.5, -2);
