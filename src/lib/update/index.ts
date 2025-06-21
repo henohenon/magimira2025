@@ -1,6 +1,6 @@
-﻿import {events} from "~/text-alive/events.ts";
-import {player} from "~/text-alive";
-import {restartUpdateCycle, stopUpdateCycle} from "./cycle";
+﻿import {events} from "~/lib/text-alive/events.ts";
+import {player} from "~/lib/text-alive";
+import {restartUpdateCycle, stopUpdateCycle} from "./cycle.ts";
 
 // Setup event listeners similar to src/dev/controls/update.ts
 events.on("onPause", () => {

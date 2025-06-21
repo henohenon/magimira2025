@@ -1,9 +1,14 @@
-﻿import {setFreePosition, setFreeRotation, switchCamera, switchCameraWithCrossFade} from "~/babylon/camera.ts";
-import {events as babylonEvents} from "~/babylon/events.ts";
-import {setModelRotation, setPosition} from "~/babylon/mdl.ts";
+﻿import {
+    setFreePosition,
+    setFreeRotation,
+    switchCamera,
+    switchCameraWithCrossFade
+} from "~/lib/babylon/camera";
+import {events as babylonEvents} from "~/lib/babylon/events";
+import {setModelRotation, setPosition} from "~/lib/babylon/mdl";
 import {events} from "./events";
-import {setLightingPreset} from "~/game/light.ts";
-import {setLightIntensity} from "~/babylon/light.ts";
+import {setLightingPreset} from "~/game/light";
+import {setLightIntensity} from "~/lib/babylon/light";
 
 switchCamera("free");
 setFreePosition(-2.5, 1.5, -8);

@@ -1,7 +1,8 @@
-﻿import {pointer} from "~/game/input.ts";
-import {createCircleRipple, createSquareRipple} from "~/effects/ripple";
-import type {Subscription} from "prismatix-input/subject";
+﻿import type {Subscription} from "prismatix-input/subject";
 import type {WithPositionInputEvent} from "prismatix-input/web-native";
+
+import {createCircleRipple, createSquareRipple} from "~/lib/effects/ripple";
+import {pointer} from "~/game/input.ts";
 
 // Array to track all active subscriptions
 export const subscriptions: Array<Subscription> = [];

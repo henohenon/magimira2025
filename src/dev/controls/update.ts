@@ -1,5 +1,5 @@
 import {gameUpdate} from "~/game/update";
-import {setUpdateLogic} from "~/update/cycle";
+import {setUpdateLogic} from "~/lib/update/cycle";
 
 import {updateModelInfo} from "./models";
 import {updateCameraInfo} from "./camera";

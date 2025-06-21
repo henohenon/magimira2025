@@ -15,7 +15,8 @@
     setFreeRotation,
     switchCamera,
     switchCameraWithCrossFade,
-} from "~/babylon/camera";
+} from "~/lib/babylon/camera";
+
 import type {Dropdown} from "../web-components/dropdown.ts";
 import type {TripleInput} from "../web-components/triple-input.ts";
 import type {NumberInput} from "../web-components/number-input.ts";

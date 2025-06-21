@@ -1,7 +1,5 @@
 import {Player, type ISongMap, type IRepetitiveSegment} from "textalive-app-api";
 
-import "~/effects/spectrum/circle.ts";
-
 import { events } from "./events";
 
 

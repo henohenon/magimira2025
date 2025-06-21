@@ -4,7 +4,7 @@
     setLightDiffuse,
     setLightEnabled,
     setLightIntensity
-} from "~/babylon/light.ts";
+} from "~/lib/babylon/light.ts";
 
 export const setLightingPreset = (preset: "day" | "night" | "sunset" | "dawn"): boolean => {
     // すべてのライトを有効か

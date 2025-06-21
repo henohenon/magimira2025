@@ -1,4 +1,4 @@
-﻿import {events as babylonEvents} from "../../babylon/events.ts";
+﻿import {events as babylonEvents} from "~/lib/babylon/events";
 import {
     addModelRotation,
     addPosition,
@@ -10,9 +10,10 @@ import {
     setModelRotation,
     setModelVisibility,
     setPosition
-} from "../../babylon/mdl.ts";
-import type {TripleInput} from "../web-components/triple-input.ts";
-import type {ToggleSwitch} from "~/dev/web-components/toggle-switch.ts";
+} from "~/lib/babylon/mdl";
+
+import type {ToggleSwitch} from "../web-components/toggle-switch";
+import type {TripleInput} from "../web-components/triple-input";
 
 // Function to update model position and rotation inputs in the UI
 export function updateModelInfo() {

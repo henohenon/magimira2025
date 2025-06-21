@@ -1,4 +1,5 @@
-﻿import {createCircleRipple, createSquareRipple} from "~/effects/ripple";
+﻿import {createCircleRipple, createSquareRipple} from "~/lib/effects/ripple";
+
 import type {DoubleInput} from "../web-components/double-input.ts";
 import type {NumberInput} from "../web-components/number-input.ts";
 import type {ColorPicker} from "../web-components/color-picker.ts";

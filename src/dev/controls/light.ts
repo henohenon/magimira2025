@@ -16,7 +16,7 @@
     getLightIntensity,
     getLightDirection,
     getLightPosition
-} from "~/babylon/light.ts";
+} from "~/lib/babylon/light.ts";
 import {setLightingPreset, switchLight} from "~/game/light.ts";
 
 import type {ToggleSwitch} from "../web-components/toggle-switch.ts";

@@ -1,7 +1,8 @@
-﻿import {player} from "~/text-alive";
-import type {InputAndSlider} from "../web-components/input-slider.ts";
+﻿import {player} from "~/lib/text-alive";
 import {cameraActions, events} from "~/game/events";
-import type {Dropdown} from "~/dev/web-components/dropdown.ts";
+
+import type {Dropdown} from "../web-components/dropdown.ts";
+import type {InputAndSlider} from "../web-components/input-slider.ts";
 
 const autoStartToggle = document.getElementById("auto-start-toggle") as HTMLInputElement;
 // Store auto-start preference - load from localStorage or default to false

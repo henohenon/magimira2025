@@ -11,7 +11,7 @@ import { Effect, RenderTargetTexture } from "@babylonjs/core/Materials";
 
 import {degToRad, radToDeg} from ".";
 import {events} from "./events";
-import {tween, type TweenControl} from "~/update/tween.ts";
+import {tween, type TweenControl} from "~/lib/update/tween.ts";
 
 export type CameraType = "free" | "free2" | "arc" | "arc2";
 // カメラ管理

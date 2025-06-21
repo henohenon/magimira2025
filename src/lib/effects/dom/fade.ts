@@ -1,5 +1,5 @@
 ﻿// Fade effects
-import { tween } from "~/update/tween.ts";
+import { tween } from "~/lib/update/tween.ts";
 
 // Get overlay elements from the DOM
 const whiteOverlay = document.getElementById('white-overlay') as HTMLElement;

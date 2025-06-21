@@ -1,4 +1,4 @@
-import {addGlitchEffect, clearGlitchEffects, getActiveGlitchCount} from "~/effects/glitch";
+import {addGlitchEffect, clearGlitchEffects, getActiveGlitchCount} from "~/lib/effects/glitch";
 
 // UI要素の取得
 const glitchDemoButton = document.getElementById('glitch-demo-button');

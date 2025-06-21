@@ -1,6 +1,7 @@
-﻿import {updateTweenList} from "./tween";
-import {events} from "~/game/events.ts";
-import {engine, scene} from "~/babylon";
+﻿import {events} from "~/game/events";
+import {engine, scene} from "~/lib/babylon";
+
+import {updateTweenList} from "./tween";
 
 let lastTime = 0;
 let lastPosition = 0;

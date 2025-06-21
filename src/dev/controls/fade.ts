@@ -13,7 +13,8 @@
     initContainerFadeOut,
     shutterIn,
     shutterOut
-} from "~/effects/dom/fade";
+} from "~/lib/effects/dom/fade";
+
 import type { Dropdown } from "../web-components/dropdown.ts";
 import type { NumberInput } from "../web-components/number-input.ts";
 

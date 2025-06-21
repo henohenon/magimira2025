@@ -1,9 +1,10 @@
-﻿import { pointer } from "~/game/input.ts";
-import type { Subscription } from "prismatix-input/subject";
+﻿import type { Subscription } from "prismatix-input/subject";
 import type { WithPositionInputEvent } from "prismatix-input/web-native";
-import { spectrums } from "~/effects/spectrum";
-import type { CircleSpectrum, HorizontalSpectrum, VerticalSpectrum } from "~/effects/spectrum";
-import type { Spectrum } from "~/effects/spectrum";
+
+import { pointer } from "~/game/input.ts";
+import { spectrums } from "~/lib/effects/spectrum";
+import type { CircleSpectrum, HorizontalSpectrum, VerticalSpectrum } from "~/lib/effects/spectrum";
+import type { Spectrum } from "~/lib/effects/spectrum";
 
 // Array to track all active subscriptions
 export const subscriptions: Array<Subscription> = [];
