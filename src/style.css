@@ -1,11 +1,23 @@
 @import "tailwindcss";
 
 .fade{
-    @apply transition-opacity duration-3000 opacity-100;
+    @apply opacity-100;
 }
 .fade.out {
     @apply pointer-events-none;
     opacity: 0 !important;
+}
+
+/* White and black fade overlays */
+.fade-overlay {
+    @apply fixed top-0 left-0 w-full h-full;
+    z-index: 10000;
+}
+.fade-white {
+    background-color: white;
+}
+.fade-black {
+    background-color: black;
 }
 
 #loading-wrapper{

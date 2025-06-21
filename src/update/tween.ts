@@ -23,6 +23,7 @@ export const tween = <T>(
     interp: buildInterpolator(from, to),
     done: false
   });
+  console.log("tween", tweens, from, to, duration, step);
 
   // 最初のフレームをすぐ適用
   step(from);
@@ -99,10 +100,10 @@ export const tweenMutable = <T extends object>(
   step(shared);
 }
 
-export const updateTweenList = (currentPosition: number): void => {
+export const updateTweenList = (current: number): void => {
   for (let i = tweens.length - 1; i >= 0; i--) {
     const tween = tweens[i];
-    const elapsed = currentPosition - tween.startTime;
+    const elapsed = current - tween.startTime;
 
     if (elapsed >= tween.duration) {
       tween.step(tween.interp(1));

@@ -7,6 +7,8 @@ type CameraAction = {
 };
 
 type Events = {
+  onLoaded: undefined;
+  onGameStart: undefined;
   onCameraAction: {
     action: CameraAction;
     position: number;

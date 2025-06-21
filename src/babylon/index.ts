@@ -14,8 +14,8 @@ if (!canvas) {
   throw new Error("Canvas not found");
 }
 
-const engine = new Engine(canvas, true);
-const scene = new Scene(engine);
+export const engine = new Engine(canvas, true);
+export const scene = new Scene(engine);
 events.emit("onSceneDefinition", { engine, scene });
 // デフォルトローディング画面を非表示
 engine.hideLoadingUI();
@@ -30,7 +30,6 @@ scene.executeWhenReady(()=>{
 	events.emit("onSceneLoaded");
 });
 
-engine.runRenderLoop(() => scene.render());
 window.addEventListener("resize", () => engine.resize());
 
 
