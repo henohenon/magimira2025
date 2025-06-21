@@ -8,16 +8,23 @@ import "@babylonjs/loaders/glTF";
 import {events} from "./events";
 import {degToRad, radToDeg} from ".";
 
-export type CameraType = "free" | "arc";
+export type CameraType = "free" | "free2" | "arc" | "arc2";
 // カメラ管理
-const cameras: { "free": FreeCamera | null, "arc": ArcRotateCamera | null } = {
+const cameras: { 
+	"free": FreeCamera | null, 
+	"free2": FreeCamera | null, 
+	"arc": ArcRotateCamera | null,
+	"arc2": ArcRotateCamera | null
+} = {
 	"free": null,
+	"free2": null,
 	"arc": null,
+	"arc2": null
 }
 
 // ArcRotateCamera specific functions
-export const addArcTargetPosition = (x: number, y: number, z: number): void => {
-	const camera = cameras.arc;
+export const addArcTargetPosition = (x: number, y: number, z: number, cameraType: "arc" | "arc2" = "arc"): void => {
+	const camera = cameras[cameraType];
 	if (!camera) return;
     const currentTarget = camera.getTarget();
     // 相対的に移動（現在の位置に加算）
@@ -27,16 +34,16 @@ export const addArcTargetPosition = (x: number, y: number, z: number): void => {
     camera.setTarget(newTarget);
 };
 
-export const setArcTargetPosition = (x: number, y: number, z: number): void => {
-    const camera = cameras.arc;
+export const setArcTargetPosition = (x: number, y: number, z: number, cameraType: "arc" | "arc2" = "arc"): void => {
+    const camera = cameras[cameraType];
     if (!camera) return;
     // 位置を直接設定
     const newTarget = new Vector3(x, y, z);
     camera.setTarget(newTarget);
 };
 
-export const addArcSphericalCoordinates= (alpha: number, beta: number, radius: number): void => {
-    const camera = cameras.arc;
+export const addArcSphericalCoordinates = (alpha: number, beta: number, radius: number, cameraType: "arc" | "arc2" = "arc"): void => {
+    const camera = cameras[cameraType];
     if (!camera) return;
     // 現在の値に加算 (convert degrees to radians)
     camera.alpha += degToRad(alpha);
@@ -44,8 +51,8 @@ export const addArcSphericalCoordinates= (alpha: number, beta: number, radius: n
     camera.radius += radius;
 };
 
-export const setArcSphericalCoordinates = (alpha: number, beta: number, radius: number): void => {
-    const camera = cameras.arc;
+export const setArcSphericalCoordinates = (alpha: number, beta: number, radius: number, cameraType: "arc" | "arc2" = "arc"): void => {
+    const camera = cameras[cameraType];
     if (!camera) return;
     // 値を直接設定 (convert degrees to radians)
     camera.alpha = degToRad(alpha);
@@ -53,20 +60,20 @@ export const setArcSphericalCoordinates = (alpha: number, beta: number, radius: 
     camera.radius = radius;
 };
 
-export const getArcTargetPosition = (): { x: number, y: number, z: number } | undefined => {
-    return cameras.arc?.target;
+export const getArcTargetPosition = (cameraType: "arc" | "arc2" = "arc"): { x: number, y: number, z: number } | undefined => {
+    return cameras[cameraType]?.target;
 };
 
-export const getArcSphericalCoordinates = (): { alpha: number, beta: number, radius: number } | undefined => {
-    const camera = cameras.arc;
+export const getArcSphericalCoordinates = (cameraType: "arc" | "arc2" = "arc"): { alpha: number, beta: number, radius: number } | undefined => {
+    const camera = cameras[cameraType];
     return camera ? { alpha: radToDeg(camera.alpha), beta: radToDeg(camera.beta), radius: camera.radius } : undefined;
 };
 
 
 
 // FreeCamera specific functions
-export const addFreePosition = (x: number, y: number, z: number): void => {
-    const camera = cameras.free;
+export const addFreePosition = (x: number, y: number, z: number, cameraType: "free" | "free2" = "free"): void => {
+    const camera = cameras[cameraType];
     if (!camera) return;
     // Add to current position
     const currentPosition = camera.position;
@@ -74,15 +81,15 @@ export const addFreePosition = (x: number, y: number, z: number): void => {
     camera.position = currentPosition.add(new Vector3(x, y, z));
 };
 
-export const setFreePosition = (x: number, y: number, z: number): void => {
-    const camera = cameras.free;
+export const setFreePosition = (x: number, y: number, z: number, cameraType: "free" | "free2" = "free"): void => {
+    const camera = cameras[cameraType];
     if (!camera) return;
     // Set position directly
     camera.position = new Vector3(x, y, z);
 };
 
-export const addFreeRotation = (yaw: number, pitch: number, roll: number): void => {
-    const camera = cameras.free;
+export const addFreeRotation = (yaw: number, pitch: number, roll: number, cameraType: "free" | "free2" = "free"): void => {
+    const camera = cameras[cameraType];
     if (!camera) return;
     // Create a quaternion from the yaw, pitch, roll values (convert degrees to radians)
     const rotationToAdd = Quaternion.RotationYawPitchRoll(degToRad(yaw), degToRad(pitch), degToRad(roll));
@@ -91,8 +98,8 @@ export const addFreeRotation = (yaw: number, pitch: number, roll: number): void 
 	camera.rotationQuaternion = currentRotation.multiply(rotationToAdd);
 };
 
-export const setFreeRotation = (yaw: number, pitch: number, roll: number): void => {
-    const camera = cameras.free;
+export const setFreeRotation = (yaw: number, pitch: number, roll: number, cameraType: "free" | "free2" = "free"): void => {
+    const camera = cameras[cameraType];
     if (!camera) return;
     // Set rotation directly using quaternion (convert degrees to radians)
     camera.rotationQuaternion = Quaternion.RotationYawPitchRoll(
@@ -100,13 +107,13 @@ export const setFreeRotation = (yaw: number, pitch: number, roll: number): void 
     );
 };
 
-export const getFreePosition = (): { x: number, y: number, z: number } | undefined => {
-    const camera = cameras.free;
+export const getFreePosition = (cameraType: "free" | "free2" = "free"): { x: number, y: number, z: number } | undefined => {
+    const camera = cameras[cameraType];
     return camera ? camera.position : undefined;
 };
 
-export const getFreeRotation = (): { x: number, y: number, z: number } | undefined => {
-    const camera = cameras.free;
+export const getFreeRotation = (cameraType: "free" | "free2" = "free"): { x: number, y: number, z: number } | undefined => {
+    const camera = cameras[cameraType];
     if (!camera || !camera.rotationQuaternion) return undefined;
 	// Convert quaternion to Euler angles
 	const euler = camera.rotationQuaternion.toEulerAngles() || new Vector3(0, 0, 0);
@@ -132,10 +139,27 @@ events.on("onSceneDefinition", async ({ scene }) => {
 		scene,
 	);
 
+	// Arc camera 2 (second rotatable camera with different initial parameters)
+	cameras.arc2 = new ArcRotateCamera(
+		"camera-arc2",
+		-Math.PI / 4,
+		Math.PI / 4,
+		8,
+		new Vector3(0, 2, 0),
+		scene,
+	);
+
 	// Free camera (movable)
 	cameras.free = new FreeCamera(
 		"camera-free",
 		new Vector3(0, 1.5, -5), // Position the camera slightly above ground level and back from origin
+		scene,
+	);
+
+	// Free camera 2 (second movable camera with different initial position)
+	cameras.free2 = new FreeCamera(
+		"camera-free2",
+		new Vector3(3, 2, -7), // Position at a different location
 		scene,
 	);
 
@@ -149,5 +173,9 @@ export const switchCamera = (key: CameraType) => {
 }
 
 export const getActiveCameraType = (): CameraType => {
-    return _scene?.activeCamera?.name == "camera-arc" ? "arc" : "free";
+    const activeCameraName = _scene?.activeCamera?.name;
+    if (activeCameraName === "camera-arc") return "arc";
+    if (activeCameraName === "camera-arc2") return "arc2";
+    if (activeCameraName === "camera-free2") return "free2";
+    return "free"; // Default to "free" if none of the above or undefined
 }
