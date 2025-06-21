@@ -1,5 +1,5 @@
 import "@babylonjs/loaders";
-import {Color4, type Nullable} from "@babylonjs/core";
+import {type Nullable} from "@babylonjs/core";
 import type {Scene} from "@babylonjs/core/scene";
 import {ArcRotateCamera} from "@babylonjs/core/Cameras/arcRotateCamera";
 import {FreeCamera} from "@babylonjs/core/Cameras/freeCamera";
@@ -169,7 +169,6 @@ events.on("onSceneDefinition", async ({ engine, scene }) => {
         false        // generateMipMaps
     );
     crossRt.renderList = scene.meshes;
-    crossRt.clearColor  = new Color4(0, 0, 0, 1);
 
     crossPp = new PostProcess(
         "crossfade",
