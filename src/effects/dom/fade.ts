@@ -8,6 +8,8 @@ const textaliveBanner = document.getElementsByClassName("textalive-banner")[0] a
 const loadingWrapper = document.getElementById("loading-wrapper");
 const playingContainer = document.getElementById("playing");
 const initContainer = document.getElementById("init");
+const blackTrimTop = document.getElementById("black-trim-top") as HTMLElement;
+const blackTrimBottom = document.getElementById("black-trim-bottom") as HTMLElement;
 
 if (!whiteOverlay || !blackOverlay) {
   throw new Error("Fade overlay elements not found in the DOM");
@@ -16,6 +18,17 @@ if (!whiteOverlay || !blackOverlay) {
 if (!playingContainer || !initContainer || !loadingWrapper || !textaliveBanner) {
   throw new Error("Playing container not found");
 }
+
+if (!blackTrimTop || !blackTrimBottom) {
+  throw new Error("Black trim elements not found");
+}
+
+// Default heights from the original CSS
+const SHUTTER_TOP_DEFAULT_HEIGHT = 60;
+const SHUTTER_BOTTOM_DEFAULT_HEIGHT = 100;
+
+blackTrimTop.style.height = `${SHUTTER_TOP_DEFAULT_HEIGHT}px`;
+blackTrimBottom.style.height = `${SHUTTER_BOTTOM_DEFAULT_HEIGHT}px`;
 
 // Default fade duration in milliseconds
 const FADE_DURATION = 3000;
@@ -189,3 +202,64 @@ export const initContainerFadeOut = (duration: number = FADE_DURATION): void => 
     }
   );
 }
+// Shutter-like fade effect functions
+export const shutterIn = (duration: number = FADE_DURATION): void => {
+  // Get the viewport height
+  const viewportHeight = window.innerHeight;
+  // Calculate the target height for each trim (half of the viewport)
+  const targetHeight = viewportHeight / 2;
+
+  // Get the current heights
+  const currentTopHeight = parseInt(getComputedStyle(blackTrimTop).height) || 15;
+  const currentBottomHeight = parseInt(getComputedStyle(blackTrimBottom).height) || 25;
+
+  // Animate the top trim height
+  tween(
+    { height: currentTopHeight },
+    { height: targetHeight },
+    duration,
+    (value) => {
+      blackTrimTop.style.height = `${value.height}px`;
+    }
+  );
+
+  // Animate the bottom trim height
+  tween(
+    { height: currentBottomHeight },
+    { height: targetHeight },
+    duration,
+    (value) => {
+      blackTrimBottom.style.height = `${value.height}px`;
+    }
+  );
+};
+
+export const shutterOut = (duration: number = FADE_DURATION): void => {
+  // Get the viewport height
+  const viewportHeight = window.innerHeight;
+
+  // Get the current heights
+  const currentTopHeight = parseInt(getComputedStyle(blackTrimTop).height) || viewportHeight / 2;
+  const currentBottomHeight = parseInt(getComputedStyle(blackTrimBottom).height) || viewportHeight / 2;
+
+
+  // Animate the top trim height
+  tween(
+    { height: currentTopHeight },
+    { height: SHUTTER_TOP_DEFAULT_HEIGHT },
+    duration,
+    (value) => {
+      blackTrimTop.style.height = `${value.height}px`;
+    }
+  );
+
+  // Animate the bottom trim height
+  tween(
+    { height: currentBottomHeight },
+    { height: SHUTTER_BOTTOM_DEFAULT_HEIGHT },
+    duration,
+    (value) => {
+      blackTrimBottom.style.height = `${value.height}px`;
+    }
+  );
+};
