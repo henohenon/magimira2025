@@ -36,7 +36,7 @@ const FADE_DURATION = 3000;
 // White fade in/out functions
 export const whiteFadeIn = (duration: number = FADE_DURATION): void => {
   // Remove the 'out' class to make sure it's visible in case CSS is still affecting it
-  whiteOverlay.classList.remove('out');
+  whiteOverlay.classList.remove('hidden');
   // Use tween to animate opacity from 0 to 1
   tween(
     { opacity: 0 },
@@ -45,7 +45,7 @@ export const whiteFadeIn = (duration: number = FADE_DURATION): void => {
     (value) => {
       whiteOverlay.style.opacity = value.opacity.toString();
     }
-  );
+  ).promise;
 };
 
 export const whiteFadeOut = (duration: number = FADE_DURATION): void => {
@@ -58,7 +58,7 @@ export const whiteFadeOut = (duration: number = FADE_DURATION): void => {
       whiteOverlay.style.opacity = value.opacity.toString();
       // Add the 'out' class when fully transparent for pointer-events-none
       if (value.opacity === 0) {
-        whiteOverlay.classList.add('out');
+        whiteOverlay.classList.add('hidden');
       }
     }
   );
@@ -67,7 +67,7 @@ export const whiteFadeOut = (duration: number = FADE_DURATION): void => {
 // Black fade in/out functions
 export const blackFadeIn = (duration: number = FADE_DURATION): void => {
   // Remove the 'out' class to make sure it's visible in case CSS is still affecting it
-  blackOverlay.classList.remove('out');
+  blackOverlay.classList.remove('hidden');
   // Use tween to animate opacity from 0 to 1
   tween(
     { opacity: 0 },
@@ -89,7 +89,7 @@ export const blackFadeOut = (duration: number = FADE_DURATION): void => {
       blackOverlay.style.opacity = value.opacity.toString();
       // Add the 'out' class when fully transparent for pointer-events-none
       if (value.opacity === 0) {
-        blackOverlay.classList.add('out');
+        blackOverlay.classList.add('hidden');
       }
     }
   );
@@ -97,7 +97,7 @@ export const blackFadeOut = (duration: number = FADE_DURATION): void => {
 
 // TextAlive banner fade functions
 export const textaliveBannerFadeIn = (duration: number = FADE_DURATION): void => {
-  textaliveBanner.classList.remove("out");
+  textaliveBanner.classList.remove('hidden');
   tween(
     { opacity: 0 },
     { opacity: 1 },
@@ -116,7 +116,7 @@ export const textaliveBannerFadeOut = (duration: number = FADE_DURATION): void =
     (value) => {
       textaliveBanner.style.opacity = value.opacity.toString();
       if (value.opacity === 0) {
-        textaliveBanner.classList.add("out");
+        textaliveBanner.classList.add('hidden');
       }
     }
   );
@@ -124,7 +124,7 @@ export const textaliveBannerFadeOut = (duration: number = FADE_DURATION): void =
 
 // Loading wrapper fade functions
 export const loadingWrapperFadeIn = (duration: number = FADE_DURATION): void => {
-  loadingWrapper.classList.remove("out");
+  loadingWrapper.classList.remove('hidden');
   tween(
     { opacity: 0 },
     { opacity: 1 },
@@ -143,7 +143,7 @@ export const loadingWrapperFadeOut = (duration: number = FADE_DURATION): void =>
     (value) => {
       loadingWrapper.style.opacity = value.opacity.toString();
       if (value.opacity === 0) {
-        loadingWrapper.classList.add("out");
+        loadingWrapper.classList.add('hidden');
       }
     }
   );
@@ -151,7 +151,7 @@ export const loadingWrapperFadeOut = (duration: number = FADE_DURATION): void =>
 
 // Playing container fade functions
 export const playingContainerFadeIn = (duration: number = FADE_DURATION): void => {
-  playingContainer.classList.remove("out");
+  playingContainer.classList.remove('hidden');
   tween(
     { opacity: 0 },
     { opacity: 1 },
@@ -170,7 +170,7 @@ export const playingContainerFadeOut = (duration: number = FADE_DURATION): void 
     (value) => {
       playingContainer.style.opacity = value.opacity.toString();
       if (value.opacity === 0) {
-        playingContainer.classList.add("out");
+        playingContainer.classList.add('hidden');
       }
     }
   );
@@ -178,7 +178,7 @@ export const playingContainerFadeOut = (duration: number = FADE_DURATION): void 
 
 // Init container fade functions
 export const initContainerFadeIn = (duration: number = FADE_DURATION): void => {
-  initContainer.classList.remove("out");
+  initContainer.classList.remove('hidden');
   tween(
     { opacity: 0 },
     { opacity: 1 },
@@ -197,7 +197,7 @@ export const initContainerFadeOut = (duration: number = FADE_DURATION): void => 
     (value) => {
       initContainer.style.opacity = value.opacity.toString();
       if (value.opacity === 0) {
-        initContainer.classList.add("out");
+        initContainer.classList.add('hidden');
       }
     }
   );

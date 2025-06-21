@@ -7,25 +7,25 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body class="m-0 w-screen h-screen overflow-hidden" id="input-area">
-    <canvas id="babylon-canvas" class="absolute m-0 inset-0 w-full h-full -z-10"></canvas>
-    <canvas id="effects-canvas" class="absolute m-0 inset-0 w-full h-full -z-9"></canvas>
+    <canvas id="babylon-canvas" class="max -z-10"></canvas>
+    <canvas id="effects-canvas" class="max -z-9"></canvas>
     <div id="app" class="absolute inset-0 w-full h-full">
-      <div id="white-overlay" class="fade-overlay fade-white fade out"></div>
-      <div id="black-overlay" class="fade-overlay fade-black fade out"></div>
+      <div id="white-overlay" class="max hidden"></div>
+      <div id="black-overlay" class="max hidden"></div>
 
-      <div id="init" class="fade flex h-full justify-center items-center flex-col">
+      <div id="init" class="flex h-full justify-center items-center flex-col">
         <h1 class="text-white text-7xl italic font-serif">Listen with Miku</h1>
         <button id="start-button" class="mt-5 px-4 py-2 bg-blue-500 text-white rounded">Start</button>
       </div>
-      <div id="playing" class="fade out select-none">
-        <div id="black-trim" class="absolute w-full h-full top-0 left-0 z-5">
+      <div id="playing" class="max hidden">
+        <div id="black-trim" class="max">
           <div id="black-trim-top" class="absolute w-full bg-stone-900"></div>
           <div id="black-trim-bottom" class="absolute w-full bottom-0 bg-stone-900 flex justify-center items-center">
             <h3 class="text-white text-4xl" id="lyrics-text"></h3>
           </div>
         </div>
       </div>
-      <div id="loading-wrapper" class="fade absolute w-full h-full top-0 left-0 bg-white/15 backdrop-blur-md flex justify-center items-center select-none">
+      <div id="loading-wrapper" class="max bg-white/15 backdrop-blur-md flex justify-center items-center">
         <div class="w-5 h-5 border-4 m-auto mx-3 border-t-transparent border-b-transparent border-white rounded-full animate-spin"></div>
         <div id="loading-text" class="text-white text-2xl">Loading...</div>
       </div>
