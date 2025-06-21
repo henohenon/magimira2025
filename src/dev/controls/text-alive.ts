@@ -1,7 +1,6 @@
 ﻿import {player} from "~/text-alive";
-import {events} from "~/text-alive/events.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";
-import {cameraActions} from "~/game/events";
+import {cameraActions, events} from "~/game/events";
 import type {Dropdown} from "~/dev/web-components/dropdown.ts";
 
 const autoStartToggle = document.getElementById("auto-start-toggle") as HTMLInputElement;
@@ -22,7 +21,8 @@ if (autoStartToggle) {
 }
 
 // Listen for app ready event to auto-start if enabled
-events.on("onAppReady", () => {
+events.on("onLoaded", () => {
+    timeInputSlider.max = player.video.duration;
     if (autoStart) {
         // Check if there's a default camera action selected in the dropdown
         if (cameraActionDropdown.value) {
@@ -64,10 +64,6 @@ if (!timeInputSlider) throw new Error("Time controls not found");
 export const updateTextAliveInfo = (position: number) => {
     timeInputSlider.value = position;
 }
-
-events.on("onAppReady", () => {
-    timeInputSlider.max = player.video.duration;
-});
 
 timeInputSlider.subscribe((time) => {
     player.requestMediaSeek(Math.round(time));

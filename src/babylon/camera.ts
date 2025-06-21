@@ -1,20 +1,24 @@
 import "@babylonjs/loaders";
+import {type Nullable} from "@babylonjs/core";
 import type {Scene} from "@babylonjs/core/scene";
 import {ArcRotateCamera} from "@babylonjs/core/Cameras/arcRotateCamera";
 import {FreeCamera} from "@babylonjs/core/Cameras/freeCamera";
 import {Quaternion, Vector3} from "@babylonjs/core/Maths/math.vector";
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
-import {events} from "./events";
+import { PostProcess } from "@babylonjs/core/PostProcesses/postProcess";
+import { Effect, RenderTargetTexture } from "@babylonjs/core/Materials";
+
 import {degToRad, radToDeg} from ".";
+import {events} from "./events";
+import {tween, type TweenControl} from "~/update/tween.ts";
 
 export type CameraType = "free" | "arc";
 // カメラ管理
-const cameras: { "free": FreeCamera | null, "arc": ArcRotateCamera | null } = {
+const cameras: { "free": Nullable<FreeCamera>, "arc": Nullable<ArcRotateCamera> } = {
 	"free": null,
 	"arc": null,
 }
-
 // ArcRotateCamera specific functions
 export const addArcTargetPosition = (x: number, y: number, z: number): void => {
 	const camera = cameras.arc;
@@ -118,8 +122,11 @@ export const getFreeRotation = (): { x: number, y: number, z: number } | undefin
 	};
 };
 
+let crossRt: RenderTargetTexture;
+let crossPp: PostProcess;
+let crossFadeRate = 0.0;
 let _scene: Scene;
-events.on("onSceneDefinition", async ({ scene }) => {
+events.on("onSceneDefinition", async ({ engine, scene }) => {
     _scene = scene;
 
 	// Arc camera (rotatable around target)
@@ -140,12 +147,82 @@ events.on("onSceneDefinition", async ({ scene }) => {
 	);
 
     _scene.activeCamera = cameras.free;
-});
 
+
+    // クロスフェード用
+    Effect.ShadersStore["crossfadeFragmentShader"] = `
+        varying vec2 vUV;
+        uniform sampler2D textureSampler;
+        uniform sampler2D blendTexture;
+        uniform float fade;
+
+        void main(void) {
+            vec4 col1 = texture2D(textureSampler, vUV);
+            vec4 col2 = texture2D(blendTexture, vUV);
+            gl_FragColor = mix(col1, col2, fade);
+        }
+    `;
+    crossRt = new RenderTargetTexture(
+        "crossRt",
+        { width: engine.getRenderWidth(), height: engine.getRenderHeight() },
+        scene,
+        false        // generateMipMaps
+    );
+    crossRt.renderList = scene.meshes;
+
+    crossPp = new PostProcess(
+        "crossfade",
+        "crossfade",
+        ["fade"],                      // ユニフォーム
+        ["blendTexture"],              // サンプラ名
+        1.0,
+        null,                  // 適用したいカメラ
+        undefined,
+        engine,
+        true
+    );
+    crossPp.onApply = (effect) => {
+        effect.setTexture("blendTexture", crossRt);
+        effect.setFloat("fade", crossFadeRate);
+    };
+});
 
 export const switchCamera = (key: CameraType) => {
 	if (!cameras[key]) return;
 	_scene.activeCamera = cameras[key];
+}
+
+let crossFadeTween: TweenControl | null = null;
+export const switchCameraWithCrossFade = async (key: CameraType, duration: number) => {
+    const currentCamera = _scene.activeCamera;
+    const nextCamera = cameras[key];
+    if (!currentCamera || !nextCamera) return;
+
+    // Cancel any existing tween
+    if (crossFadeTween) {
+        crossFadeTween.complete();
+        crossFadeTween = null;
+    }
+
+    crossRt.activeCamera = currentCamera;
+    _scene.customRenderTargets.push(crossRt);
+
+    nextCamera.attachPostProcess(crossPp);
+
+    crossFadeTween = tween(1, 0, duration, (value) => {
+        crossFadeRate = value;
+    });
+
+    _scene.activeCamera = nextCamera;
+
+
+    // Wait for the tween to complete using the Promise
+    await crossFadeTween.promise;
+
+    // After the tween completes
+    nextCamera.detachPostProcess(crossPp);
+    _scene.customRenderTargets.pop();
+    crossFadeTween = null;
 }
 
 export const getActiveCameraType = (): CameraType => {

@@ -2,8 +2,6 @@ import mitt, { type Emitter } from 'mitt';
 
 type Events = {
     onAppReady: undefined;
-    onGameStart: undefined;
-    onAudioDomReady: HTMLMediaElement;
     onPhrase: { phrase: string, duration: number };
     onWord: { word: string, duration: number };
     onChar: { char: string, duration: number };
