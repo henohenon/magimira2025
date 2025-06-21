@@ -14,9 +14,11 @@
     setFreePosition,
     setFreeRotation,
     switchCamera,
+    switchCameraWithCrossFade,
 } from "~/babylon/camera";
 import type {Dropdown} from "../web-components/dropdown.ts";
 import type {TripleInput} from "../web-components/triple-input.ts";
+import type {NumberInput} from "../web-components/number-input.ts";
 
 // Get active camera dropdown
 const activeCameraDropdown = document.getElementById("camera-active-type") as Dropdown;
@@ -54,10 +56,19 @@ if (!freeCameraAddPositionInput || !freeCameraAddPositionButton || !freeCameraSe
     throw new Error("Free camera controls not found");
 }
 
+// Get fade controls
+const fadeDurationInput = document.getElementById("camera-fade-duration") as NumberInput;
+const fadeExecButton = document.getElementById("camera-fade-exec-btn") as HTMLButtonElement;
+const fadeTargetDropdown = document.getElementById("camera-fade-target") as Dropdown;
+
+// Fade controls validation
+if (!fadeDurationInput || !fadeExecButton || !fadeTargetDropdown) {
+    throw new Error("Fade controls not found");
+}
+
 // Subscribe to active camera changes
 activeCameraDropdown.subscribe((key) => {
     switchCamera(key as CameraType);
-    updateCameraInfo();
 });
 
 // Arc camera event listeners
@@ -103,6 +114,19 @@ freeCameraAddRotationButton.addEventListener("click", () => {
 freeCameraSetRotationInput.subscribe((value1, value2, value3) => {
     setFreeRotation(value1, value2, value3);
 })
+
+// Execute fade button event listener
+fadeExecButton.addEventListener("click", async () => {
+    const duration = fadeDurationInput.value;
+    const targetCamera = fadeTargetDropdown.value as CameraType;
+
+    if (getActiveCameraType() === targetCamera) {
+        console.log(`Already using ${targetCamera} camera`);
+        return;
+    }
+    // Execute fade
+    await switchCameraWithCrossFade(targetCamera, duration);
+});
 
 // Function to update camera position and rotation inputs in the UI
 export function updateCameraInfo() {

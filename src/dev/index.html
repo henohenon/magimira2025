@@ -57,6 +57,15 @@
         <div class="dev-section" id="camera-section">
             <h3 class="dev-section-title">camera</h3>
             <drop-down id="camera-active-type" label="Camera Type" data-options="arc, free" value="arc"></drop-down>
+            <dev-accordion summary="Camera Fade Controls" id="camera-fade-controls-section">
+                <number-input id="camera-fade-duration" label="Fade Duration (ms)" min="0" step="100" value="1000"></number-input>
+                <drop-down id="camera-fade-target" label="Target Camera" data-options="arc, free" value="arc"></drop-down>
+                <div class="grid grid-cols-1 gap-2 mt-2">
+                    <button id="camera-fade-exec-btn">
+                        Execute Fade
+                    </button>
+                </div>
+            </dev-accordion>
             <dev-accordion summary="Arc Camera Controls" id="arc-camera-controls-section">
                 <triple-input id="camera-arc-position-add" label="Add Target Position"></triple-input>
                 <button id="camera-arc-position-add-btn">Add Position</button>
