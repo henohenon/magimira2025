@@ -5,6 +5,15 @@ interface Tween<T> {
   step: (value: T) => void;
   interp: (p: number) => T;
   done: boolean;
+  resolve?: (value: void) => void;
+  reject?: (reason?: any) => void;
+}
+
+// Interface for tween control methods
+export interface TweenControl {
+  cancel: () => void;
+  complete: () => void;
+  promise: Promise<void>;
 }
 
 const tweens: Tween<any>[] = [];
@@ -15,17 +24,50 @@ export const tween = <T>(
   to: T,
   duration: number,
   step: (value: T) => void
-)=> {
-  tweens.push({
+): TweenControl => {
+  let resolvePromise = () => {};
+  let rejectPromise = () => {};
+
+  const promise = new Promise<void>((resolve, reject) => {
+    resolvePromise = resolve;
+    rejectPromise = reject;
+  });
+
+  const newTween: Tween<T> = {
     duration,
     startTime: performance.now(),
     step,
     interp: buildInterpolator(from, to),
-    done: false
-  });
+    done: false,
+    resolve: resolvePromise,
+    reject: rejectPromise
+  };
+
+  tweens.push(newTween);
+  console.log("tween", tweens, from, to, duration, step);
 
   // 最初のフレームをすぐ適用
   step(from);
+
+  // Return control object
+  return {
+    cancel: () => {
+      const index = tweens.indexOf(newTween);
+      if (index === -1) return;
+      tweens.splice(index, 1);
+      if (newTween.reject) newTween.reject(new Error('Tween cancelled'));
+    },
+    complete: () => {
+      const index = tweens.indexOf(newTween);
+      if (index === -1) return;
+      // Apply final value
+      step(newTween.interp(1));
+      // Remove from tweens array
+      tweens.splice(index, 1);
+      if (newTween.resolve) newTween.resolve();
+    },
+    promise
+  };
 }
 
 const buildInterpolator = <T>(from: T, to: T): ((p: number) => T) => {
@@ -55,54 +97,11 @@ const buildInterpolator = <T>(from: T, to: T): ((p: number) => T) => {
   return (_: number) => to;
 };
 
-const buildMutableInterpolator = <T extends object>(
-  from: T,
-  to: T,
-  shared: T
-): ((p: number) => T) => {
-  const keys = Object.keys(from) as (keyof T)[];
-  const interpolators: { [K in keyof T]?: (p: number) => any } = {};
 
-  for (const key of keys) {
-    interpolators[key] = buildInterpolator(from[key], to[key]);
-  }
-
-  return (p: number) => {
-    for (const key of keys) {
-      const ip = interpolators[key];
-      if (ip) shared[key] = ip(p);
-    }
-    return shared;
-  };
-};
-
-// ② "mutable" 専用ファクトリ
-export const tweenMutable = <T extends object>(
-  from: T,
-  to: T,
-  duration: number,
-  step: (value: T) => void
-): void => {
-  // 参照の着地点を 1 度だけ決定
-  const shared = { ...from }; // もとのオブジェクトをそのまま使うなら = from
-  const interp = buildMutableInterpolator(from, to, shared);
-
-  tweens.push({
-    duration,
-    startTime: performance.now(),
-    step,
-    interp,
-    done: false
-  });
-
-  // 初回は from と同一内容の shared が渡る
-  step(shared);
-}
-
-export const updateTweenList = (currentPosition: number): void => {
+export const updateTweenList = (current: number): void => {
   for (let i = tweens.length - 1; i >= 0; i--) {
     const tween = tweens[i];
-    const elapsed = currentPosition - tween.startTime;
+    const elapsed = current - tween.startTime;
 
     if (elapsed >= tween.duration) {
       tween.step(tween.interp(1));

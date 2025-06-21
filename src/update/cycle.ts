@@ -1,22 +1,31 @@
-﻿import { updateTweenList } from "./tween";
+﻿import {updateTweenList} from "./tween";
+import {events} from "~/game/events.ts";
+import {engine, scene} from "~/babylon";
 
-// Track time independently, similar to src/dev/controls/update.ts
 let lastTime = 0;
 let lastPosition = 0;
-let animationFrameId: number | null = null;
+let isPause = false;
+events.on("onLoaded", () => {
+    lastTime = performance.now();
+    lastPosition = 0;
+    engine.runRenderLoop(() => {
+        const currentTime = performance.now();
+        const deltaTime = currentTime - lastTime;
 
-export const updateCycle = (currentTime: number): void => {
-  const deltaTime = currentTime - lastTime;
-  const currentPosition = lastPosition + deltaTime;
+        let currentPosition = lastPosition;
+        if (!isPause) {
+            currentPosition = lastPosition + deltaTime;
+        }
+        updateTweenList(currentTime);
 
-  updateTweenList(currentPosition);
+        updateLogic(currentPosition, deltaTime);
 
-  updateLogic(currentPosition, deltaTime);
+        lastTime = currentTime;
+        lastPosition = currentPosition;
 
-  lastTime = currentTime;
-  lastPosition = currentPosition;
-  animationFrameId = requestAnimationFrame(updateCycle);
-};
+        scene.render();
+    });
+});
 
 // Function type for updateLogic
 export type UpdateLogicFunction = (currentPosition: number, delta: number) => void;
@@ -34,22 +43,12 @@ const updateLogic = (currentPosition: number, deltaTime: number): void => {
   }
 };
 
-export const startUpdateCycle = () => {
-    const now = performance.now();
-    lastTime = now;
-    lastPosition = 0;
-    updateCycle(now);
-}
-
 export const stopUpdateCycle = () => {
-    if (!animationFrameId) return;
-    cancelAnimationFrame(animationFrameId);
-    animationFrameId = null;
+    isPause = true;
 }
 
 export const restartUpdateCycle = (position: number) => {
-    stopUpdateCycle();
     lastTime = performance.now();
     lastPosition = position;
-    updateCycle(lastTime);
+    isPause = false;
 }

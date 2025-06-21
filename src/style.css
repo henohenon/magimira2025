@@ -1,11 +1,7 @@
 @import "tailwindcss";
 
-.fade{
-    @apply transition-opacity duration-3000 opacity-100;
-}
-.fade.out {
-    @apply pointer-events-none;
-    opacity: 0 !important;
+.max{
+    @apply absolute top-0 left-0 m-0 inset-0 w-full h-full select-none;
 }
 
 #loading-wrapper{

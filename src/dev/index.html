@@ -57,6 +57,15 @@
         <div class="dev-section" id="camera-section">
             <h3 class="dev-section-title">camera</h3>
             <drop-down id="camera-active-type" label="Camera Type" data-options="arc, arc2, free, free2" value="arc"></drop-down>
+            <dev-accordion summary="Camera Fade Controls" id="camera-fade-controls-section">
+                <number-input id="camera-fade-duration" label="Fade Duration (ms)" min="0" step="100" value="1000"></number-input>
+                <drop-down id="camera-fade-target" label="Target Camera" data-options="arc, free" value="arc"></drop-down>
+                <div class="grid grid-cols-1 gap-2 mt-2">
+                    <button id="camera-fade-exec-btn">
+                        Execute Fade
+                    </button>
+                </div>
+            </dev-accordion>
             <dev-accordion summary="Arc Camera Controls" id="arc-camera-controls-section">
                 <triple-input id="camera-arc-position-add" label="Add Target Position"></triple-input>
                 <button id="camera-arc-position-add-btn">Add Position</button>
@@ -115,6 +124,21 @@
                     <button id="preset-night" class="bg-gradient-to-r from-blue-900 to-indigo-900 hover:from-blue-800 hover:to-indigo-800 text-white py-2 px-3 rounded shadow-md transition-all">🌙 夜間<br><span class="text-xs opacity-80">神秘的な月明かり</span></button>
                     <button id="preset-sunset" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-2 px-3 rounded shadow-md transition-all">🌅 夕焼け<br><span class="text-xs opacity-80">ドラマチックな夕日</span></button>
                     <button id="preset-dawn" class="bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white py-2 px-3 rounded shadow-md transition-all">🌄 朝焼け<br><span class="text-xs opacity-80">希望の朝光</span></button>
+                </div>
+            </dev-accordion>
+        </div>
+        <div class="dev-section" id="dom-fade-section">
+            <h3 class="dev-section-title">dom fade effects</h3>
+            <dev-accordion summary="fade controls">
+                <number-input id="dom-fade-duration" label="Fade Duration (ms)" min="0" step="100" value="3000"></number-input>
+                <drop-down id="dom-fade-type" label="Fade Type" data-options="white,black,textalive-banner,loading-wrapper,playing-container,init-container,shutter" value="white"></drop-down>
+                <div class="grid grid-cols-2 gap-2 mt-2">
+                    <button id="dom-fade-in-btn" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2 px-3 rounded shadow-md transition-all">
+                        Fade In
+                    </button>
+                    <button id="dom-fade-out-btn" class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white py-2 px-3 rounded shadow-md transition-all">
+                        Fade Out
+                    </button>
                 </div>
             </dev-accordion>
         </div>
@@ -238,23 +262,26 @@
             </div>
         </dev-accordion>
     </aside>
-    <div class="relative flex-1">
-        <canvas id="babylon-canvas" class="absolute m-0 inset-0 w-full h-full -z-10"></canvas>
-        <canvas id="effects-canvas" class="absolute m-0 inset-0 w-full h-full -z-9"></canvas>
+    <div id="input-area" class="relative flex-1">
+        <canvas id="babylon-canvas" class="max -z-10"></canvas>
+        <canvas id="effects-canvas" class="max -z-9"></canvas>
         <div id="app" class="absolute inset-0 w-full h-full">
-            <div id="init" class="fade flex h-full justify-center items-center flex-col">
+            <div id="white-overlay" class="max hidden"></div>
+            <div id="black-overlay" class="max hidden"></div>
+
+            <div id="init" class="flex h-full justify-center items-center flex-col">
                 <h1 class="text-white text-7xl italic font-serif">Listen with Miku</h1>
                 <button id="start-button" class="mt-5 px-4 py-2 bg-blue-500 text-white rounded">Start</button>
             </div>
-            <div id="playing" class="fade out select-none">
-                <div id="black-trim" class="absolute w-full h-full top-0 left-0 z-5">
-                    <div id="black-trim-top" class="absolute w-full h-15 bg-stone-900"></div>
-                    <div id="black-trim-bottom" class="absolute w-full h-25 bottom-0 bg-stone-900 flex justify-center items-center">
+            <div id="playing" class="max hidden">
+                <div id="black-trim" class="max">
+                    <div id="black-trim-top" class="absolute w-full bg-stone-900"></div>
+                    <div id="black-trim-bottom" class="absolute w-full bottom-0 bg-stone-900 flex justify-center items-center">
                         <h3 class="text-white text-4xl" id="lyrics-text"></h3>
                     </div>
                 </div>
             </div>
-            <div id="loading-wrapper" class="fade absolute w-full h-full top-0 left-0 bg-white/15 backdrop-blur-md flex justify-center items-center select-none">
+            <div id="loading-wrapper" class="max bg-white/15 backdrop-blur-md flex justify-center items-center">
                 <div class="w-5 h-5 border-4 m-auto mx-3 border-t-transparent border-b-transparent border-white rounded-full animate-spin"></div>
                 <div id="loading-text" class="text-white text-2xl">Loading...</div>
             </div>
