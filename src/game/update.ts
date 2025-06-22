@@ -5,9 +5,7 @@ import {setUpdateLogic} from "~/lib/update/cycle";
 import {checkKeyFrames} from "./events";
 
 // Set up the update logic for the game
-export const gameUpdate = (currentPosition: number, deltaTime: number) => {
-    const lastPosition = currentPosition - deltaTime;
-
+export const gameUpdate = (lastPosition: number, currentPosition: number, deltaTime: number) => {
     updateTextAlive(lastPosition, currentPosition);
     updateEffects(deltaTime);
 
