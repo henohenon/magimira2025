@@ -1,21 +1,21 @@
 ﻿import {
-    setLightIntensity,
+    addLightDirection,
+    addLightPosition,
+    getHemisphericGroundColor,
+    getLightDiffuse,
+    getLightDirection,
+    getLightEnabled,
+    getLightIntensity,
+    getLightPosition,
     resetHemispheric,
+    resetPoint,
+    resetSpot,
     setHemisphericGroundColor,
     setLightDiffuse,
+    setLightDirection,
     setLightEnabled,
-    addLightPosition,
-    setLightPosition, 
-    addLightDirection, 
-    setLightDirection, 
-    resetPoint, 
-    resetSpot,
-    getLightEnabled,
-    getLightDiffuse,
-    getHemisphericGroundColor,
-    getLightIntensity,
-    getLightDirection,
-    getLightPosition
+    setLightIntensity,
+    setLightPosition
 } from "~/lib/babylon/light.ts";
 import {setLightingPreset, switchLight} from "~/game/light.ts";
 
@@ -23,6 +23,7 @@ import type {ToggleSwitch} from "../web-components/toggle-switch.ts";
 import type {ColorPicker} from "../web-components/color-picker.ts";
 import type {NumberInput} from "../web-components/number-input.ts";
 import type {TripleInput} from "../web-components/triple-input.ts";
+import {Color3} from "@babylonjs/core/Maths/math.color";
 
 const spotLightEnable = document.getElementById("spot-light-enable") as ToggleSwitch;
 const spotLightDiffuse = document.getElementById("spot-light-diffuse") as ColorPicker;
@@ -88,19 +89,27 @@ hemisphericLightEnable.subscribe(toggle => {
 
 spotLightDiffuse.subscribe(color => {
     if (!color) return;
-    setLightDiffuse("spot", color);
+    const color3 = Color3.FromHexString(color);
+    if (!color3) return;
+    setLightDiffuse("spot", color3);
 });
 pointLightDiffuse.subscribe(color => {
     if (!color) return;
-    setLightDiffuse("point", color);
+    const color3 = Color3.FromHexString(color);
+    if (!color3) return;
+    setLightDiffuse("point", color3);
 });
 hemisphericLightDiffuse.subscribe(color => {
     if (!color) return;
-    setLightDiffuse("hemispheric", color);
+    const color3 = Color3.FromHexString(color);
+    if (!color3) return;
+    setLightDiffuse("hemispheric", color3);
 });
 hemisphericLightGroundColor.subscribe(color => {
     if (!color) return;
-    setHemisphericGroundColor(color);
+    const color3 = Color3.FromHexString(color);
+    if (!color3) return;
+    setHemisphericGroundColor(color3);
 });
 
 spotLightIntensity.subscribe(value => {
@@ -172,18 +181,15 @@ export function updateLightInfo() {
     hemisphericLightEnable.checked = getLightEnabled("hemispheric");
 
     // Update color pickers with current light diffuse colors
-    const spotDiffuse = getLightDiffuse("spot");
-    spotLightDiffuse.value = spotDiffuse.toHexString();
+    spotLightDiffuse.value = getLightDiffuse("spot");
 
-    const pointDiffuse = getLightDiffuse("point");
-    pointLightDiffuse.value = pointDiffuse.toHexString();
 
-    const hemisphericDiffuse = getLightDiffuse("hemispheric");
-    hemisphericLightDiffuse.value = hemisphericDiffuse.toHexString();
+    pointLightDiffuse.value = getLightDiffuse("point");
+
+    hemisphericLightDiffuse.value = getLightDiffuse("hemispheric");
 
     // Update hemispheric ground color
-    const groundColor = getHemisphericGroundColor();
-    hemisphericLightGroundColor.value = groundColor.toHexString();
+    hemisphericLightGroundColor.value = getHemisphericGroundColor();
 
     // Update intensity sliders
     spotLightIntensity.value = getLightIntensity("spot");

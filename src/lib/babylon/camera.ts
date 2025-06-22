@@ -239,8 +239,9 @@ export const switchCameraWithCrossFade = async (key: CameraType, duration: numbe
     await crossFadeTween.promise;
 
     // After the tween completes
-    nextCamera.detachPostProcess(crossPp);
+    _scene.activeCamera.detachPostProcess(crossPp);
     _scene.customRenderTargets.pop();
+    crossRt.activeCamera = null;
     crossFadeTween = null;
 }
 

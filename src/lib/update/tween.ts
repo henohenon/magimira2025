@@ -1,4 +1,6 @@
-﻿// Tween system
+﻿import { Color3 } from "@babylonjs/core/Maths/math.color";
+
+// Tween system
 interface Tween<T> {
   duration: number;
   startTime: number;
@@ -74,6 +76,20 @@ const buildInterpolator = <T>(from: T, to: T): ((p: number) => T) => {
   if (typeof from === "number" && typeof to === "number") {
     const diff = to - from;
     return (p: number) => (from + diff * p) as T;
+  }
+
+  if(from instanceof Color3 && to instanceof Color3) {
+    let tmp = from.clone();
+    const diffR = to.r - from.r;
+    const diffG = to.g - from.g;
+    const diffB = to.b - from.b;
+    
+    return (p: number) => {
+      tmp.r = from.r + diffR * p;
+      tmp.g = from.g + diffG * p;
+      tmp.b = from.b + diffB * p;
+      return tmp as T
+    };
   }
 
   if (typeof from === "object" && from !== null && typeof to === "object" && to !== null) {

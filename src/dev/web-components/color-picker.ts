@@ -1,4 +1,6 @@
-﻿class ColorPicker extends HTMLElement {
+﻿import {Color3} from "@babylonjs/core/Maths/math.color";
+
+class ColorPicker extends HTMLElement {
   private colorInput: HTMLInputElement | null = null;
   private hueInput: HTMLInputElement | null = null;
   private saturationInput: HTMLInputElement | null = null;
@@ -217,10 +219,13 @@
     return this.colorInput?.value || undefined;
   }
 
-  set value(newValue: string) {
+  set value(newValue: string | Color3) {
     if (this.colorInput && !this.colorInput.matches(':focus')) {
-      this.colorInput.value = newValue;
-      this.updateFromHex(newValue);
+      const newValueStr: string = (newValue instanceof Color3)
+          ? newValue.toHexString()
+          : newValue;
+      this.colorInput.value = newValueStr
+      this.updateFromHex(newValueStr);
     }
   }
 

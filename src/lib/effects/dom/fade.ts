@@ -34,11 +34,11 @@ blackTrimBottom.style.height = `${SHUTTER_BOTTOM_DEFAULT_HEIGHT}px`;
 const FADE_DURATION = 3000;
 
 // White fade in/out functions
-export const whiteFadeIn = (duration: number = FADE_DURATION): void => {
+export const whiteFadeIn = (duration: number = FADE_DURATION) => {
   // Remove the 'out' class to make sure it's visible in case CSS is still affecting it
   whiteOverlay.classList.remove('hidden');
   // Use tween to animate opacity from 0 to 1
-  tween(
+  return tween(
     { opacity: 0 },
     { opacity: 1 },
     duration,
@@ -48,9 +48,9 @@ export const whiteFadeIn = (duration: number = FADE_DURATION): void => {
   ).promise;
 };
 
-export const whiteFadeOut = (duration: number = FADE_DURATION): void => {
+export const whiteFadeOut = (duration: number = FADE_DURATION) => {
   // Use tween to animate opacity from 1 to 0
-  tween(
+  return tween(
     { opacity: 1 },
     { opacity: 0 },
     duration,
@@ -61,7 +61,7 @@ export const whiteFadeOut = (duration: number = FADE_DURATION): void => {
         whiteOverlay.classList.add('hidden');
       }
     }
-  );
+  ).promise;
 };
 
 // Black fade in/out functions
