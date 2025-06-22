@@ -61,16 +61,16 @@
   }
 
   set value(newValue: number) {
-    if (this.inputField) {
+    if (this.inputField && !this.inputField.matches(':focus')) {
       this.inputField.valueAsNumber = newValue;
     }
   }
 
   set max(newValue: number) {
-    if (this.inputField) {
+    if (this.inputField && !this.inputField.matches(':focus')) {
       this.inputField.max = newValue.toString();
     }
-    if (this.slider) {
+    if (this.slider && !this.slider.matches(':focus')) {
       this.slider.max = newValue.toString();
     }
   }

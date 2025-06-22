@@ -32,7 +32,7 @@
     return Number(this.inputField?.value);
   }
   set value(newValue: number) {
-    if (this.inputField) {
+    if (this.inputField && !this.inputField.matches(':focus')) {
       this.inputField.valueAsNumber = newValue;
     }
   }

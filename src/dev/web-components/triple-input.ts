@@ -84,7 +84,7 @@
   }
 
   set value1(newValue: number) {
-    if (this.input1) {
+    if (this.input1 && !this.input1.matches(':focus')) {
       this.input1.valueAsNumber = newValue;
     }
   }
@@ -94,7 +94,7 @@
   }
 
   set value2(newValue: number) {
-    if (this.input2) {
+    if (this.input2 && !this.input2.matches(':focus')) {
       this.input2.valueAsNumber = newValue;
     }
   }
@@ -103,7 +103,7 @@
     return Number(this.input3?.value);
   }
   set value3(newValue: number) {
-    if (this.input3) {
+    if (this.input3 && !this.input3.matches(':focus')) {
       this.input3.valueAsNumber = newValue;
     }
   }
