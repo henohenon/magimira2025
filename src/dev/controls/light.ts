@@ -173,17 +173,17 @@ export function updateLightInfo() {
 
     // Update color pickers with current light diffuse colors
     const spotDiffuse = getLightDiffuse("spot");
-    spotLightDiffuse.value = spotDiffuse.toString();
+    spotLightDiffuse.value = spotDiffuse.toHexString();
 
     const pointDiffuse = getLightDiffuse("point");
-    pointLightDiffuse.value = pointDiffuse.toString();
+    pointLightDiffuse.value = pointDiffuse.toHexString();
 
     const hemisphericDiffuse = getLightDiffuse("hemispheric");
-    hemisphericLightDiffuse.value = hemisphericDiffuse.toString();
+    hemisphericLightDiffuse.value = hemisphericDiffuse.toHexString();
 
     // Update hemispheric ground color
     const groundColor = getHemisphericGroundColor();
-    hemisphericLightGroundColor.value = groundColor.toString();
+    hemisphericLightGroundColor.value = groundColor.toHexString();
 
     // Update intensity sliders
     spotLightIntensity.value = getLightIntensity("spot");
