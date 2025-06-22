@@ -27,10 +27,10 @@ events.on("onKeyFrame", ({action, position}) => {
 
     // Handle different key frames
     switch(action.name) {
-        case "2C":
-            //setFreePosition(2.5, 1.5, -2);
-            //setFreeRotation(-90, 0, 0);
-            switchCameraWithCrossFade("arc", 1000);
+        case "Sotellusストリートライト":
+            setFreeRotation(-90, 0, 0, "free2");
+            setFreePosition(-1, 0.5, -1.3, "free2");
+            switchCameraWithCrossFade("free2", 1000);
             break;
         case "first":
             intensity += 0.01;
