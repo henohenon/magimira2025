@@ -7,6 +7,7 @@
     getLightEnabled,
     getLightIntensity,
     getLightPosition,
+    getPointLightRange,
     resetHemispheric,
     resetPoint,
     resetSpot,
@@ -15,7 +16,8 @@
     setLightDirection,
     setLightEnabled,
     setLightIntensity,
-    setLightPosition
+    setLightPosition,
+    setPointLightRange
 } from "~/lib/babylon/light.ts";
 import {setLightingPreset, switchLight} from "~/game/light.ts";
 
@@ -34,6 +36,7 @@ const spotLightSetPositionInput = document.getElementById("spot-light-set-positi
 const pointLightEnable = document.getElementById("point-light-enable") as ToggleSwitch;
 const pointLightDiffuse = document.getElementById("point-light-diffuse") as ColorPicker;
 const pointLightIntensity = document.getElementById("point-light-intensity") as NumberInput;
+const pointLightRange = document.getElementById("point-light-range") as NumberInput;
 const pointLightAddPositionInput = document.getElementById("point-light-add-position-input") as TripleInput;
 const pointLightAddPositionButton = document.getElementById("point-light-add-position-button") as HTMLButtonElement;
 const pointLightSetPositionInput = document.getElementById("point-light-set-position-input") as TripleInput;
@@ -59,6 +62,7 @@ if (!spotLightEnable || !pointLightEnable || !hemisphericLightEnable ||
     !spotLightDiffuse || !pointLightDiffuse || !hemisphericLightDiffuse ||
     !hemisphericLightGroundColor ||
     !spotLightIntensity || !pointLightIntensity || !hemisphericLightIntensity ||
+    !pointLightRange ||
     !spotLightAddPositionInput || !pointLightAddPositionInput || !hemisphericLightAddDirectionInput ||
     !spotLightAddPositionButton || !pointLightAddPositionButton || !hemisphericLightAddDirectionButton ||
     !spotLightSetPositionInput || !pointLightSetPositionInput || !hemisphericLightSetDirectionInput ||
@@ -69,6 +73,7 @@ if (!spotLightEnable || !pointLightEnable || !hemisphericLightEnable ||
         spotLightDiffuse, pointLightDiffuse, hemisphericLightDiffuse,
         hemisphericLightGroundColor,
         spotLightIntensity, pointLightIntensity, hemisphericLightIntensity,
+        pointLightRange,
         spotLightAddPositionInput, pointLightAddPositionInput, hemisphericLightAddDirectionInput,
         spotLightAddPositionButton, pointLightAddPositionButton, hemisphericLightAddDirectionButton,
         spotLightSetPositionInput, pointLightSetPositionInput, hemisphericLightSetDirectionInput,
@@ -117,6 +122,9 @@ spotLightIntensity.subscribe(value => {
 });
 pointLightIntensity.subscribe(value => {
     setLightIntensity("point", value);
+});
+pointLightRange.subscribe(value => {
+    setPointLightRange(value);
 });
 hemisphericLightIntensity.subscribe(value => {
     setLightIntensity("hemispheric", value);
@@ -195,6 +203,9 @@ export function updateLightInfo() {
     spotLightIntensity.value = getLightIntensity("spot");
     pointLightIntensity.value = getLightIntensity("point");
     hemisphericLightIntensity.value = getLightIntensity("hemispheric");
+
+    // Update range slider
+    pointLightRange.value = getPointLightRange();
 
     // Update position inputs
     const spotPosition = getLightPosition("spot");
