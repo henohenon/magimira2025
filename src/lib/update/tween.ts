@@ -46,7 +46,6 @@ export const tween = <T>(
   };
 
   tweens.push(newTween);
-  console.log("tween", tweens, from, to, duration, step);
 
   // 最初のフレームをすぐ適用
   step(from);

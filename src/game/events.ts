@@ -3,7 +3,6 @@
 type KeyFrame = {
   name: string;
   position: number;
-  executed?: boolean; // Track if the key frame has been executed
 };
 
 type Events = {
@@ -22,9 +21,12 @@ export const keyFrames: KeyFrame[] = [
   { "name": "init", "position": 0 },
   { "name": "Sotellusストリートライト", "position": 3234.437 },
   { "name": "揺らめく都市のmagic", "position": 11216.412499999999 },
+  { "name": "街明かりが渦巻く躓くmymind", "position": 21281.940000000002 },
+  { "name": "再起動theothernight", "position": 25286.610500000003 },
   { "name": "(Don’tyouknow？)", "position": 28150.415 },
   { "name": "Ah強引にgoin'on", "position": 28717.314 },
-  { "name": "好きも得意ももう全部奏でたいんだ", "position": 30900.7055 },
+  { "name": "好きも得意も", "position": 30900.7055 },
+  { "name": "もう全部奏でたいんだ", "position": 33000 },
   { "name": "(Yeahdoit！)", "position": 35848.0465 },
   { "name": "めくるめくこの雑踏をかき分けていく", "position": 37370.935 },
   { "name": "光差す道を目指して", "position": 41370.016 },
@@ -66,16 +68,10 @@ export const keyFrames: KeyFrame[] = [
   { "name": "咲かせた未来のその先へ", "position": 180800.384625 }
 ];
 
-export const checkKeyFrames = (position: number): void => {
+export const updateKeyFrames = (lastPosition: number, currentPosition: number): void => {
   for (const action of keyFrames) {
-    if (action.executed) continue;
-    if (action.position <= position) {
-      events.emit('onKeyFrame', {
-        action,
-        position
-      });
-      // Mark the key frame as executed
-      action.executed = true;
+    if (action.position >= lastPosition && action.position < currentPosition) {
+      events.emit("onKeyFrame", { action, position: currentPosition });
     }
   }
 };

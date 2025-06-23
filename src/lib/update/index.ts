@@ -1,5 +1,4 @@
 ﻿import {events} from "~/lib/text-alive/events.ts";
-import {player} from "~/lib/text-alive";
 import {restartUpdateCycle, stopUpdateCycle} from "./cycle.ts";
 
 // Setup event listeners similar to src/dev/controls/update.ts
@@ -8,11 +7,6 @@ events.on("onPause", () => {
 });
 
 events.on("onPlay", ({ position }) => {
-  restartUpdateCycle(position);
-});
-
-events.on("onSeek", ({ position }) => {
-  if (!player.isPlaying) return;
   restartUpdateCycle(position);
 });
 

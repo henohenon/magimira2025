@@ -3,6 +3,7 @@ import {keyFrames, events} from "~/game/events";
 
 import type {Dropdown} from "../web-components/dropdown.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";
+import {restartUpdateCycle} from "~/lib/update/cycle.ts";
 
 const autoStartToggle = document.getElementById("auto-start-toggle") as HTMLInputElement;
 // Store auto-start preference - load from localStorage or default to false
@@ -67,7 +68,9 @@ export const updateTextAliveInfo = (position: number) => {
 }
 
 timeInputSlider.subscribe((time) => {
+    if (!player.isPlaying) return;
     player.requestMediaSeek(Math.round(time));
+    restartUpdateCycle(time);
 })
 
 // Function to format milliseconds to MM:SS format

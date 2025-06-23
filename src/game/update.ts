@@ -2,7 +2,7 @@
 import {updateEffects} from "~/lib/effects";
 import {setUpdateLogic} from "~/lib/update/cycle";
 
-import {checkKeyFrames} from "./events";
+import {updateKeyFrames} from "./events";
 
 // Set up the update logic for the game
 export const gameUpdate = (lastPosition: number, currentPosition: number, deltaTime: number) => {
@@ -10,7 +10,7 @@ export const gameUpdate = (lastPosition: number, currentPosition: number, deltaT
     updateEffects(deltaTime);
 
     // Check for key frames at the current position
-    checkKeyFrames(currentPosition);
+    updateKeyFrames(lastPosition, currentPosition);
 };
 
 setUpdateLogic(gameUpdate);

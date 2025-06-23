@@ -18,7 +18,6 @@ events.on("onLoaded", () => {
             currentPosition = lastPosition + deltaTime;
         }
         updateTweenList(currentTime);
-
         updateLogicFunction(lastPosition, currentPosition, deltaTime);
 
         lastTime = currentTime;
@@ -43,6 +42,7 @@ export const stopUpdateCycle = () => {
 }
 
 export const restartUpdateCycle = (position: number) => {
+    console.log("Restart update cycle at", position);
     lastTime = performance.now();
     lastPosition = position;
     isPause = false;
