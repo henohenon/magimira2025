@@ -59,6 +59,24 @@ export const setArcSphericalCoordinates = (alpha: number, beta: number, radius: 
     camera.radius = radius;
 };
 
+export const setArcAlpha = (alpha: number, cameraType: "arc" | "arc2" = "arc"): void => {
+    const camera = cameras[cameraType] as ArcRotateCamera;
+    if (!camera) return;
+    camera.alpha = degToRad(alpha);
+};
+
+export const setArcBeta = (beta: number, cameraType: "arc" | "arc2" = "arc"): void => {
+    const camera = cameras[cameraType] as ArcRotateCamera;
+    if (!camera) return;
+    camera.beta = degToRad(beta);
+};
+
+export const setArcRadius = (radius: number, cameraType: "arc" | "arc2" = "arc"): void => {
+    const camera = cameras[cameraType] as ArcRotateCamera;
+    if (!camera) return;
+    camera.radius = radius;
+};
+
 export const getArcTargetPosition = (cameraType: "arc" | "arc2" = "arc"): { x: number, y: number, z: number } | undefined => {
     return cameras[cameraType]?.target;
 };

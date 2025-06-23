@@ -6,17 +6,11 @@ import {
     setLightEnabled,
     setLightIntensity
 } from "~/lib/babylon/light.ts";
-import {tween} from "~/lib/update/tween.ts";
 
-export const tweenHemisphericLightColor = (
-    from: Color3,
-    to: Color3,
-    duration: number
-) => {
-    return tween(from, to, duration, (x) => {
-        setHemisphericGroundColor(x);
-        setLightDiffuse("hemispheric", x);
-    });
+
+export const setHemisphericLightColor = (color: Color3) => {
+    setHemisphericGroundColor(color);
+    setLightDiffuse("hemispheric", color);
 }
 
 export const setLightingPreset = (preset: "day" | "night" | "sunset" | "dawn"): boolean => {

@@ -4,6 +4,7 @@ import { tween } from "~/lib/update/tween.ts";
 // Get overlay elements from the DOM
 const whiteOverlay = document.getElementById('white-overlay') as HTMLElement;
 const blackOverlay = document.getElementById('black-overlay') as HTMLElement;
+const customColorOverlay = document.getElementById('custom-color-overlay') as HTMLElement;
 const textaliveBanner = document.getElementsByClassName("textalive-banner")[0] as HTMLElement;
 const loadingWrapper = document.getElementById("loading-wrapper");
 const playingContainer = document.getElementById("playing");
@@ -11,7 +12,7 @@ const initContainer = document.getElementById("init");
 const blackTrimTop = document.getElementById("black-trim-top") as HTMLElement;
 const blackTrimBottom = document.getElementById("black-trim-bottom") as HTMLElement;
 
-if (!whiteOverlay || !blackOverlay) {
+if (!whiteOverlay || !blackOverlay || !customColorOverlay) {
   throw new Error("Fade overlay elements not found in the DOM");
 }
 
@@ -260,6 +261,41 @@ export const shutterOut = (duration: number = FADE_DURATION): void => {
     duration,
     (value) => {
       blackTrimBottom.style.height = `${value.height}px`;
+    }
+  );
+};
+
+// Custom color fade functions
+export const setCustomColor = (color: string): void => {
+  customColorOverlay.style.backgroundColor = color;
+};
+
+export const customColorFadeIn = (duration: number = FADE_DURATION) => {
+  // Remove the 'hidden' class to make sure it's visible
+  customColorOverlay.classList.remove('hidden');
+  // Use tween to animate opacity from 0 to 1
+  return tween(
+    { opacity: 0 },
+    { opacity: 1 },
+    duration,
+    (value) => {
+      customColorOverlay.style.opacity = value.opacity.toString();
+    }
+  );
+};
+
+export const customColorFadeOut = (duration: number = FADE_DURATION) => {
+  // Use tween to animate opacity from 1 to 0
+  return tween(
+    { opacity: 1 },
+    { opacity: 0 },
+    duration,
+    (value) => {
+      customColorOverlay.style.opacity = value.opacity.toString();
+      // Add the 'hidden' class when fully transparent
+      if (value.opacity === 0) {
+        customColorOverlay.classList.add('hidden');
+      }
     }
   );
 };

@@ -1,5 +1,5 @@
 ﻿import {player} from "~/lib/text-alive";
-import {keyFrames, events} from "~/game/events";
+import {keyFrames, events, phraseFrames} from "~/game/events";
 
 import type {Dropdown} from "../web-components/dropdown.ts";
 import type {InputAndSlider} from "../web-components/input-slider.ts";
@@ -88,7 +88,7 @@ const keyFrameAccordionDetails = document.querySelector('#key-frame-timestamps-a
 if (!keyFrameAccordionDetails) throw new Error("Key frame timestamps accordion details not found");
 
 // Sort key frames by position
-const sortedActions = [...keyFrames].sort((a, b) => a.position - b.position);
+const sortedActions = [...keyFrames, ...phraseFrames].sort((a, b) => a.position - b.position);
 
 // Get the dropdown element
 const keyFrameDropdown = document.getElementById('key-frame-dropdown') as Dropdown;
@@ -125,6 +125,7 @@ sortedActions.forEach(action => {
     // Add click event listener to seek to the key frame position and play
     button.addEventListener('click', () => {
         player.requestMediaSeek(action.position);
+        restartUpdateCycle(action.position);
     });
 
     keyFrameAccordionDetails.appendChild(button);

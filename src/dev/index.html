@@ -132,7 +132,8 @@
             <h3 class="dev-section-title">dom fade effects</h3>
             <dev-accordion summary="fade controls">
                 <number-input id="dom-fade-duration" label="Fade Duration (ms)" min="0" step="100" value="3000"></number-input>
-                <drop-down id="dom-fade-type" label="Fade Type" data-options="white,black,textalive-banner,loading-wrapper,playing-container,init-container,shutter" value="white"></drop-down>
+                <drop-down id="dom-fade-type" label="Fade Type" data-options="white,black,custom-color,textalive-banner,loading-wrapper,playing-container,init-container,shutter" value="white"></drop-down>
+                <color-picker id="dom-fade-custom-color" label="Custom Color"></color-picker>
                 <div class="grid grid-cols-2 gap-2 mt-2">
                     <button id="dom-fade-in-btn" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2 px-3 rounded shadow-md transition-all">
                         Fade In
@@ -269,6 +270,7 @@
         <div id="app" class="absolute inset-0 w-full h-full">
             <div id="white-overlay" class="max bg-white hidden"></div>
             <div id="black-overlay" class="max bg-black hidden"></div>
+            <div id="custom-color-overlay" class="max hidden"></div>
 
             <div id="init" class="flex h-full justify-center items-center flex-col">
                 <h1 class="text-white text-7xl italic font-serif">Listen with Miku</h1>

@@ -48,7 +48,7 @@ export const tween = <T>(
   tweens.push(newTween);
 
   // 最初のフレームをすぐ適用
-  step(from);
+    step(from);
 
   // Return control object
   return {
@@ -61,11 +61,11 @@ export const tween = <T>(
     complete: () => {
       const index = tweens.indexOf(newTween);
       if (index === -1) return;
-      // Apply final value
-      step(newTween.interp(1));
-      // Remove from tweens array
-      tweens.splice(index, 1);
-      if (newTween.resolve) newTween.resolve();
+        // Apply final value
+        step(newTween.interp(1));
+        // Remove from tweens array
+        tweens.splice(index, 1);
+        if (newTween.resolve) newTween.resolve();
     },
     promise
   };
@@ -112,19 +112,20 @@ const buildInterpolator = <T>(from: T, to: T): ((p: number) => T) => {
   return (_: number) => to;
 };
 
-
 export const updateTweenList = (current: number): void => {
   for (let i = tweens.length - 1; i >= 0; i--) {
     const tween = tweens[i];
     const elapsed = current - tween.startTime;
 
-    if (elapsed >= tween.duration) {
-      tween.step(tween.interp(1));
-      tween.done = true;
-      tweens.splice(i, 1);
-    } else {
-      const p = elapsed / tween.duration;
-      tween.step(tween.interp(p));
-    }
+      if (elapsed >= tween.duration) {
+        tween.step(tween.interp(1));
+        tween.done = true;
+        tweens.splice(i, 1);
+        // 重要: Promiseを解決する
+        if (tween.resolve) tween.resolve();
+      } else {
+        const p = elapsed / tween.duration;
+        tween.step(tween.interp(p));
+      }
   }
 };
