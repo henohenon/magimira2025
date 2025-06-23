@@ -21,6 +21,8 @@ export const keyFrames: KeyFrame[] = [
   { name: "init", position: 0 },
   { name: "好きも得意も", position: 30939 },
   { name: "もう全部奏でたいんだ", position: 33000 },
+  { name: "終わりなんて", position: 54577 },
+  { name: "ない", position: 55600 },
 ];
 
 
