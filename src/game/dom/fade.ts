@@ -9,6 +9,7 @@ const textaliveBanner = document.getElementsByClassName("textalive-banner")[0] a
 const loadingWrapper = document.getElementById("loading-wrapper");
 const playingContainer = document.getElementById("playing");
 const initContainer = document.getElementById("init");
+const blackTrim = document.getElementById("black-trim") as HTMLElement;
 const blackTrimTop = document.getElementById("black-trim-top") as HTMLElement;
 const blackTrimBottom = document.getElementById("black-trim-bottom") as HTMLElement;
 
@@ -20,7 +21,7 @@ if (!playingContainer || !initContainer || !loadingWrapper || !textaliveBanner) 
   throw new Error("Playing container not found");
 }
 
-if (!blackTrimTop || !blackTrimBottom) {
+if (!blackTrim || !blackTrimTop || !blackTrimBottom) {
   throw new Error("Black trim elements not found");
 }
 
@@ -36,175 +37,105 @@ const FADE_DURATION = 3000;
 
 // White fade in/out functions
 export const whiteFadeIn = (duration: number = FADE_DURATION) => {
-  // Remove the 'out' class to make sure it's visible in case CSS is still affecting it
   whiteOverlay.classList.remove('hidden');
-  // Use tween to animate opacity from 0 to 1
-  return tween(
-    { opacity: 0 },
-    { opacity: 1 },
-    duration,
-    (value) => {
-      whiteOverlay.style.opacity = value.opacity.toString();
-    }
-  ).promise;
+  return tween(0, 1, duration, (x) => {
+    whiteOverlay.style.opacity = x.toString();
+  });
 };
 
 export const whiteFadeOut = (duration: number = FADE_DURATION) => {
-  // Use tween to animate opacity from 1 to 0
-  return tween(
-    { opacity: 1 },
-    { opacity: 0 },
-    duration,
-    (value) => {
-      whiteOverlay.style.opacity = value.opacity.toString();
-      // Add the 'out' class when fully transparent for pointer-events-none
-      if (value.opacity === 0) {
-        whiteOverlay.classList.add('hidden');
-      }
-    }
-  ).promise;
+  return tween(1, 0, duration, (x) => {
+    whiteOverlay.style.opacity = x.toString();
+  }, {onComplete: () => {
+    whiteOverlay.classList.add('hidden');
+  }});
 };
+
+export const setWhiteBlur = (pixel: number): void => {
+    whiteOverlay.style.filter = `blur(${pixel}px)`;
+}
 
 // Black fade in/out functions
-export const blackFadeIn = (duration: number = FADE_DURATION): void => {
-  // Remove the 'out' class to make sure it's visible in case CSS is still affecting it
+export const blackFadeIn = (duration: number = FADE_DURATION) => {
   blackOverlay.classList.remove('hidden');
-  // Use tween to animate opacity from 0 to 1
-  tween(
-    { opacity: 0 },
-    { opacity: 1 },
-    duration,
-    (value) => {
-      blackOverlay.style.opacity = value.opacity.toString();
-    }
-  );
+  return tween(0, 1, duration, (x) => {
+    blackOverlay.style.opacity = x.toString();
+  });
 };
 
-export const blackFadeOut = (duration: number = FADE_DURATION): void => {
-  // Use tween to animate opacity from 1 to 0
-  tween(
-    { opacity: 1 },
-    { opacity: 0 },
-    duration,
-    (value) => {
-      blackOverlay.style.opacity = value.opacity.toString();
-      // Add the 'out' class when fully transparent for pointer-events-none
-      if (value.opacity === 0) {
-        blackOverlay.classList.add('hidden');
-      }
-    }
-  );
+export const blackFadeOut = (duration: number = FADE_DURATION) => {
+  return tween(1, 0, duration, (x) => {
+    blackOverlay.style.opacity = x.toString();
+  }, {onComplete: () => {
+    blackOverlay.classList.add('hidden');
+  }});
 };
 
 // TextAlive banner fade functions
-export const textaliveBannerFadeIn = (duration: number = FADE_DURATION): void => {
+export const textaliveBannerFadeIn = (duration: number = FADE_DURATION) => {
   textaliveBanner.classList.remove('hidden');
-  tween(
-    { opacity: 0 },
-    { opacity: 1 },
-    duration,
-    (value) => {
-      textaliveBanner.style.opacity = value.opacity.toString();
-    }
-  );
+  return tween(0, 1, duration, (x) => {
+    textaliveBanner.style.opacity = x.toString();
+  });
 }
 
-export const textaliveBannerFadeOut = (duration: number = FADE_DURATION): void => {
-  tween(
-    { opacity: 1 },
-    { opacity: 0 },
-    duration,
-    (value) => {
-      textaliveBanner.style.opacity = value.opacity.toString();
-      if (value.opacity === 0) {
-        textaliveBanner.classList.add('hidden');
-      }
-    }
-  );
+export const textaliveBannerFadeOut = (duration: number = FADE_DURATION) => {
+  return tween(1, 0, duration, (x) => {
+    textaliveBanner.style.opacity = x.toString();
+  }, {onComplete: () => {
+    textaliveBanner.classList.add('hidden');
+  }});
 }
 
 // Loading wrapper fade functions
-export const loadingWrapperFadeIn = (duration: number = FADE_DURATION): void => {
+export const loadingWrapperFadeIn = (duration: number = FADE_DURATION) => {
   loadingWrapper.classList.remove('hidden');
-  tween(
-    { opacity: 0 },
-    { opacity: 1 },
-    duration,
-    (value) => {
-      loadingWrapper.style.opacity = value.opacity.toString();
-    }
-  );
+  return tween(0, 1, duration, (x) => {
+    loadingWrapper.style.opacity = x.toString();
+  });
 }
 
-export const loadingWrapperFadeOut = (duration: number = FADE_DURATION): void => {
-  tween(
-    { opacity: 1 },
-    { opacity: 0 },
-    duration,
-    (value) => {
-      loadingWrapper.style.opacity = value.opacity.toString();
-      if (value.opacity === 0) {
-        loadingWrapper.classList.add('hidden');
-      }
-    }
-  );
+export const loadingWrapperFadeOut = (duration: number = FADE_DURATION) => {
+  return tween(1, 0, duration, (x) => {
+    loadingWrapper.style.opacity = x.toString();
+  }, {onComplete: () => {
+    loadingWrapper.classList.add('hidden');
+  }});
 }
 
 // Playing container fade functions
-export const playingContainerFadeIn = (duration: number = FADE_DURATION): void => {
+export const playingContainerFadeIn = (duration: number = FADE_DURATION) => {
   playingContainer.classList.remove('hidden');
-  tween(
-    { opacity: 0 },
-    { opacity: 1 },
-    duration,
-    (value) => {
-      playingContainer.style.opacity = value.opacity.toString();
-    }
-  );
+  return tween(0, 1, duration, (x) => {
+    playingContainer.style.opacity = x.toString();
+  });
 }
 
-export const playingContainerFadeOut = (duration: number = FADE_DURATION): void => {
-  tween(
-    { opacity: 1 },
-    { opacity: 0 },
-    duration,
-    (value) => {
-      playingContainer.style.opacity = value.opacity.toString();
-      if (value.opacity === 0) {
-        playingContainer.classList.add('hidden');
-      }
-    }
-  );
+export const playingContainerFadeOut = (duration: number = FADE_DURATION) => {
+  return tween(1, 0, duration, (x) => {
+    playingContainer.style.opacity = x.toString();
+  }, {onComplete: () => {
+    playingContainer.classList.add('hidden');
+  }});
 }
 
 // Init container fade functions
-export const initContainerFadeIn = (duration: number = FADE_DURATION): void => {
+export const initContainerFadeIn = (duration: number = FADE_DURATION) => {
   initContainer.classList.remove('hidden');
-  tween(
-    { opacity: 0 },
-    { opacity: 1 },
-    duration,
-    (value) => {
-      initContainer.style.opacity = value.opacity.toString();
-    }
-  );
+  return tween(0, 1, duration, (x) => {
+    initContainer.style.opacity = x.toString();
+  });
 }
 
-export const initContainerFadeOut = (duration: number = FADE_DURATION): void => {
-  tween(
-    { opacity: 1 },
-    { opacity: 0 },
-    duration,
-    (value) => {
-      initContainer.style.opacity = value.opacity.toString();
-      if (value.opacity === 0) {
-        initContainer.classList.add('hidden');
-      }
-    }
-  );
+export const initContainerFadeOut = (duration: number = FADE_DURATION) => {
+  return tween(1, 0, duration, (x) => {
+    initContainer.style.opacity = x.toString();
+  }, {onComplete: () => {
+    initContainer.classList.add('hidden');
+  }});
 }
 // Shutter-like fade effect functions
-export const shutterIn = (duration: number = FADE_DURATION): void => {
+export const shutterIn = (duration: number = FADE_DURATION) => {
   // Get the viewport height
   const viewportHeight = window.innerHeight;
   // Calculate the target height for each trim (half of the viewport)
@@ -215,7 +146,7 @@ export const shutterIn = (duration: number = FADE_DURATION): void => {
   const currentBottomHeight = parseInt(getComputedStyle(blackTrimBottom).height) || 25;
 
   // Animate the top trim height
-  tween(
+  const topTween = tween(
     { height: currentTopHeight },
     { height: targetHeight },
     duration,
@@ -225,7 +156,7 @@ export const shutterIn = (duration: number = FADE_DURATION): void => {
   );
 
   // Animate the bottom trim height
-  tween(
+  const bottomTween = tween(
     { height: currentBottomHeight },
     { height: targetHeight },
     duration,
@@ -233,9 +164,22 @@ export const shutterIn = (duration: number = FADE_DURATION): void => {
       blackTrimBottom.style.height = `${value.height}px`;
     }
   );
+
+  // Return a promise that resolves when both tweens complete
+  return {
+    promise: Promise.all([topTween.promise, bottomTween.promise]).then(() => {}),
+    cancel: () => {
+      topTween.cancel();
+      bottomTween.cancel();
+    },
+    complete: () => {
+      topTween.complete();
+      bottomTween.complete();
+    }
+  };
 };
 
-export const shutterOut = (duration: number = FADE_DURATION): void => {
+export const shutterOut = (duration: number = FADE_DURATION) => {
   // Get the viewport height
   const viewportHeight = window.innerHeight;
 
@@ -243,9 +187,8 @@ export const shutterOut = (duration: number = FADE_DURATION): void => {
   const currentTopHeight = parseInt(getComputedStyle(blackTrimTop).height) || viewportHeight / 2;
   const currentBottomHeight = parseInt(getComputedStyle(blackTrimBottom).height) || viewportHeight / 2;
 
-
   // Animate the top trim height
-  tween(
+  const topTween = tween(
     { height: currentTopHeight },
     { height: SHUTTER_TOP_DEFAULT_HEIGHT },
     duration,
@@ -255,7 +198,7 @@ export const shutterOut = (duration: number = FADE_DURATION): void => {
   );
 
   // Animate the bottom trim height
-  tween(
+  const bottomTween = tween(
     { height: currentBottomHeight },
     { height: SHUTTER_BOTTOM_DEFAULT_HEIGHT },
     duration,
@@ -263,6 +206,91 @@ export const shutterOut = (duration: number = FADE_DURATION): void => {
       blackTrimBottom.style.height = `${value.height}px`;
     }
   );
+
+  // Return a promise that resolves when both tweens complete
+  return {
+    promise: Promise.all([topTween.promise, bottomTween.promise]).then(() => {}),
+    cancel: () => {
+      topTween.cancel();
+      bottomTween.cancel();
+    },
+    complete: () => {
+      topTween.complete();
+      bottomTween.complete();
+    }
+  };
+};
+
+// Shutter fade effect functions (combining shutter and fade)
+export const shutterFadeIn = (duration: number = FADE_DURATION) => {
+  // Remove the 'hidden' class to make sure it's visible
+  blackOverlay.classList.remove('hidden');
+
+  // Start with the shutter at default position and black overlay transparent
+  blackTrimTop.style.height = `${SHUTTER_TOP_DEFAULT_HEIGHT}px`;
+  blackTrimBottom.style.height = `${SHUTTER_BOTTOM_DEFAULT_HEIGHT}px`;
+  blackOverlay.style.opacity = '0';
+
+  // Get the viewport height
+  const viewportHeight = window.innerHeight;
+  // Calculate the target height for each trim (half of the viewport)
+  const targetHeight = viewportHeight / 2;
+
+  // Get the current heights
+  const currentTopHeight = parseInt(getComputedStyle(blackTrimTop).height) || SHUTTER_TOP_DEFAULT_HEIGHT;
+  const currentBottomHeight = parseInt(getComputedStyle(blackTrimBottom).height) || SHUTTER_BOTTOM_DEFAULT_HEIGHT;
+
+  // Animate the top trim height
+  const topTween = tween(
+    { height: currentTopHeight },
+    { height: targetHeight },
+    duration,
+    (value) => {
+      blackTrimTop.style.height = `${value.height}px`;
+    }
+  );
+
+  // Animate the bottom trim height
+  const bottomTween = tween(currentBottomHeight,
+    targetHeight,
+    duration,
+    (value) => {
+      blackTrimBottom.style.height = `${value}px`;
+    }
+  );
+
+  // Animate the black overlay opacity
+  const fadeTween = tween(
+    { opacity: 0 },
+    { opacity: 1 },
+    duration,
+    (value) => {
+      blackOverlay.style.opacity = value.opacity.toString();
+    }
+  );
+
+  // Return a promise that resolves when all tweens complete
+  return {
+    promise: Promise.all([topTween.promise, bottomTween.promise, fadeTween.promise]).then(() => {}),
+    cancel: () => {
+      topTween.cancel();
+      bottomTween.cancel();
+      fadeTween.cancel();
+    },
+    complete: () => {
+      topTween.complete();
+      bottomTween.complete();
+      fadeTween.complete();
+    }
+  };
+};
+
+export const shutterFadeOut = (duration: number = FADE_DURATION) => {
+  return tween(1, 0, duration, (x) => {
+      blackTrim.style.opacity = x.toString();
+  }, {onComplete: () => {
+      blackTrim.classList.add('hidden');
+  }});
 };
 
 // Custom color fade functions
@@ -271,31 +299,16 @@ export const setCustomColor = (color: string): void => {
 };
 
 export const customColorFadeIn = (duration: number = FADE_DURATION) => {
-  // Remove the 'hidden' class to make sure it's visible
   customColorOverlay.classList.remove('hidden');
-  // Use tween to animate opacity from 0 to 1
-  return tween(
-    { opacity: 0 },
-    { opacity: 1 },
-    duration,
-    (value) => {
-      customColorOverlay.style.opacity = value.opacity.toString();
-    }
-  );
+  return tween(0, 1, duration, (x) => {
+    customColorOverlay.style.opacity = x.toString();
+  });
 };
 
 export const customColorFadeOut = (duration: number = FADE_DURATION) => {
-  // Use tween to animate opacity from 1 to 0
-  return tween(
-    { opacity: 1 },
-    { opacity: 0 },
-    duration,
-    (value) => {
-      customColorOverlay.style.opacity = value.opacity.toString();
-      // Add the 'hidden' class when fully transparent
-      if (value.opacity === 0) {
-        customColorOverlay.classList.add('hidden');
-      }
-    }
-  );
+  return tween(1, 0, duration, (x) => {
+    customColorOverlay.style.opacity = x.toString();
+  }, {onComplete: () => {
+    customColorOverlay.classList.add('hidden');
+  }});
 };

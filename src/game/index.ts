@@ -24,7 +24,14 @@ import { delayForMilSeconds } from "~/lib/update";
 
 import {setHemisphericLightColor, setLightingPreset } from "./light";
 import {events as gameEvents} from "./events";
-import {customColorFadeIn, customColorFadeOut, setCustomColor } from "./dom/fade.ts";
+import {
+    customColorFadeIn,
+    customColorFadeOut,
+    setCustomColor, setWhiteBlur,
+    shutterFadeOut,
+    whiteFadeIn,
+    whiteFadeOut
+} from "./dom/fade.ts";
 
 import "./update";
 import "./dom/bottom-lyrics.ts";
@@ -136,5 +143,24 @@ const updateView = async (viewKey: string) => {
             setFreeRotation(115, 13, 0, "free2");
             switchCameraWithCrossFade("free2", 1000);
             tween(getHemisphericGroundColor(), cryptonColors["Miku"], 3000, setHemisphericLightColor);
+            break;
+        case "空回る今だって僕らの祈り毎秒更新":
+            tween(getHemisphericGroundColor(), cryptonColors["KAITO"], 3000, setHemisphericLightColor);
+            break;
+        case "不安感だって攫っていく未来にrideon":
+            setLightDiffuse("hemispheric", cryptonColors["Rin"]);
+            setHemisphericGroundColor(cryptonColors["Ren"]);
+            break;
+        case "Yeah！":
+            shutterFadeOut(0);
+            break;
+        case "終わりなんて":
+            whiteFadeIn(0);
+            break;
+        case "ない":
+            tween(10, 0, 2000, setWhiteBlur);
+            whiteFadeOut(2000);
+            break;
+
     }
 }

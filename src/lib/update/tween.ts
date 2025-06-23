@@ -25,13 +25,19 @@ export const tween = <T>(
   from: T,
   to: T,
   duration: number,
-  step: (value: T) => void
+  step: (value: T) => void,
+  options?: { onComplete?: () => void; }
 ): TweenControl => {
-  let resolvePromise = () => {};
+  let resolvePromise = () => {
+    if (options?.onComplete) options.onComplete();
+  };
   let rejectPromise = () => {};
 
   const promise = new Promise<void>((resolve, reject) => {
-    resolvePromise = resolve;
+    resolvePromise = () => {
+      resolve();
+      if (options?.onComplete) options.onComplete();
+    }
     rejectPromise = reject;
   });
 
