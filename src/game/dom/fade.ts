@@ -12,6 +12,7 @@ const initContainer = document.getElementById("init");
 const blackTrim = document.getElementById("black-trim") as HTMLElement;
 const blackTrimTop = document.getElementById("black-trim-top") as HTMLElement;
 const blackTrimBottom = document.getElementById("black-trim-bottom") as HTMLElement;
+const neverEndText = document.getElementById("never-end-text") as HTMLElement;
 
 if (!whiteOverlay || !blackOverlay || !customColorOverlay) {
   throw new Error("Fade overlay elements not found in the DOM");
@@ -23,6 +24,10 @@ if (!playingContainer || !initContainer || !loadingWrapper || !textaliveBanner) 
 
 if (!blackTrim || !blackTrimTop || !blackTrimBottom) {
   throw new Error("Black trim elements not found");
+}
+
+if (!neverEndText) {
+  throw new Error("Never end text element not found");
 }
 
 // Default heights from the original CSS
@@ -310,5 +315,21 @@ export const customColorFadeOut = (duration: number = FADE_DURATION) => {
     customColorOverlay.style.opacity = x.toString();
   }, {onComplete: () => {
     customColorOverlay.classList.add('hidden');
+  }});
+};
+
+// Never end text fade functions
+export const neverEndTextFadeIn = (duration: number = FADE_DURATION) => {
+  neverEndText.classList.remove('hidden');
+  return tween(0, 1, duration, (x) => {
+    neverEndText.style.opacity = x.toString();
+  });
+};
+
+export const neverEndTextFadeOut = (duration: number = FADE_DURATION) => {
+  return tween(1, 0, duration, (x) => {
+    neverEndText.style.opacity = x.toString();
+  }, {onComplete: () => {
+    neverEndText.classList.add('hidden');
   }});
 };

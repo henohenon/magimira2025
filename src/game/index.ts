@@ -26,7 +26,7 @@ import {setHemisphericLightColor, setLightingPreset } from "./light";
 import {events as gameEvents} from "./events";
 import {
     customColorFadeIn,
-    customColorFadeOut,
+    customColorFadeOut, neverEndTextFadeIn, neverEndTextFadeOut,
     setCustomColor, setWhiteBlur,
     shutterFadeOut,
     whiteFadeIn,
@@ -156,10 +156,13 @@ const updateView = async (viewKey: string) => {
             break;
         case "終わりなんて":
             whiteFadeIn(0);
+            neverEndTextFadeIn(500);
             break;
         case "ない":
-            tween(10, 0, 2000, setWhiteBlur);
-            whiteFadeOut(2000);
+            await delayForMilSeconds(400);
+            tween(10, 0, 4000, setWhiteBlur);
+            whiteFadeOut(4000);
+            neverEndTextFadeOut(500);
             break;
 
     }
