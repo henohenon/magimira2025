@@ -45,7 +45,7 @@
   }
 
   set value(newValue: string) {
-    if (!this.select) return;
+    if (!this.select || this.select.matches(':focus')) return;
     this.select.value = newValue;
   }
 

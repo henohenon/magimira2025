@@ -1,6 +1,4 @@
-﻿import "./dom/bottom-lyrics.ts";
-
-import {drawFrequencySpectrum} from "./spectrum";
+﻿import {drawFrequencySpectrum} from "./spectrum";
 import {drawRipples} from "./ripple";
 import {drawGlitchEffects} from "./glitch";
 

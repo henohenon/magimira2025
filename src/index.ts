@@ -11,7 +11,7 @@ import {
     loadingWrapperFadeOut,
     playingContainerFadeIn,
     textaliveBannerFadeOut
-} from "~/lib/effects/dom/fade";
+} from "~/game/dom/fade";
 import {player} from "~/lib/text-alive";
 
 let babylonLoaded = false;

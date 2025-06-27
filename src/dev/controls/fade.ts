@@ -12,20 +12,25 @@
     initContainerFadeIn,
     initContainerFadeOut,
     shutterIn,
-    shutterOut
-} from "~/lib/effects/dom/fade";
+    shutterOut,
+    customColorFadeIn,
+    customColorFadeOut,
+    setCustomColor
+} from "~/game/dom/fade";
 
 import type { Dropdown } from "../web-components/dropdown.ts";
 import type { NumberInput } from "../web-components/number-input.ts";
+import type { ColorPicker } from "../web-components/color-picker.ts";
 
 // Get DOM fade controls
 const fadeDurationInput = document.getElementById("dom-fade-duration") as NumberInput;
 const fadeTypeDropdown = document.getElementById("dom-fade-type") as Dropdown;
 const fadeInButton = document.getElementById("dom-fade-in-btn") as HTMLButtonElement;
 const fadeOutButton = document.getElementById("dom-fade-out-btn") as HTMLButtonElement;
+const fadeCustomColorPicker = document.getElementById("dom-fade-custom-color") as ColorPicker;
 
 // Validate controls
-if (!fadeDurationInput || !fadeTypeDropdown || !fadeInButton || !fadeOutButton) {
+if (!fadeDurationInput || !fadeTypeDropdown || !fadeInButton || !fadeOutButton || !fadeCustomColorPicker) {
     throw new Error("DOM fade controls not found");
 }
 
@@ -42,6 +47,11 @@ const executeFadeIn = () => {
             break;
         case "black":
             blackFadeIn(duration);
+            break;
+        case "custom-color":
+            const customColor = fadeCustomColorPicker.value ?? "#000000";
+            setCustomColor(customColor);
+            customColorFadeIn(duration);
             break;
         case "textalive-banner":
             textaliveBannerFadeIn(duration);
@@ -76,6 +86,9 @@ const executeFadeOut = () => {
             break;
         case "black":
             blackFadeOut(duration);
+            break;
+        case "custom-color":
+            customColorFadeOut(duration);
             break;
         case "textalive-banner":
             textaliveBannerFadeOut(duration);

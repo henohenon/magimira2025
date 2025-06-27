@@ -1,43 +1,29 @@
-﻿import type {Subscription} from "prismatix-input/subject";
-import type {WithPositionInputEvent} from "prismatix-input/web-native";
+﻿import {createCircleRipple, createSquareRipple} from "~/lib/effects/ripple";
 
-import {createCircleRipple, createSquareRipple} from "~/lib/effects/ripple";
-import {pointer} from "~/game/input.ts";
+import {positionRipple} from "./input.ts";
+import type {Subscription} from "prismatix-input/types";
 
-// Array to track all active subscriptions
-export const subscriptions: Array<Subscription> = [];
-
-export const enableCircleRipple = () => {
-    const s = pointer.subscribe((e: WithPositionInputEvent) => {
-        if(e.action === "start"){
-            createCircleRipple(e.x, e.y);
-        }
+const subscriptions: Subscription[] = [];
+let rippleColor = "#ffffff";
+export function setRippleColor(color: string) {
+    rippleColor = color;
+}
+export function enableCircleRipple() {
+    const subscribe = positionRipple.subscribe(e => {
+       createCircleRipple(e.x, e.y, { color: rippleColor });
     });
-
-    // Add the unsubscribe function to the subscriptions array
-    subscriptions.push(s);
-
-    return s;
+    subscriptions.push(subscribe);
 }
 
-export const enableSquareRipple = () => {
-    const s = pointer.subscribe((e: WithPositionInputEvent) => {
-        if(e.action === "start"){
-            createSquareRipple(e.x, e.y);
-        }
+export function enableSquareRipple(){
+    const subscribe = positionRipple.subscribe(e => {
+        createSquareRipple(e.x, e.y, { color: rippleColor });
     });
-
-    // Add the unsubscribe function to the subscriptions array
-    subscriptions.push(s);
-
-    return s;
+    subscriptions.push(subscribe);
 }
 
-// Function to disable all subscriptions
-export const disableAllRipples = () => {
-    // Call each unsubscribe function
-    for (const s of subscriptions) s.unsubscribe();
-
-    // Clear the subscriptions array
-    subscriptions.length = 0;
+export function disableAllRipple() {
+    for (const subscription of subscriptions) {
+        subscription.unsubscribe();
+    }
 }

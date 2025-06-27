@@ -60,7 +60,7 @@
   }
 
   set checked(value) {
-    if (!this.checkbox) return;
+    if (!this.checkbox || this.checkbox.matches(':focus')) return;
     this.checkbox.checked = value;
     this.updateChecked();
   }

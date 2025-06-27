@@ -1,141 +1,92 @@
-﻿import type { Subscription } from "prismatix-input/subject";
-import type { WithPositionInputEvent } from "prismatix-input/web-native";
+﻿import type { Subscription } from "prismatix-input/types";
+import type {WithPositionInputEvent} from "prismatix-input/input";
 
-import { pointer } from "~/game/input.ts";
-import { spectrums } from "~/lib/effects/spectrum";
-import type { CircleSpectrum, HorizontalSpectrum, VerticalSpectrum } from "~/lib/effects/spectrum";
-import type { Spectrum } from "~/lib/effects/spectrum";
+import {
+    spectrums,
+    type Spectrum,
+    type CircleSpectrum,
+    type VerticalSpectrum,
+    type HorizontalSpectrum
+} from "~/lib/effects/spectrum";
 
-// Array to track all active subscriptions
-export const subscriptions: Array<Subscription> = [];
+import {inputArea, positionSpectrum} from "./input.ts";
 
+const subscriptions: Subscription[] = [];
 /**
  * Common function to enable spectrum frequency effect on click
- * @param spectrumType The type of spectrum to enable
+ * @param spectrum The type of spectrum to enable
  * @param calculateRate Function to calculate position from input event
  * @param addFrequency Function to add frequency to the spectrum
  * @param strength Optional strength of the frequency effect (default: 0.3)
  * @param range Optional range of the frequency effect (default: 2)
  * @returns Subscription that can be used to unsubscribe
  */
-const enableSpectrum = <T extends Spectrum>(
-    spectrumType: T,
+function enableSpectrum<T extends Spectrum>(
+    spectrum: T,
     calculateRate: (e: WithPositionInputEvent) => number,
-    addFrequency: (spectrum: T, position: number, strength: number, range: number) => void,
+    addFrequency: (position: number, strength: number, range: number) => void,
     strength: number = 0.3,
     range: number = 2
-) => {
-    spectrumType.setEnable(true);
+) {
+    spectrum.setEnable(true);
 
-    // TODO: Multi tap countermeasure
-    // Variable to cache the last position
-    let lastRate: number | null = null;
-    let isClicking = false;
-
-    const s = pointer.subscribe((e: WithPositionInputEvent) => {
-        // Calculate the position
-        const currentRate = calculateRate(e);
-
+    const subscription = positionSpectrum.subscribe(e => {
+        console.log(e);
         if (e.action === "start") {
-            // Add frequency effect to spectrum
-            addFrequency(spectrumType, currentRate, strength, range);
-            // Cache the position
-            lastRate = currentRate;
-            isClicking = true;
-        } else if (isClicking && e.action === "move") {
-            if(lastRate !== null){
-                // Remove effect at the last position
-                addFrequency(spectrumType, lastRate, -strength, range);
-            }
-
-            // Add effect at the current position
-            addFrequency(spectrumType, currentRate, strength, range);
-
-            // Update the last position
-            lastRate = currentRate;
+            addFrequency(calculateRate(e), strength, range);
         } else if (e.action === "end") {
-            isClicking = false;
-
-            if(lastRate !== null){
-                // Add negative frequency effect to spectrum when input ends
-                addFrequency(spectrumType, lastRate, -strength, range);
-                // Reset the last position
-                lastRate = null;
-            }
+            addFrequency(calculateRate(e), -strength, range);
         }
     });
 
     // Add the subscription to the array
-    subscriptions.push(s);
+    subscriptions.push(subscription);
 
-    return s;
+    return subscription;
 };
 
-/**
- * Enables circle spectrum frequency effect on click
- * @param strength Optional strength of the frequency effect (default: 0.3)
- * @param range Optional range of the frequency effect (default: 2)
- * @returns Subscription that can be used to unsubscribe
- */
-export const enableCircleSpectrum = (strength: number = 0.3, range: number = 2) => {
+export function enableCircleSpectrum(strength: number = 0.3, range: number = 2) {
     const circleSpectrum = spectrums["circle"] as CircleSpectrum;
 
     return enableSpectrum(
         circleSpectrum,
-        (e) => Math.atan2(e.y - window.innerHeight / 2, e.x - window.innerWidth / 2),
-        (spectrum, angle, strength, range) => spectrum.addFrequencyByAngle(angle, strength, range),
+        (e) => Math.atan2(e.y - inputArea.offsetHeight / 2, e.x - inputArea.offsetWidth / 2),
+        (angle, strength, range) => circleSpectrum.addFrequencyByAngle(angle, strength, range),
         strength,
         range
     );
 };
 
-/**
- * Enables horizontal spectrum frequency effect on click
- * @param strength Optional strength of the frequency effect (default: 0.3)
- * @param range Optional range of the frequency effect (default: 2)
- * @returns Subscription that can be used to unsubscribe
- */
-export const enableHorizontalSpectrum = (strength: number = 0.3, range: number = 2) => {
-    const horizontalSpectrum = spectrums["horizontal"] as HorizontalSpectrum;
-
-    return enableSpectrum(
-        horizontalSpectrum,
-        (e) => e.x / window.innerWidth,
-        (spectrum, rate, strength, range) => spectrum.addFrequencyByRate(rate, strength, range),
-        strength,
-        range
-    );
-};
-
-/**
- * Enables vertical spectrum frequency effect on click
- * @param strength Optional strength of the frequency effect (default: 0.3)
- * @param range Optional range of the frequency effect (default: 2)
- * @returns Subscription that can be used to unsubscribe
- */
-export const enableVerticalSpectrum = (strength: number = 0.3, range: number = 2) => {
+export function enableVerticalSpectrum(strength: number = 0.3, range: number = 2) {
     const verticalSpectrum = spectrums["vertical"] as VerticalSpectrum;
 
     return enableSpectrum(
         verticalSpectrum,
-        (e) => e.y / window.innerHeight,
-        (spectrum, rate, strength, range) => spectrum.addFrequencyByRate(rate, strength, range),
+        (e) => e.y / inputArea.offsetHeight,
+        (rate, strength, range) => verticalSpectrum.addFrequencyByRate(rate, strength, range),
         strength,
         range
-    );
-};
+    )
 
-/**
- * Disables all spectrum frequency subscriptions
- */
-export const disableFrequencyOnClick = () => {
-    // Call each unsubscribe function
-    for (const s of subscriptions) s.unsubscribe();
-    for (const spectrum of Object.values(spectrums)) {
-        spectrum.setEnable(false);
-        spectrum.refreshFrequency();
+}
+
+export function enableHorizontalSpectrum(strength: number = 0.3, range: number = 2) {
+    const horizontalSpectrum = spectrums["horizontal"] as HorizontalSpectrum;
+
+    return enableSpectrum(
+        horizontalSpectrum,
+        (e) => e.x / inputArea.offsetWidth,
+        (rate, strength, range) => horizontalSpectrum.addFrequencyByRate(rate, strength, range),
+        strength,
+        range
+    )
+}
+
+export function disableAllSpectrum() {
+    for (const subscription of subscriptions) {
+        subscription.unsubscribe();
     }
-
-    // Clear the subscriptions array
-    subscriptions.length = 0;
-};
+    for (const spectrum of Object.values(spectrums)){
+        spectrum.setEnable(false);
+    }
+}

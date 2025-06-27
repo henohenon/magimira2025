@@ -18,8 +18,7 @@ events.on("onLoaded", () => {
             currentPosition = lastPosition + deltaTime;
         }
         updateTweenList(currentTime);
-
-        updateLogic(currentPosition, deltaTime);
+        updateLogicFunction(lastPosition, currentPosition, deltaTime);
 
         lastTime = currentTime;
         lastPosition = currentPosition;
@@ -29,7 +28,7 @@ events.on("onLoaded", () => {
 });
 
 // Function type for updateLogic
-export type UpdateLogicFunction = (currentPosition: number, delta: number) => void;
+export type UpdateLogicFunction = (lastPosition: number, currentPosition: number, delta: number) => void;
 
 // Variable to store the single updateLogic function
 let updateLogicFunction: UpdateLogicFunction = () => {};
@@ -38,17 +37,12 @@ export const setUpdateLogic = (fn: UpdateLogicFunction): void => {
   updateLogicFunction = fn;
 };
 
-const updateLogic = (currentPosition: number, deltaTime: number): void => {
-  if (updateLogicFunction) {
-    updateLogicFunction(currentPosition, deltaTime);
-  }
-};
-
 export const stopUpdateCycle = () => {
     isPause = true;
 }
 
 export const restartUpdateCycle = (position: number) => {
+    console.log("Restart update cycle at", position);
     lastTime = performance.now();
     lastPosition = position;
     isPause = false;

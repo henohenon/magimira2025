@@ -60,7 +60,7 @@
     return Number(this.inputField1?.value);
   }
   public set value1(newValue) {
-    if (this.inputField1) {
+    if (this.inputField1 && !this.inputField1.matches(':focus')) {
       this.inputField1.valueAsNumber = newValue;
     }
   }
@@ -68,7 +68,7 @@
     return Number(this.inputField2?.value);
   }
   public set value2(newValue) {
-    if (this.inputField2) {
+    if (this.inputField2 && !this.inputField2.matches(':focus')) {
       this.inputField2.valueAsNumber = newValue;
     }
   }

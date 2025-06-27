@@ -9,20 +9,20 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250606.0",
-    "@tailwindcss/vite": "^4.1.8",
+    "@cloudflare/workers-types": "^4.20250627.0",
+    "@tailwindcss/vite": "^4.1.11",
     "@types/babylonjs": "^2.4.5",
     "biome": "^0.3.3",
-    "lefthook": "^1.11.13",
+    "lefthook": "^1.11.14",
     "rollup-plugin-visualizer": "^5.14.0",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "@babylonjs/core": "^8.11.0",
-    "@babylonjs/loaders": "^8.11.0",
+    "@babylonjs/core": "^8.14.0",
+    "@babylonjs/loaders": "^8.14.0",
     "mitt": "^3.0.1",
-    "prismatix-input": "^0.1.5",
+    "prismatix-input": "^0.1.13",
     "textalive-app-api": "^0.4.0"
   }
 }

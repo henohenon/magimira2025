@@ -1,8 +1,10 @@
+import {Light} from "@babylonjs/core/Lights";
 import {HemisphericLight} from "@babylonjs/core/Lights/hemisphericLight";
 import {SpotLight} from "@babylonjs/core/Lights/spotLight";
 import {PointLight} from "@babylonjs/core/Lights/pointLight";
 import {Vector3} from "@babylonjs/core/Maths/math.vector";
 import {Color3} from "@babylonjs/core/Maths/math.color";
+
 import {events} from "./events";
 
 export type LightType = 'spot' | 'point' | 'hemispheric';
@@ -27,6 +29,7 @@ const pointSettings = {
     intensity: 0,
     diffuse: new Color3(0.6, 0.6, 1), // 青みがかった光（少し明るく）
     position: new Vector3(0, 2, 0),
+    range: 10, // 光の届く範囲を設定
 };
 
 export const resetHemispheric = () => {
@@ -50,6 +53,7 @@ export const resetPoint = () => {
     point.intensity = pointSettings.intensity;
     point.diffuse = pointSettings.diffuse;
     point.position = pointSettings.position;
+    point.range = pointSettings.range;
 }
 
 events.on("onSceneDefinition", ({scene}) => {
@@ -59,6 +63,7 @@ events.on("onSceneDefinition", ({scene}) => {
 
     // スポットライト (初期状態では無効)
     lights.spot = new SpotLight("spotLight", spotSettings.position!, spotSettings.direction!, spotSettings.range!, spotSettings.exponent!, scene);
+    lights.spot.falloffType = Light.FALLOFF_GLTF;
     resetSpot();
 
     // ポイントライト (初期状態では無効)
@@ -70,13 +75,13 @@ export function setLightEnabled(lightType: LightType, enabled: boolean) {
     lights[lightType].setEnabled(enabled);
 }
 
-export function setLightDiffuse(lightType: LightType, color: string) {
-    lights[lightType].diffuse = Color3.FromHexString(color);
+export function setLightDiffuse(lightType: LightType, color: Color3) {
+    lights[lightType].diffuse = color;
 }
 
-export function setHemisphericGroundColor(color: string) {
+export function setHemisphericGroundColor(color: Color3) {
     const hemi = lights.hemispheric as HemisphericLight;
-    hemi.groundColor = Color3.FromHexString(color);
+    hemi.groundColor = color;
 }
 
 export function setLightIntensity(lightType: LightType, intensity: number) {
@@ -130,4 +135,15 @@ export function getLightDirection(lightType: DirectionLightType): Vector3 {
 export function getLightPosition(lightType: PositionLightType): Vector3 {
     const light = lights[lightType] as SpotLight | PointLight;
     return light.position;
+}
+
+// Range functions for point light
+export function setPointLightRange(range: number) {
+    const point = lights.point as PointLight;
+    point.radius = range;
+}
+
+export function getPointLightRange(): number {
+    const point = lights.point as PointLight;
+    return point.range;
 }

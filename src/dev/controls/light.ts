@@ -1,21 +1,23 @@
 ﻿import {
-    setLightIntensity,
+    addLightDirection,
+    addLightPosition,
+    getHemisphericGroundColor,
+    getLightDiffuse,
+    getLightDirection,
+    getLightEnabled,
+    getLightIntensity,
+    getLightPosition,
+    getPointLightRange,
     resetHemispheric,
+    resetPoint,
+    resetSpot,
     setHemisphericGroundColor,
     setLightDiffuse,
+    setLightDirection,
     setLightEnabled,
-    addLightPosition,
-    setLightPosition, 
-    addLightDirection, 
-    setLightDirection, 
-    resetPoint, 
-    resetSpot,
-    getLightEnabled,
-    getLightDiffuse,
-    getHemisphericGroundColor,
-    getLightIntensity,
-    getLightDirection,
-    getLightPosition
+    setLightIntensity,
+    setLightPosition,
+    setPointLightRange
 } from "~/lib/babylon/light.ts";
 import {setLightingPreset, switchLight} from "~/game/light.ts";
 
@@ -23,6 +25,7 @@ import type {ToggleSwitch} from "../web-components/toggle-switch.ts";
 import type {ColorPicker} from "../web-components/color-picker.ts";
 import type {NumberInput} from "../web-components/number-input.ts";
 import type {TripleInput} from "../web-components/triple-input.ts";
+import {Color3} from "@babylonjs/core/Maths/math.color";
 
 const spotLightEnable = document.getElementById("spot-light-enable") as ToggleSwitch;
 const spotLightDiffuse = document.getElementById("spot-light-diffuse") as ColorPicker;
@@ -33,6 +36,7 @@ const spotLightSetPositionInput = document.getElementById("spot-light-set-positi
 const pointLightEnable = document.getElementById("point-light-enable") as ToggleSwitch;
 const pointLightDiffuse = document.getElementById("point-light-diffuse") as ColorPicker;
 const pointLightIntensity = document.getElementById("point-light-intensity") as NumberInput;
+const pointLightRange = document.getElementById("point-light-range") as NumberInput;
 const pointLightAddPositionInput = document.getElementById("point-light-add-position-input") as TripleInput;
 const pointLightAddPositionButton = document.getElementById("point-light-add-position-button") as HTMLButtonElement;
 const pointLightSetPositionInput = document.getElementById("point-light-set-position-input") as TripleInput;
@@ -58,6 +62,7 @@ if (!spotLightEnable || !pointLightEnable || !hemisphericLightEnable ||
     !spotLightDiffuse || !pointLightDiffuse || !hemisphericLightDiffuse ||
     !hemisphericLightGroundColor ||
     !spotLightIntensity || !pointLightIntensity || !hemisphericLightIntensity ||
+    !pointLightRange ||
     !spotLightAddPositionInput || !pointLightAddPositionInput || !hemisphericLightAddDirectionInput ||
     !spotLightAddPositionButton || !pointLightAddPositionButton || !hemisphericLightAddDirectionButton ||
     !spotLightSetPositionInput || !pointLightSetPositionInput || !hemisphericLightSetDirectionInput ||
@@ -68,6 +73,7 @@ if (!spotLightEnable || !pointLightEnable || !hemisphericLightEnable ||
         spotLightDiffuse, pointLightDiffuse, hemisphericLightDiffuse,
         hemisphericLightGroundColor,
         spotLightIntensity, pointLightIntensity, hemisphericLightIntensity,
+        pointLightRange,
         spotLightAddPositionInput, pointLightAddPositionInput, hemisphericLightAddDirectionInput,
         spotLightAddPositionButton, pointLightAddPositionButton, hemisphericLightAddDirectionButton,
         spotLightSetPositionInput, pointLightSetPositionInput, hemisphericLightSetDirectionInput,
@@ -88,19 +94,27 @@ hemisphericLightEnable.subscribe(toggle => {
 
 spotLightDiffuse.subscribe(color => {
     if (!color) return;
-    setLightDiffuse("spot", color);
+    const color3 = Color3.FromHexString(color);
+    if (!color3) return;
+    setLightDiffuse("spot", color3);
 });
 pointLightDiffuse.subscribe(color => {
     if (!color) return;
-    setLightDiffuse("point", color);
+    const color3 = Color3.FromHexString(color);
+    if (!color3) return;
+    setLightDiffuse("point", color3);
 });
 hemisphericLightDiffuse.subscribe(color => {
     if (!color) return;
-    setLightDiffuse("hemispheric", color);
+    const color3 = Color3.FromHexString(color);
+    if (!color3) return;
+    setLightDiffuse("hemispheric", color3);
 });
 hemisphericLightGroundColor.subscribe(color => {
     if (!color) return;
-    setHemisphericGroundColor(color);
+    const color3 = Color3.FromHexString(color);
+    if (!color3) return;
+    setHemisphericGroundColor(color3);
 });
 
 spotLightIntensity.subscribe(value => {
@@ -108,6 +122,9 @@ spotLightIntensity.subscribe(value => {
 });
 pointLightIntensity.subscribe(value => {
     setLightIntensity("point", value);
+});
+pointLightRange.subscribe(value => {
+    setPointLightRange(value);
 });
 hemisphericLightIntensity.subscribe(value => {
     setLightIntensity("hemispheric", value);
@@ -172,23 +189,23 @@ export function updateLightInfo() {
     hemisphericLightEnable.checked = getLightEnabled("hemispheric");
 
     // Update color pickers with current light diffuse colors
-    const spotDiffuse = getLightDiffuse("spot");
-    spotLightDiffuse.value = spotDiffuse.toString();
+    spotLightDiffuse.value = getLightDiffuse("spot");
 
-    const pointDiffuse = getLightDiffuse("point");
-    pointLightDiffuse.value = pointDiffuse.toString();
 
-    const hemisphericDiffuse = getLightDiffuse("hemispheric");
-    hemisphericLightDiffuse.value = hemisphericDiffuse.toString();
+    pointLightDiffuse.value = getLightDiffuse("point");
+
+    hemisphericLightDiffuse.value = getLightDiffuse("hemispheric");
 
     // Update hemispheric ground color
-    const groundColor = getHemisphericGroundColor();
-    hemisphericLightGroundColor.value = groundColor.toString();
+    hemisphericLightGroundColor.value = getHemisphericGroundColor();
 
     // Update intensity sliders
     spotLightIntensity.value = getLightIntensity("spot");
     pointLightIntensity.value = getLightIntensity("point");
     hemisphericLightIntensity.value = getLightIntensity("hemispheric");
+
+    // Update range slider
+    pointLightRange.value = getPointLightRange();
 
     // Update position inputs
     const spotPosition = getLightPosition("spot");

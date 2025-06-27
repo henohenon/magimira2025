@@ -7,7 +7,7 @@ import {updateLightInfo} from "./light";
 import {updateTextAliveInfo} from "./text-alive";
 import {updateGlitchCount} from "./glitch";
 
-setUpdateLogic((currentPosition, delta) => {
+setUpdateLogic((lastPosition, currentPosition, delta) => {
     // Update camera position and rotation info
     updateTextAliveInfo(currentPosition);
     updateCameraInfo();
@@ -15,5 +15,5 @@ setUpdateLogic((currentPosition, delta) => {
     updateLightInfo();
     updateGlitchCount();
 
-    gameUpdate(currentPosition, delta);
+    gameUpdate(lastPosition, currentPosition, delta);
 });
