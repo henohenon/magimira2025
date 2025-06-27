@@ -37,6 +37,12 @@ import "./update";
 import "./dom/bottom-lyrics.ts";
 import "./input";
 import "./events";
+import {
+    disableAllSpectrum,
+    enableCircleSpectrum,
+    enableHorizontalSpectrum,
+    enableVerticalSpectrum
+} from "~/game/spectrum.ts";
 
 setLightingPreset("night");
 switchCamera("free");
@@ -167,3 +173,8 @@ const updateView = async (viewKey: string) => {
 
     }
 }
+
+disableAllSpectrum();
+enableCircleSpectrum();
+enableVerticalSpectrum();
+enableHorizontalSpectrum();

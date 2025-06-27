@@ -5,27 +5,62 @@ import {createKeyboardInput, type KeyboardInputEvent} from "prismatix-input/inpu
 import {createPointerInputWithPosition} from "prismatix-input/input/pointer";
 import {createKeycodePositionMiddleware} from "prismatix-input/middleware/keycode-position";
 import type {PRXSubject} from "prismatix-input/types";
-import {createCircleRipple} from "~/lib/effects/ripple";
 
 type Events = {
     "keyboard": KeyboardInputEvent,
+    "pointer": WithPositionInputEvent
     "position": WithPositionInputEvent
 };
 
 const emitter = mitt<Events>();
 const keyboard = createSubject<Events>(emitter, "keyboard") as PRXSubject<KeyboardInputEvent>;
-const position = createSubject<Events>(emitter, "position") as PRXSubject<WithPositionInputEvent>;
+const pointer = createSubject<Events>(emitter, "pointer") as PRXSubject<WithPositionInputEvent>;
+export const position = createSubject<Events>(emitter, "position") as PRXSubject<WithPositionInputEvent>;
 
-const inputArea = document.getElementById("input-area");
-if (!inputArea) {
+export const inputArea = document.getElementById("input-area") || document.body;
+if (!document.getElementById("input-area")) {
     throw new Error("Input area not found");
 }
-console.log("Input area found:", inputArea as EventTarget);
-createKeyboardInput(keyboard, { events: "keydown", target: inputArea as EventTarget });
-createPointerInputWithPosition(position, { events: "pointerdown", target: inputArea as EventTarget });
-createKeycodePositionMiddleware(keyboard, position, { scaleTarget: inputArea });
 
-position.subscribe(event => {
-    console.log("position", event);
-    createCircleRipple(event.x, event.y);
+console.log("Input area found:", inputArea as EventTarget);
+createKeyboardInput(keyboard, { events: ["keydown-norepeat", "keyup"], target: inputArea as EventTarget });
+createPointerInputWithPosition(pointer, { events: ["pointerdown", "pointermove", "pointerup"], target: inputArea as EventTarget });
+
+const keyPositions = new Map<string, { x: number, y: number }>();
+pointer.subscribe(e => {
+   const pos = keyPositions.get(e.key);
+   switch (e.action) {
+       case "start":
+           position.next(e);
+           keyPositions.set(e.key, e);
+           break;
+       case "move":
+           if(pos){
+               position.next({
+                   ...e,
+                   action: "end",
+                   x: pos.x,
+                   y: pos.y,
+               });
+               position.next({
+                   ...e,
+                   action: "start",
+               });
+               keyPositions.set(e.key, e);
+           }
+           break;
+       case "end":
+           if(pos){
+               position.next({
+                   ...e,
+                   action: "end",
+                   x: pos.x,
+                   y: pos.y,
+               });
+           }
+           keyPositions.delete(e.key);
+           position.next(e);
+           break;
+   }
 });
+createKeycodePositionMiddleware(keyboard, position, { scaleTarget: inputArea });
