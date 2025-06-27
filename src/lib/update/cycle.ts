@@ -5,7 +5,7 @@ import {updateTweenList} from "./tween";
 
 let lastTime = 0;
 let lastPosition = 0;
-let isPause = false;
+let isPause = true;
 events.on("onLoaded", () => {
     lastTime = performance.now();
     lastPosition = 0;
