@@ -1,37 +1,31 @@
 ﻿import mitt from "mitt";
-import {createSubjects} from "prismatix-input/mitt";
-import {
-    keyboardInput,
-    pointerInputWithPosition
-} from "prismatix-input/web-native";
-import type {
-    KeyboardInputEvent, KeyboardInputOptions,
-    PointerInputOptions, WithPositionInputEvent
-} from "prismatix-input/web-native";
-import type {Subject} from "prismatix-input/subject";
-import {
-    type CounterInputEvent, type CounterMiddleware,
-    counterMiddleware,
-    type DurationInputEvent,
-    repeatInput,
-    type RepeatInputEvent,
-    startToEndDurationInput
-} from "prismatix-input/middleware";
+import {createSubject} from "prismatix-input/mitt-ex";
+import type {WithPositionInputEvent} from "prismatix-input/input";
+import {createKeyboardInput, type KeyboardInputEvent} from "prismatix-input/input/keyboard";
+import {createPointerInputWithPosition} from "prismatix-input/input/pointer";
+import {createKeycodePositionMiddleware} from "prismatix-input/middleware/keycode-position";
+import type {PRXSubject} from "prismatix-input/types";
+import {createCircleRipple} from "~/lib/effects/ripple";
 
 type Events = {
-    anyInput: KeyboardInputEvent | WithPositionInputEvent;
-    pointer: WithPositionInputEvent;
-    duration: DurationInputEvent;
-    durationRepeat: DurationInputEvent | RepeatInputEvent;
-    counter: CounterInputEvent;
+    "keyboard": KeyboardInputEvent,
+    "position": WithPositionInputEvent
 };
 
 const emitter = mitt<Events>();
-export const { anyInput, pointer, duration, durationRepeat, counter } = createSubjects(emitter, ["anyInput", "pointer", "durationRepeat", "duration", "counter"]);
+const keyboard = createSubject<Events>(emitter, "keyboard") as PRXSubject<KeyboardInputEvent>;
+const position = createSubject<Events>(emitter, "position") as PRXSubject<WithPositionInputEvent>;
 
 const inputArea = document.getElementById("input-area");
-pointerInputWithPosition([anyInput as Subject<WithPositionInputEvent>, pointer], { events: ["pointerdown", "pointermove", "pointerup"], target: inputArea } as PointerInputOptions);
-keyboardInput(anyInput as Subject<KeyboardInputEvent>, { events: ["keydown-norepeat", "keyup"], target: inputArea as EventTarget } as KeyboardInputOptions);
-startToEndDurationInput(anyInput, [durationRepeat as Subject<DurationInputEvent>, duration], { minDuration: 300 });
-repeatInput(anyInput, durationRepeat as Subject<RepeatInputEvent>)
-export const counterInstance = counterMiddleware(durationRepeat, counter) as CounterMiddleware;
+if (!inputArea) {
+    throw new Error("Input area not found");
+}
+console.log("Input area found:", inputArea as EventTarget);
+createKeyboardInput(keyboard, { events: "keydown", target: inputArea as EventTarget });
+createPointerInputWithPosition(position, { events: "pointerdown", target: inputArea as EventTarget });
+createKeycodePositionMiddleware(keyboard, position, { scaleTarget: inputArea });
+
+position.subscribe(event => {
+    console.log("position", event);
+    createCircleRipple(event.x, event.y);
+});

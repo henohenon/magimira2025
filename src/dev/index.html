@@ -264,7 +264,7 @@
             </div>
         </dev-accordion>
     </aside>
-    <div id="input-area" class="relative flex-1">
+    <div id="input-area" class="relative flex-1" tabindex="0">
         <canvas id="babylon-canvas" class="max -z-10"></canvas>
         <canvas id="effects-canvas" class="max -z-9"></canvas>
         <div id="app" class="absolute inset-0 w-full h-full">
@@ -273,7 +273,7 @@
             <div id="custom-color-overlay" class="max hidden"></div>
 
             <div id="init" class="flex h-full justify-center items-center flex-col">
-                <h1 class="text-white text-7xl italic font-serif">Listen with Miku</h1>
+                <h1 class="text-white text-7xl italic font-serif select-none">Listen with Miku</h1>
                 <button id="start-button" class="mt-5 px-4 py-2 bg-blue-500 text-white rounded">Start</button>
             </div>
             <div id="playing" class="max hidden">
