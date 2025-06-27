@@ -189,9 +189,13 @@ const updateView = async (viewKey: string) => {
             tween(10, 0, 4000, setWhiteBlur);
             whiteFadeOut(4000);
             neverEndTextFadeOut(500);
+            setHemisphericGroundColor(Color3.White());
             break;
-        case "奏でた今日が僕らの道だ":
-
-
+        case "この手掴めばまた始まるんだ":
+            setRippleColor("#ffffff");
+            enableCircleRipple();
+            enableSquareRipple();
+            break;
+        case "グシャグシャのまま描いた“アイ”":
     }
 }
