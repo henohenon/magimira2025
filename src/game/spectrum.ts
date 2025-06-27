@@ -9,7 +9,7 @@ import {
     type HorizontalSpectrum
 } from "~/lib/effects/spectrum";
 
-import {inputArea, position} from "./input.ts";
+import {inputArea, positionSpectrum} from "./input.ts";
 
 const subscriptions: Subscription[] = [];
 /**
@@ -30,7 +30,7 @@ function enableSpectrum<T extends Spectrum>(
 ) {
     spectrum.setEnable(true);
 
-    const subscription = position.subscribe(e => {
+    const subscription = positionSpectrum.subscribe(e => {
         console.log(e);
         if (e.action === "start") {
             addFrequency(calculateRate(e), strength, range);

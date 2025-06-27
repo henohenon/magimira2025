@@ -38,28 +38,37 @@ import "./dom/bottom-lyrics.ts";
 import "./input";
 import "./events";
 import {
-    disableAllSpectrum,
-    enableCircleSpectrum,
-    enableHorizontalSpectrum,
-    enableVerticalSpectrum
+    disableAllSpectrum
 } from "~/game/spectrum.ts";
+import {disableAllRipple, enableCircleRipple, enableSquareRipple, setRippleColor} from "~/game/ripple.ts";
 
 setLightingPreset("night");
 switchCamera("free");
 setFreePosition(-2.5, 1.5, -8);
 setFreeRotation(0, 0, 0);
+disableAllSpectrum();
+disableAllRipple();
+
 babylonEvents.on("onModelsLoaded", () => {
     setPosition("dotmiku", -2.5, 0 , -1);
     setModelRotation("dotmiku", 0, 0, 0);
 });
 
+const cryptonColorCodes = {
+    "MEIKO": "#dd111e",
+    "KAITO": "#1247a5",
+    "Miku": "#22c0ef",
+    "Rin": "#e66334",
+    "Ren": "#e68c19",
+    "Luka": "#dd448a",
+}
 const cryptonColors = {
-    "MEIKO": Color3.FromHexString("#dd111e"),
-    "KAITO": Color3.FromHexString("#1247a5"),
-    "Miku": Color3.FromHexString("#22c0ef"),
-    "Rin": Color3.FromHexString("#e66334"),
-    "Ren": Color3.FromHexString("#e68c19"),
-    "Luka": Color3.FromHexString("#dd448a"),
+    "MEIKO": Color3.FromHexString(cryptonColorCodes["MEIKO"]),
+    "KAITO": Color3.FromHexString(cryptonColorCodes["KAITO"]),
+    "Miku": Color3.FromHexString(cryptonColorCodes["Miku"]),
+    "Rin": Color3.FromHexString(cryptonColorCodes["Rin"]),
+    "Ren": Color3.FromHexString(cryptonColorCodes["Ren"]),
+    "Luka": Color3.FromHexString(cryptonColorCodes["Luka"]),
 }
 
 // Listen for key frame events
@@ -74,6 +83,7 @@ textaliveEvents.on("onPhrase", ({phrase}) => {
 const updateView = async (viewKey: string) => {
     switch(viewKey) {
         case "init":
+            enableCircleRipple();
             tween(getHemisphericGroundColor(), Color3.White(), 7000, setHemisphericGroundColor);
             tween(getLightDiffuse("hemispheric"), Color3.White(),7000, (x) => {
                 setLightDiffuse("hemispheric", x);
@@ -95,15 +105,20 @@ const updateView = async (viewKey: string) => {
                 setArcSphericalCoordinates(x, 75, 6);
             });
             tween(getHemisphericGroundColor(), cryptonColors["Rin"], 3000, setHemisphericLightColor);
+            setRippleColor(cryptonColorCodes["Rin"]);
             await delayForMilSeconds(1000);
             break;
         case "街明かりが渦巻く躓くmymind":
             tween(getHemisphericGroundColor(), cryptonColors["Miku"], 3000, setHemisphericLightColor);
+            setRippleColor(cryptonColorCodes["Miku"]);
             break;
         case "再起動theothernight":
             tween(getHemisphericGroundColor(), cryptonColors["MEIKO"], 3000, setHemisphericLightColor);
+            setRippleColor(cryptonColorCodes["MEIKO"]);
             break;
         case "(Don’tyouknow？)":
+            disableAllRipple();
+            enableSquareRipple();
             setCustomColor("#1247a5"); // KAITO
             await customColorFadeIn(1000).promise;
 
@@ -128,18 +143,19 @@ const updateView = async (viewKey: string) => {
             setArcTargetPosition(-2.5, 0.8, -1);
             setArcSphericalCoordinates(-90, 80, 2);
             switchCameraWithCrossFade("arc", 3000);
+            setRippleColor(cryptonColorCodes["Luka"]);
             tween(2, 15, 4500, setArcRadius);
             tween(80, 20, 4500, setArcBeta);
             break;
         case "(Yeahdoit！)":
-            setCustomColor("#e66334"); // Rin
+            setRippleColor(cryptonColorCodes["Rin"]);
+            setCustomColor(cryptonColorCodes["Rin"]);
             await customColorFadeIn(1000).promise;
-
             setHemisphericLightColor(cryptonColors["MEIKO"]);
+            setRippleColor(cryptonColorCodes["MEIKO"]);
             setFreePosition(1, 1, -1);
             setFreeRotation(-51, 9, 8);
             switchCamera("free");
-
             customColorFadeOut(1000);
             break;
         case "めくるめくこの雑踏をかき分けていく":
@@ -149,15 +165,19 @@ const updateView = async (viewKey: string) => {
             setFreeRotation(115, 13, 0, "free2");
             switchCameraWithCrossFade("free2", 1000);
             tween(getHemisphericGroundColor(), cryptonColors["Miku"], 3000, setHemisphericLightColor);
+            setRippleColor(cryptonColorCodes["Miku"]);
             break;
         case "空回る今だって僕らの祈り毎秒更新":
             tween(getHemisphericGroundColor(), cryptonColors["KAITO"], 3000, setHemisphericLightColor);
+            setRippleColor(cryptonColorCodes["KAITO"]);
             break;
         case "不安感だって攫っていく未来にrideon":
             setLightDiffuse("hemispheric", cryptonColors["Rin"]);
             setHemisphericGroundColor(cryptonColors["Ren"]);
+            setRippleColor(cryptonColorCodes["Ren"]);
             break;
         case "Yeah！":
+            disableAllRipple();
             shutterFadeOut(0);
             break;
         case "終わりなんて":
@@ -170,11 +190,8 @@ const updateView = async (viewKey: string) => {
             whiteFadeOut(4000);
             neverEndTextFadeOut(500);
             break;
+        case "奏でた今日が僕らの道だ":
+
 
     }
 }
-
-disableAllSpectrum();
-enableCircleSpectrum();
-enableVerticalSpectrum();
-enableHorizontalSpectrum();
