@@ -23,6 +23,12 @@ export const keyFrames: KeyFrame[] = [
   { name: "もう全部奏でたいんだ", position: 33000 },
   { name: "終わりなんて", position: 54577 },
   { name: "ない", position: 55600 },
+  { name: "この手掴めば", position: 56611 },
+  { name: "また始まるんだ", position: 58600 },
+  { name: "グシャグシャのまま描いた", position: 59965 },
+  { name: "描いた-“アイ”", position: 62400 },
+  { name: "灯した歌は", position: 64860 },
+  { name: "君に届く", position: 67000 },
 ];
 
 
