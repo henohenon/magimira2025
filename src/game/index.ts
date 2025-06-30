@@ -77,6 +77,7 @@ gameEvents.on("onLoaded", async ()=>{
     setModelRotation("room", 0, 0, 0);
     setFreePosition(-2.5, 1, -2);
     setFreeRotation(0, 25, 0);
+    enableCircleRipple();
 
     await delayForMilSeconds(1000);
     audio.play();
@@ -98,7 +99,6 @@ const updateView = async (viewKey: string) => {
     console.log(viewKey);
     switch(viewKey) {
         case "init":
-            enableCircleRipple();
             break;
         case "Sotellusストリートライト": // 全員
             setFreeRotation(-90, 0, 0, "free2");

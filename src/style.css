@@ -4,6 +4,10 @@
     @apply absolute top-0 left-0 m-0 inset-0 w-full h-full select-none;
 }
 
+.textalive-banner.hidden{
+    display: none!important;
+}
+
 #loading-wrapper{
     z-index: 10001;
 }
