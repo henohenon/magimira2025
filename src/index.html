@@ -16,30 +16,30 @@
 
       <div id="init" class="relative flex h-full justify-center items-center flex-col hidden">
           <div id="init-input" class="max"></div>
-          <h1 class="text-white text-7xl italic font-serif select-none">Listen with Miku</h1>
+          <h1 class="title-text">Listen with Miku</h1>
           <div class="h-10 mt-5 text-center select-none">
               <h3 class="h-9 text-white text-2xl">~Follow your heart~</h3>
               <h3 class="text-white text-xl">Just typing, tapping, or clicking</h3>
           </div>
-          <button id="credit-button" class="absolute bottom-0 left-0 px-4 text-white text-2xl flex items-center border border-transparent">credit</button>
+          <button id="credit-button" class="absolute bottom-0 right-0 px-4 text-white text-2xl flex items-center border border-transparent">credit</button>
           <div id="credit" class="max bg-white/15 backdrop-blur-sm flex flex-col align-cener justify-center text-center hidden">
               <h3 class="m-3 text-white text-2xl">model: Lat式ミク様</h3>
               <h3 class="m-3 text-white text-2xl">soundEffect: 果音ラボ様</h3>
               <h3 class="m-3 text-white text-2xl">staff: Alice, MeguIre, Ristoc, トリ, へのへのん</h3>
-              <button id="close-credit-button" class="absolute bottom-0 left-0 px-4 text-white text-2xl flex items-center border border-transparent">close</button>
+              <button id="close-credit-button" class="absolute bottom-0 right-0 px-4 text-white text-2xl flex items-center border border-transparent">close</button>
           </div>
       </div>
       <div id="playing" class="max pointer-events-none hidden">
           <div id="black-trim" class="max">
               <div id="black-trim-top" class="absolute w-full bg-stone-900"></div>
               <div id="black-trim-bottom" class="absolute w-full bottom-0 bg-stone-900 flex justify-center items-center">
-                  <h3 class="text-white text-4xl" id="lyrics-text"></h3>
+                  <h3 class="text-white mx-3 text-4xl sm:text-xl" id="lyrics-text"></h3>
               </div>
           </div>
           <h1 id="never-end-text" class="text-4xl italic absolute inset-0 flex items-center justify-center hidden">終わりなんてない</h1>
       </div>
       <div id="loading-wrapper" class="max bg-white/15 backdrop-blur-sm flex flex-col justify-center items-center hide">
-          <h1 class="text-white text-7xl italic font-serif select-none">Listen with Miku</h1>
+          <h1 class="title-text">Listen with Miku</h1>
           <div class="flex h-10 mt-5 select-none">
               <div class="w-5 h-5 border-4 m-auto mx-3 border-t-transparent border-b-transparent border-white rounded-full animate-spin"></div>
               <div id="loading-text" class="text-white text-2xl">Loading...</div>
