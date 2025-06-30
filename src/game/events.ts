@@ -8,6 +8,7 @@ type KeyFrame = {
 type Events = {
   onLoaded: undefined;
   onGameStart: undefined;
+  onMusicStart: undefined;
   onKeyFrame: {
     key: KeyFrame;
     position: number;

@@ -7,3 +7,14 @@
 #loading-wrapper{
     z-index: 10001;
 }
+
+#credit-button, #close-credit-button{
+    height: 30px;
+    margin: 4px;
+}
+#credit-button:hover, #close-credit-button:hover{
+    @apply border-white;
+}
+#credit-button:active, #close-credit-button:active{
+    @apply bg-white;
+}

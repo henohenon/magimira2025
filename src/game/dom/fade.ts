@@ -9,6 +9,7 @@ const textaliveBanner = document.getElementsByClassName("textalive-banner")[0] a
 const loadingWrapper = document.getElementById("loading-wrapper");
 const playingContainer = document.getElementById("playing");
 const initContainer = document.getElementById("init");
+const creditContainer = document.getElementById("credit");
 const blackTrim = document.getElementById("black-trim") as HTMLElement;
 const blackTrimTop = document.getElementById("black-trim-top") as HTMLElement;
 const blackTrimBottom = document.getElementById("black-trim-bottom") as HTMLElement;
@@ -18,7 +19,7 @@ if (!whiteOverlay || !blackOverlay || !customColorOverlay) {
   throw new Error("Fade overlay elements not found in the DOM");
 }
 
-if (!playingContainer || !initContainer || !loadingWrapper || !textaliveBanner) {
+if (!playingContainer || !initContainer || !loadingWrapper || !textaliveBanner || !creditContainer) {
   throw new Error("Playing container not found");
 }
 
@@ -139,6 +140,24 @@ export const initContainerFadeOut = (duration: number = FADE_DURATION) => {
     initContainer.classList.add('hidden');
   }});
 }
+
+// Credit container fade functions
+export const creditContainerFadeOut = (duration: number = FADE_DURATION) => {
+  return tween(1, 0, duration, (x) => {
+    creditContainer.style.opacity = x.toString();
+  }, {onComplete: () => {
+    creditContainer.classList.add('hidden');
+  }});
+}
+
+export const creditContainerFadeIn = (duration: number = FADE_DURATION) => {
+  creditContainer.classList.remove('hidden');
+  return tween(0, 1, duration, (x) => {
+    creditContainer.style.opacity = x.toString();
+  });
+}
+
+
 // Shutter-like fade effect functions
 export const shutterIn = (duration: number = FADE_DURATION) => {
   // Get the viewport height
