@@ -255,7 +255,7 @@ export function getModelRotation(modelName: string): { x: number, y: number, z: 
  * @param z Z coordinate
  * @returns true if model was found and positioned, false otherwise
  */
-export function setPosition(modelName: string, x: number, y: number, z: number): boolean {
+export function setModelPosition(modelName: string, x: number, y: number, z: number): boolean {
 	const mesh = rootModels[modelName];
 	if (!mesh || isNaN(x) || isNaN(y) || isNaN(z)) {
 		console.warn(`Invalid model name or position values: ${modelName}, x=${x}, y=${y}, z=${z}`);

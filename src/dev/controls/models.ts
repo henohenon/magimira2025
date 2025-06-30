@@ -9,7 +9,7 @@ import {
     playAnimation,
     setModelRotation,
     setModelVisibility,
-    setPosition
+    setModelPosition
 } from "~/lib/babylon/mdl";
 
 import type {ToggleSwitch} from "../web-components/toggle-switch";
@@ -73,7 +73,7 @@ babylonEvents.on("onModelsLoaded", (modelNames) => {
         });
 
         setPositionInput.subscribe((value1, value2, value3) => {
-            setPosition(modelName, value1, value2, value3);
+            setModelPosition(modelName, value1, value2, value3);
         });
 
         addRotationButton.addEventListener("click", () => {

@@ -11,9 +11,8 @@ import {
     switchCamera,
     switchCameraWithCrossFade
 } from "~/lib/babylon/camera";
-import {events as babylonEvents} from "~/lib/babylon/events";
 import {events as textaliveEvents} from "~/lib/text-alive/events";
-import {setModelRotation, setPosition} from "~/lib/babylon/mdl";
+import {setModelRotation, setModelPosition} from "~/lib/babylon/mdl";
 import {
     getHemisphericGroundColor,
     getLightDiffuse,
@@ -51,11 +50,6 @@ setFreeRotation(0, 0, 0);
 disableAllSpectrum();
 disableAllRipple();
 
-babylonEvents.on("onModelsLoaded", () => {
-    setPosition("dotmiku", -2.5, 0 , -1);
-    setModelRotation("dotmiku", 0, 0, 0);
-});
-
 const cryptonColorCodes = {
     "MEIKO": "#dd111e",
     "KAITO": "#1247a5",
@@ -72,6 +66,13 @@ const cryptonColors = {
     "Ren": Color3.FromHexString(cryptonColorCodes["Ren"]),
     "Luka": Color3.FromHexString(cryptonColorCodes["Luka"]),
 }
+
+gameEvents.on("onLoaded", ()=>{
+    setModelPosition("dotmiku", -2.5, 0 , -1);
+    setModelRotation("dotmiku", 0, 0, 0);
+    setModelPosition("room", -2.1, 0 , 0);
+    setModelRotation("room", 0, 0, 0);
+});
 
 // Listen for key frame events
 gameEvents.on("onKeyFrame", ({key}) => {
