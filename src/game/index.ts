@@ -1,4 +1,4 @@
-﻿import { Color3 } from "@babylonjs/core/Maths/math.color";
+import { Color3 } from "@babylonjs/core/Maths/math.color";
 
 import {
     setArcAlpha,
@@ -11,7 +11,6 @@ import {
     switchCamera,
     switchCameraWithCrossFade
 } from "~/lib/babylon/camera";
-import {events as textaliveEvents} from "~/lib/text-alive/events";
 import {setModelRotation, setModelPosition} from "~/lib/babylon/mdl";
 import {
     getHemisphericGroundColor,
@@ -90,16 +89,10 @@ gameEvents.on("onLoaded", async ()=>{
 gameEvents.on("onKeyFrame", ({key}) => {
     updateView(key.name);
 });
-// Listen for key frame events
-textaliveEvents.on("onPhrase", ({phrase}) => {
-    updateView(phrase);
-});
+
 
 const updateView = async (viewKey: string) => {
-    console.log(viewKey);
     switch(viewKey) {
-        case "init":
-            break;
         case "Sotellusストリートライト": // 全員
             setFreeRotation(-90, 0, 0, "free2");
             setFreePosition(-1, 0.1, -1.3, "free2");
@@ -296,6 +289,52 @@ const updateView = async (viewKey: string) => {
             break;
         case "立ち尽くす街角": // ミク
             whiteFadeOut(1000);
+            break;
+        case "どれほど間違っても": // レン
+            break;
+        case "この灯火は何度だって輝く": // メイコ
+            break;
+        case "(宿す against gravity)": // カイト
+            break;
+        case "ここからはノンストップ": // ルカ
+            break;
+        case "宵闇の中でも": // リン
+            break;
+        case "消えない星を繋いでいたい": // ミク
+            break;
+        case "止め処なく bluff, bluff": // メイコ
+            break;
+        case "言葉の飾り 毎秒更新": // メイコ
+            break;
+        case "揺らぐ主役 舞台は未知の最前線": // ルカ・カイト
+            break;
+        case "Yeah!": // ルカ・カイト
+            break;
+        case "もう正解なんてない": // 全員
+            break;
+        case "奏でた今日が": // 全員
+            break;
+        case "僕らの道だ": // メイコ
+            break;
+        case "ずっと手放したくないんだ“アイ”": // リン
+            break;
+        case "いつだって願いを歌えば": // 全員
+            break;
+        case "君に会える": // カイト
+            break;
+        case "最高のステージ": // ルカ
+            break;
+        case "夢はもう譲れないんじゃない？": // レン
+            break;
+        case "零れたメモリを誘って": // ミク・カイト
+            break;
+        case "Twilight to tell us": // ルカ・リン
+            break;
+        case "Starlight to tell us": // レン・メイコ
+            break;
+        case "終わりなんてないこの手掴めば": // 全員
+            break;
+        case "咲かせた未来のその先へ": // ミク
             break;
 
     }
