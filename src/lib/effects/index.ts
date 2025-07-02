@@ -16,8 +16,6 @@ console.log("Canvas size:", canvas.width, canvas.height);
 const resizeCanvas = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    
-    console.log("Canvas resized to:", canvas.width, canvas.height);
 };
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);

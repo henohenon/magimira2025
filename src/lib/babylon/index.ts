@@ -1,16 +1,17 @@
 import "@babylonjs/loaders";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { Scene } from "@babylonjs/core/scene";
-
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
 import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
 import { StandardMaterial } from "@babylonjs/core/Materials";
 import { Color3 } from "@babylonjs/core/Maths/math.color";
+
 import { events } from "./events";
 import "./mdl";
 import "./camera";
 import "./light";
+
 
 const canvas = document.getElementById("babylon-canvas") as HTMLCanvasElement;
 if (!canvas) {

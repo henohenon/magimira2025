@@ -1,4 +1,4 @@
-import { Tween } from "@tweenjs/tween.js";
+import {Tween} from "@tweenjs/tween.js";
 import "@babylonjs/loaders";
 import {type Nullable} from "@babylonjs/core";
 import type {Scene} from "@babylonjs/core/scene";
@@ -7,10 +7,10 @@ import {FreeCamera} from "@babylonjs/core/Cameras/freeCamera";
 import {Quaternion, Vector3} from "@babylonjs/core/Maths/math.vector";
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
-import { PostProcess } from "@babylonjs/core/PostProcesses/postProcess";
-import { Effect, RenderTargetTexture } from "@babylonjs/core/Materials";
+import {PostProcess} from "@babylonjs/core/PostProcesses/postProcess";
+import {Effect, RenderTargetTexture} from "@babylonjs/core/Materials";
 
-import { tweenGroup } from "~/lib/update/cycle";
+import {tweenGroup} from "~/lib/update/cycle";
 
 import {degToRad, radToDeg} from ".";
 import {events} from "./events";
@@ -187,7 +187,6 @@ events.on("onSceneDefinition", async ({ engine, scene }) => {
 
     _scene.activeCamera = cameras.free;
 
-
     // クロスフェード用
     Effect.ShadersStore["crossfadeFragmentShader"] = `
         varying vec2 vUV;
@@ -248,13 +247,18 @@ export const switchCameraWithCrossFade = async (key: CameraType, duration: numbe
     _scene.customRenderTargets.push(crossRt);
     
     nextCamera.attachPostProcess(crossPp);
-    
+
     _scene.activeCamera = nextCamera;
-    
-    crossFadeTween = new Tween({ fade: 0.0 }).to({ fade: 1.0 }, duration).onUpdate(x => {
+    crossFadeRate = 1;
+    crossFadeTween = new Tween({ fade: 1 }).to({ fade: 0 }, duration).onUpdate(x => {
         crossFadeRate = x.fade;
-    }).start();
+    }).start().onComplete(()=>{
+        if (!crossFadeTween) return;
+        tweenGroup.remove(crossFadeTween);
+        crossFadeTween = null;
+    });
     tweenGroup.add(crossFadeTween);
+
 
 
     crossFadeTween.onComplete(() => {

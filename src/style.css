@@ -25,3 +25,7 @@
 #credit-button:active, #close-credit-button:active{
     @apply bg-white;
 }
+
+#orientation-warning{
+    z-index: 10002;
+}
