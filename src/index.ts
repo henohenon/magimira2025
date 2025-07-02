@@ -91,3 +91,34 @@ closeCreditButton.addEventListener("click", () => {
     creditTween = creditContainerFadeOut(500);
     isCredit = false;
 });
+
+const fullscreenCheckbox = document.getElementById("fullscreen-checkbox") as HTMLInputElement;
+if (!fullscreenCheckbox) throw new Error("Fullscreen checkbox not found");
+fullscreenCheckbox.addEventListener("change", async () => {
+    if (fullscreenCheckbox.checked) {
+        // 全画面に入る
+        if (document.documentElement.requestFullscreen) {
+            await document.documentElement.requestFullscreen();
+        }
+    } else {
+        // 全画面解除
+        if (document.exitFullscreen) {
+            await document.exitFullscreen();
+        }
+    }
+});
+document.addEventListener("fullscreenchange", () => {
+    fullscreenCheckbox.checked = document.fullscreenElement !== null;
+});
+
+const orientationWarning = document.getElementById("orientation-warning") as HTMLElement;
+if (!orientationWarning) throw new Error("Orientation warning not found");
+function checkWindowSize() {
+    if(window.innerWidth < window.innerHeight) {
+        orientationWarning.classList.remove("hidden");
+    }else{
+        orientationWarning.classList.add("hidden");
+    }
+}
+checkWindowSize();
+window.addEventListener("resize", checkWindowSize);

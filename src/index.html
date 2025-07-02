@@ -21,19 +21,23 @@
               <h3 class="h-9 text-white text-2xl">~Follow your heart~</h3>
               <h3 class="text-white text-xl">Just typing, tapping, or clicking</h3>
           </div>
-          <button id="credit-button" class="absolute bottom-0 right-0 px-4 text-white text-2xl flex items-center border border-transparent">credit</button>
+          <div class="absolute mt-55 flex items-center justify-center select-all">
+              <input type="checkbox" id="fullscreen-checkbox" class="mr-2 w-4 h-4 text-white bg-transparent border-2 border-white rounded focus:ring-white focus:ring-2">
+              <label for="fullscreen-checkbox" class="text-white text-lg cursor-pointer select-none">Full screen</label>
+          </div>
+          <button id="credit-button" class="absolute bottom-1 left-1 px-4 text-white text-2xl flex items-center border border-transparent">credit</button>
           <div id="credit" class="max bg-white/15 backdrop-blur-sm flex flex-col align-cener justify-center text-center hidden">
-              <h3 class="m-3 text-white text-2xl">model: Lat式ミク様</h3>
-              <h3 class="m-3 text-white text-2xl">soundEffect: 果音ラボ様</h3>
+              <h3 class="m-3 text-white text-2xl">model: どっと式ミク様</h3>
+              <h3 class="m-3 text-white text-2xl">soundEffect: 効果音ラボ様</h3>
               <h3 class="m-3 text-white text-2xl">staff: Alice, MeguIre, Ristoc, トリ, へのへのん</h3>
-              <button id="close-credit-button" class="absolute bottom-0 right-0 px-4 text-white text-2xl flex items-center border border-transparent">close</button>
+              <button id="close-credit-button" class="absolute bottom-1 left-1 px-4 text-white text-2xl flex items-center border border-transparent">close</button>
           </div>
       </div>
       <div id="playing" class="max pointer-events-none hidden">
           <div id="black-trim" class="max">
               <div id="black-trim-top" class="absolute w-full bg-stone-900"></div>
               <div id="black-trim-bottom" class="absolute w-full bottom-0 bg-stone-900 flex justify-center items-center">
-                  <h3 class="text-white mx-3 text-4xl sm:text-xl" id="lyrics-text"></h3>
+                  <h3 class="text-white mx-3 text-4xl" id="lyrics-text"></h3>
               </div>
           </div>
           <h1 id="never-end-text" class="text-4xl italic absolute inset-0 flex items-center justify-center hidden">終わりなんてない</h1>
@@ -47,6 +51,21 @@
       </div>
     </div>
     <div id="media"></div>
+    <div id="orientation-warning" class="max hidden" style="z-index: 10002">
+        <div class="bg-white/90 rounded-lg p-3 m-5 text-center flex justify-center flex-col">
+            <div class="flex justify-center items-center">
+                <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-700">
+                    <rect x="8" y="18" width="48" height="28" rx="4" ry="4" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+                    <rect x="12" y="22" width="40" height="20" rx="2" ry="2" fill="white"/>
+                    <circle cx="52" cy="32" r="2" fill="white"/>
+                    <rect x="16" y="20" width="4" height="1" rx="0.5" fill="currentColor"/>
+                </svg>
+                <h2 class="text-xl font-bold text-black">Turn your phone!</h2>
+            </div>
+            <p class="text-gray-700">For a better experience, please play on a widescreen display.</p>
+            <p class="text-gray-700">よりよい体験のため横長の画面でプレイしてください。</p>
+        </div>
+    </div>
     <script type="module" src="./index.ts"></script>
   </body>
 </html>

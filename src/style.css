@@ -19,11 +19,6 @@
     z-index: 10001;
 }
 
-#credit-button, #close-credit-button{
-    height: 30px;
-    margin: 4px;
-    margin-bottom: 38px;
-}
 #credit-button:hover, #close-credit-button:hover{
     @apply border-white;
 }

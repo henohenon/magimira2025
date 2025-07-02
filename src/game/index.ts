@@ -81,8 +81,8 @@ gameEvents.on("onKeyFrame", ({key}) => {
 const updateView = async (viewKey: string) => {
     switch(viewKey) {
         case "Sotellusストリートライト": // 全員
-            setFreeRotation(180, 0, 0, "free2");
-            setFreePosition(-1, 0.1, 3, "free2");
+            setFreeRotation(145, 15, 0, "free2");
+            setFreePosition(-5, 2, 5, "free2");
             switchCameraWithCrossFade("free2", 1000);
             break;
         case "揺らめく都市のmagic": // リン
