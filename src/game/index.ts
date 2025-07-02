@@ -1,11 +1,6 @@
 import { Color3 } from "@babylonjs/core/Maths/math.color";
 
 import {
-    setArcAlpha,
-    setArcBeta,
-    setArcRadius,
-    setArcSphericalCoordinates,
-    setArcTargetPosition,
     setFreePosition,
     setFreeRotation,
     switchCamera,
@@ -13,21 +8,14 @@ import {
 } from "~/lib/babylon/camera";
 import {setModelRotation, setModelPosition} from "~/lib/babylon/mdl";
 import {
-    getHemisphericGroundColor,
-    setHemisphericGroundColor, setLightDiffuse,
+    setLightDiffuse,
     setLightIntensity
 } from "~/lib/babylon/light";
-import {tween} from "~/lib/update/tween.ts";
 import { delayForMilSeconds } from "~/lib/update";
 
-import {setHemisphericLightColor, setLightingPreset } from "./light";
+import { setLightingPreset } from "./light";
 import {events as gameEvents} from "./events";
 import {
-    customColorFadeIn,
-    customColorFadeOut, neverEndTextFadeIn, neverEndTextFadeOut,
-    setCustomColor, setWhiteBlur,
-    shutterFadeOut,
-    whiteFadeIn,
     whiteFadeOut
 } from "./dom/fade.ts";
 
@@ -35,10 +23,9 @@ import "./update";
 import "./dom/bottom-lyrics.ts";
 import "./events";
 import {
-    disableAllSpectrum, disableSpectrum, enableCircleSpectrum, enableHorizontalSpectrum, enableVerticalSpectrum
+    disableAllSpectrum
 } from "~/game/spectrum.ts";
-import {disableAllRipple, enableCircleRipple, enableSquareRipple, setRippleColor} from "~/game/ripple.ts";
-import {spectrums} from "~/lib/effects/spectrum";
+import {disableAllRipple, enableCircleRipple} from "~/game/ripple.ts";
 
 setLightingPreset("night");
 switchCamera("free");
@@ -94,198 +81,65 @@ gameEvents.on("onKeyFrame", ({key}) => {
 const updateView = async (viewKey: string) => {
     switch(viewKey) {
         case "Sotellusストリートライト": // 全員
-            setFreeRotation(-90, 0, 0, "free2");
-            setFreePosition(-1, 0.1, -1.3, "free2");
+            setFreeRotation(180, 0, 0, "free2");
+            setFreePosition(-1, 0.1, 3, "free2");
             switchCameraWithCrossFade("free2", 1000);
             break;
         case "揺らめく都市のmagic": // リン
-            setArcTargetPosition(-2.5, 1, -1);
-            setArcSphericalCoordinates(-90, 75, 6);
-            switchCameraWithCrossFade("arc", 1000);
-            tween(-90, 180, 30000, (x) => {
-                setArcSphericalCoordinates(x, 75, 6);
-            });
-            tween(getHemisphericGroundColor(), templateColors["Rin"], 3000, setHemisphericLightColor);
-            setRippleColor(templateColorCodes["Rin"]);
-            await delayForMilSeconds(1000);
             break;
         case "街明かりが渦巻く躓くmymind": // ミク
-            tween(getHemisphericGroundColor(), templateColors["Miku"], 3000, setHemisphericLightColor);
-            setRippleColor(templateColorCodes["Miku"]);
             break;
         case "再起動theothernight": // メイコ
-            tween(getHemisphericGroundColor(), templateColors["MEIKO"], 3000, setHemisphericLightColor);
-            setRippleColor(templateColorCodes["MEIKO"]);
             break;
         case "(Don’tyouknow？)": // カイト
-            disableAllRipple();
-            enableSquareRipple();
-            setCustomColor("#1247a5"); // KAITO
-            await customColorFadeIn(1000).promise;
-
-            setFreeRotation(-90, 0, 0, "free");
-            setFreePosition(-1.3, 0.8, -1, "free");
-            setHemisphericGroundColor(templateColors["Luka"]);
-            switchCamera("free");
-
-            customColorFadeOut(1000);
             break;
         case "Ah強引にgoin'on": // ルカ
             break;
         case "好きも得意も": // レン
-            setFreeRotation(90, 0, 0, "free2");
-            setFreePosition(-3.7, 0.8, -1, "free2");
-            switchCameraWithCrossFade("free2", 1000);
-            setHemisphericGroundColor(templateColors["Ren"]);
-            setLightDiffuse("hemispheric", templateColors["Ren"]);
             break;
         case "もう全部奏でたいんだ": // リンルカ
-            setLightDiffuse("hemispheric", templateColors["Luka"]);
-            setArcTargetPosition(-2.5, 0.8, -1);
-            setArcSphericalCoordinates(-90, 80, 2);
-            switchCameraWithCrossFade("arc", 3000);
-            setRippleColor(templateColorCodes["Luka"]);
-            tween(2, 15, 4500, setArcRadius);
-            tween(80, 20, 4500, setArcBeta);
             break;
         case "(Yeahdoit！)": // リン
-            setRippleColor(templateColorCodes["Rin"]);
-            setCustomColor(templateColorCodes["Rin"]);
-            await customColorFadeIn(1000).promise;
-            setHemisphericLightColor(templateColors["MEIKO"]);
-            setRippleColor(templateColorCodes["MEIKO"]);
-            setFreePosition(1, 1, -1);
-            setFreeRotation(-51, 9, 8);
-            switchCamera("free");
-            customColorFadeOut(1000);
             break;
         case "めくるめくこの雑踏をかき分けていく": // メイコ
             break;
         case "光差す道を目指して": // ミク
-            setFreePosition(-1, 0.8, -0.4, "free2");
-            setFreeRotation(115, 13, 0, "free2");
-            switchCameraWithCrossFade("free2", 1000);
-            tween(getHemisphericGroundColor(), templateColors["Miku"], 3000, setHemisphericLightColor);
-            setRippleColor(templateColorCodes["Miku"]);
             break;
         case "空回る今だって僕らの祈り毎秒更新": // カイト
-            tween(getHemisphericGroundColor(), templateColors["KAITO"], 3000, setHemisphericLightColor);
-            setRippleColor(templateColorCodes["KAITO"]);
             break;
         case "不安感だって攫っていく未来にrideon": // リンレン
-            setLightDiffuse("hemispheric", templateColors["Rin"]);
-            setHemisphericGroundColor(templateColors["Ren"]);
-            setRippleColor(templateColorCodes["Ren"]);
             break;
         case "Yeah！": // リンレン
-            disableAllRipple();
-            shutterFadeOut(0);
             break;
         case "終わりなんて": // 全員
-            whiteFadeIn(0);
-            neverEndTextFadeIn(500);
             break;
         case "ない": // 全員
-            await delayForMilSeconds(400);
-            switchCamera("free")
-            setFreePosition(-1, 1.5, 7, "free");
-            setFreeRotation(180, 0, 0, "free");
-            tween(7, 20, 6000, x => setFreePosition(-1, 1.5, x, "free"));
-            tween(10, 0, 4000, setWhiteBlur);
-            whiteFadeOut(4000);
-            neverEndTextFadeOut(500);
-            setHemisphericLightColor(Color3.White());
-            setRippleColor("#ffffff");
             break;
         case "この手掴めば": // 全員
             break;
         case "また始まるんだ": // ルカ
-            enableHorizontalSpectrum();
-            spectrums["horizontal"].setOpacity(0);
-            spectrums["horizontal"].setHueOffset(0);
-            tween(0, 1, 3000, spectrums["horizontal"].setOpacity);
-            tween(Color3.White(), templateColors["Luka"], 1000, x => spectrums["horizontal"].setColor(x.toHexString()));
-            tween(getHemisphericGroundColor(), templateColors["Luka"], 1000, setHemisphericLightColor);
-            setFreePosition(-4, 1, -1.5, "free2");
-            setFreeRotation(120, 21, 0, "free2");
-            switchCameraWithCrossFade("free2", 1000);
             break;
         case "グシャグシャのまま描いた": // ミク
-            tween(getHemisphericGroundColor(), templateColors["Miku"], 1000, setHemisphericLightColor);
-            tween(templateColors["Luka"], templateColors["Miku"], 1000, x => spectrums["horizontal"].setColor(x.toHexString()));
-            switchCameraWithCrossFade("arc", 1000);
-            setArcTargetPosition(-2.5, 1.7, -1);
-            setArcSphericalCoordinates(35, 75, 1.6);
-            tween(35, 130, 5000, setArcAlpha);
             break;
         case "描いた-“アイ”": // ミク
-            setFreePosition(-2, 1.55, -2.3);
-            setFreeRotation(-14, 30, 0);
-            switchCameraWithCrossFade("free", 1000);
-            tween(-2, -2.7, 2500, x => setFreePosition(x, 1.55, -2.3));
             break;
         case "It'sallright！": // 全員
-            tween(getHemisphericGroundColor(), Color3.White(), 1000, setHemisphericLightColor);
-
-            tween(templateColors["Miku"], Color3.White(), 1000, x => spectrums["horizontal"].setColor(x.toHexString()));
-            spectrums["vertical"].setOpacity(0);
-            spectrums["vertical"].setHueOffset(0);
-            enableVerticalSpectrum();
-            tween(0, 1, 1000, spectrums["vertical"].setOpacity);
             break;
         case "灯した歌は": // 全員
             break;
         case "君に届く": // レン
-            tween(Color3.White(), templateColors["Ren"], 1000, x => spectrums["horizontal"].setColor(x.toHexString()));
-            tween(Color3.White(), templateColors["Ren"], 1000, x => spectrums["vertical"].setColor(x.toHexString()));
-            tween(getHemisphericGroundColor(), templateColors["Ren"], 1000, setHemisphericLightColor);
-            await tween(1, 0, 1000, spectrums["horizontal"].setOpacity).promise;
-            disableSpectrum("horizontal");
             break;
         case "躊躇いはない": // カイト
-            tween(templateColors["Ren"], templateColors["KAITO"], 1000, x => spectrums["vertical"].setColor(x.toHexString()));
-            tween(getHemisphericGroundColor(), templateColors["KAITO"], 1000, setHemisphericLightColor);
             break;
         case "そう、一人じゃないから": // リン
-            tween(templateColors["KAITO"], templateColors["Ren"], 1000, x => spectrums["vertical"].setColor(x.toHexString()));
-            tween(getHemisphericGroundColor(), templateColors["Ren"], 1000, setHemisphericLightColor);
             break;
         case "(鼓動、心、不可能を超えてゆけ)": // 全員
-            tween(getHemisphericGroundColor(), Color3.White(), 1000, setHemisphericLightColor);
-            enableCircleSpectrum();
-            spectrums["circle"].setOpacity(0);
-            spectrums["circle"].setColor(templateColorCodes["Miku"]);
-            tween(0, 1, 1000, spectrums["circle"].setOpacity);
-
-            tween(templateColors["Ren"], Color3.White(), 1000, x => spectrums["vertical"].setColor(x.toHexString()));
-            await tween(1, 0, 1000, spectrums["vertical"].setOpacity).promise;
-            disableSpectrum("vertical");
             break;
         case "曖昧な夢さえも抱いて": // メイコ
-            tween(255, 0, 1000, spectrums["circle"].setHueOffset);
-            tween(templateColors["Miku"], templateColors["MEIKO"], 1000, x => spectrums["circle"].setColor(x.toHexString()));
-            enableHorizontalSpectrum();
-            spectrums["horizontal"].setOpacity(0);
-            spectrums["horizontal"].setHueOffset(0);
-            spectrums["horizontal"].setColor(templateColorCodes["MEIKO"]);
-            tween(0, 1, 1000, spectrums["horizontal"].setOpacity);
             break;
         case "(踊る、震える、重なる想いだけ)": // 全員
-            tween(0, 255, 1000, spectrums["circle"].setHueOffset);
-            tween(0, 255, 1000, spectrums["horizontal"].setHueOffset);
-            tween(templateColors["MEIKO"], templateColors["Luka"], 1000, x => spectrums["horizontal"].setColor(x.toHexString()));
-            tween(templateColors["MEIKO"], templateColors["Luka"], 1000, x => spectrums["circle"].setColor(x.toHexString()));
             break;
         case "あふれるストーリーに乗せて": // ルカ
-            tween(255, 0, 1700, spectrums["horizontal"].setHueOffset);
-            tween(255, 0, 1700, spectrums["circle"].setHueOffset);
-            spectrums["vertical"].setOpacity(0);
-            spectrums["vertical"].setHueOffset(0);
-            spectrums["vertical"].setColor(templateColorCodes["Luka"]);
-            enableVerticalSpectrum();
-            tween(0, 1, 1700, spectrums["vertical"].setOpacity);
-            await delayForMilSeconds(2800);
-            whiteFadeIn(1000);
             break;
         case "立ち尽くす街角": // ミク
             whiteFadeOut(1000);

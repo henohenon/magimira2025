@@ -6,6 +6,7 @@
       "dependencies": {
         "@babylonjs/core": "^8.14.0",
         "@babylonjs/loaders": "^8.14.0",
+        "@tweenjs/tween.js": "^25.0.0",
         "mitt": "^3.0.1",
         "prismatix-input": "^0.1.13",
         "textalive-app-api": "^0.4.0",
@@ -162,6 +163,8 @@
     "@tailwindcss/oxide-win32-x64-msvc": ["@tailwindcss/oxide-win32-x64-msvc@4.1.11", "", { "os": "win32", "cpu": "x64" }, "sha512-YfHoggn1j0LK7wR82TOucWc5LDCguHnoS879idHekmmiR7g9HUtMw9MI0NHatS28u/Xlkfi9w5RJWgz2Dl+5Qg=="],
 
     "@tailwindcss/vite": ["@tailwindcss/vite@4.1.11", "", { "dependencies": { "@tailwindcss/node": "4.1.11", "@tailwindcss/oxide": "4.1.11", "tailwindcss": "4.1.11" }, "peerDependencies": { "vite": "^5.2.0 || ^6 || ^7" } }, "sha512-RHYhrR3hku0MJFRV+fN2gNbDNEh3dwKvY8XJvTxCSXeMOsCRSr+uKvDWQcbizrHgjML6ZmTE5OwMrl5wKcujCw=="],
+
+    "@tweenjs/tween.js": ["@tweenjs/tween.js@25.0.0", "", {}, "sha512-XKLA6syeBUaPzx4j3qwMqzzq+V4uo72BnlbOjmuljLrRqdsd3qnzvZZoxvMHZ23ndsRS4aufU6JOZYpCbU6T1A=="],
 
     "@types/babylonjs": ["@types/babylonjs@2.4.5", "", { "dependencies": { "babylonjs": "*" } }, "sha512-hHImUhEeDk8OAhhwXeEsDo3osfF+zTREhSOQgAoj5E0iJL2/bN2ojavSyYFdm7vXK8WNhf7i4YEF6B3ix/WL+Q=="],
 

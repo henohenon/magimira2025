@@ -1,7 +1,8 @@
-﻿import {events} from "~/game/events";
+﻿import { Group } from '@tweenjs/tween.js';
+
+import {events} from "~/game/events";
 import {engine, scene} from "~/lib/babylon";
 
-import {updateTweenList} from "./tween";
 
 let lastTime = 0;
 let lastPosition = 0;
@@ -12,22 +13,23 @@ events.on("onLoaded", () => {
     engine.runRenderLoop(() => {
         const currentTime = performance.now();
         const deltaTime = currentTime - lastTime;
-
+        
         let currentPosition = lastPosition;
         if (!isPause) {
             currentPosition = lastPosition + deltaTime;
         }
-        updateTweenList(currentTime);
+        tweenGroup.update(currentTime);
         updateLogicFunction(lastPosition, currentPosition, deltaTime);
 
         lastTime = currentTime;
         lastPosition = currentPosition;
-
+        
         scene.render();
     });
 });
 
-// Function type for updateLogic
+export const tweenGroup = new Group();
+
 export type UpdateLogicFunction = (lastPosition: number, currentPosition: number, delta: number) => void;
 
 // Variable to store the single updateLogic function

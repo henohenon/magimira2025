@@ -1,3 +1,4 @@
+import { Tween } from "@tweenjs/tween.js";
 import "@babylonjs/loaders";
 import {type Nullable} from "@babylonjs/core";
 import type {Scene} from "@babylonjs/core/scene";
@@ -9,9 +10,10 @@ import "@babylonjs/loaders/glTF";
 import { PostProcess } from "@babylonjs/core/PostProcesses/postProcess";
 import { Effect, RenderTargetTexture } from "@babylonjs/core/Materials";
 
+import { tweenGroup } from "~/lib/update/cycle";
+
 import {degToRad, radToDeg} from ".";
 import {events} from "./events";
-import {tween, type TweenControl} from "~/lib/update/tween.ts";
 
 export type CameraType = "free" | "free2" | "arc" | "arc2";
 // カメラ管理
@@ -229,7 +231,7 @@ export const switchCamera = (key: CameraType) => {
 	_scene.activeCamera = cameras[key];
 }
 
-let crossFadeTween: TweenControl | null = null;
+let crossFadeTween: Tween | null = null;
 export const switchCameraWithCrossFade = async (key: CameraType, duration: number) => {
     const currentCamera = _scene.activeCamera;
     const nextCamera = cameras[key];
@@ -237,30 +239,32 @@ export const switchCameraWithCrossFade = async (key: CameraType, duration: numbe
 
     // Cancel any existing tween
     if (crossFadeTween) {
-        crossFadeTween.complete();
+        crossFadeTween.end();
+        tweenGroup.remove(crossFadeTween);
         crossFadeTween = null;
     }
 
     crossRt.activeCamera = currentCamera;
     _scene.customRenderTargets.push(crossRt);
-
+    
     nextCamera.attachPostProcess(crossPp);
+    
+    _scene.activeCamera = nextCamera;
+    
+    crossFadeTween = new Tween({ fade: 0.0 }).to({ fade: 1.0 }, duration).onUpdate(x => {
+        crossFadeRate = x.fade;
+    }).start();
+    tweenGroup.add(crossFadeTween);
 
-    crossFadeTween = tween(1, 0, duration, (value) => {
-        crossFadeRate = value;
+
+    crossFadeTween.onComplete(() => {
+        // After the tween completes
+        _scene.activeCamera?.detachPostProcess(crossPp);
+        _scene.customRenderTargets.pop();
+        crossRt.activeCamera = null;
+        crossFadeTween = null;
     });
 
-    _scene.activeCamera = nextCamera;
-
-
-    // Wait for the tween to complete using the Promise
-    await crossFadeTween.promise;
-
-    // After the tween completes
-    _scene.activeCamera.detachPostProcess(crossPp);
-    _scene.customRenderTargets.pop();
-    crossRt.activeCamera = null;
-    crossFadeTween = null;
 }
 
 export const getActiveCameraType = (): CameraType => {

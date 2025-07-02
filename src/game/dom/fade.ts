@@ -1,15 +1,16 @@
-﻿// Fade effects
-import { tween } from "~/lib/update/tween.ts";
+﻿import { Tween, Easing } from "@tweenjs/tween.js";
+
+import { tweenGroup } from "~/lib/update/cycle";
 
 // Get overlay elements from the DOM
 const whiteOverlay = document.getElementById('white-overlay') as HTMLElement;
 const blackOverlay = document.getElementById('black-overlay') as HTMLElement;
 const customColorOverlay = document.getElementById('custom-color-overlay') as HTMLElement;
 const textaliveBanner = document.getElementsByClassName("textalive-banner")[0] as HTMLElement;
-const loadingWrapper = document.getElementById("loading-wrapper");
-const playingContainer = document.getElementById("playing");
-const initContainer = document.getElementById("init");
-const creditContainer = document.getElementById("credit");
+const loadingWrapper = document.getElementById("loading-wrapper") as HTMLElement;
+const playingContainer = document.getElementById("playing") as HTMLElement;
+const initContainer = document.getElementById("init") as HTMLElement;
+const creditContainer = document.getElementById("credit") as HTMLElement;
 const blackTrim = document.getElementById("black-trim") as HTMLElement;
 const blackTrimTop = document.getElementById("black-trim-top") as HTMLElement;
 const blackTrimBottom = document.getElementById("black-trim-bottom") as HTMLElement;
@@ -41,125 +42,155 @@ blackTrimBottom.style.height = `${SHUTTER_BOTTOM_DEFAULT_HEIGHT}px`;
 // Default fade duration in milliseconds
 const FADE_DURATION = 3000;
 
+// Type for easing functions
+type EasingFunction = (k: number) => number;
+
 // White fade in/out functions
-export const whiteFadeIn = (duration: number = FADE_DURATION) => {
+export function whiteFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   whiteOverlay.classList.remove('hidden');
-  return tween(0, 1, duration, (x) => {
-    whiteOverlay.style.opacity = x.toString();
-  });
-};
+  const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
+    whiteOverlay.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
+}
 
-export const whiteFadeOut = (duration: number = FADE_DURATION) => {
-  return tween(1, 0, duration, (x) => {
-    whiteOverlay.style.opacity = x.toString();
-  }, {onComplete: () => {
+export function whiteFadeOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  const tween = new Tween({opacity: 1 }).to({opacity: 0}, duration).easing(easing).onUpdate(x => {
+    whiteOverlay.style.opacity = x.opacity.toString();
+  }).onComplete(() => {
     whiteOverlay.classList.add('hidden');
-  }});
-};
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
+}
 
-export const setWhiteBlur = (pixel: number): void => {
+export function setWhiteBlur(pixel: number) {
     whiteOverlay.style.filter = `blur(${pixel}px)`;
 }
 
 // Black fade in/out functions
-export const blackFadeIn = (duration: number = FADE_DURATION) => {
+export function blackFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   blackOverlay.classList.remove('hidden');
-  return tween(0, 1, duration, (x) => {
-    blackOverlay.style.opacity = x.toString();
-  });
-};
-
-export const blackFadeOut = (duration: number = FADE_DURATION) => {
-  return tween(1, 0, duration, (x) => {
-    blackOverlay.style.opacity = x.toString();
-  }, {onComplete: () => {
-    blackOverlay.classList.add('hidden');
-  }});
-};
-
-// TextAlive banner fade functions
-export const textaliveBannerFadeIn = (duration: number = FADE_DURATION) => {
-  textaliveBanner.classList.remove('hidden');
-  return tween(0, 1, duration, (x) => {
-    textaliveBanner.style.opacity = x.toString();
-  });
+  const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
+    blackOverlay.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
 }
 
-export const textaliveBannerFadeOut = (duration: number = FADE_DURATION) => {
-  return tween(1, 0, duration, (x) => {
-    textaliveBanner.style.opacity = x.toString();
-  }, {onComplete: () => {
+export function blackFadeOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  const tween = new Tween({opacity: 1 }).to({opacity: 0}, duration).easing(easing).onUpdate(x => {
+    blackOverlay.style.opacity = x.opacity.toString();
+  }).onComplete(() => {
+    blackOverlay.classList.add('hidden');
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
+}
+
+// TextAlive banner fade functions
+export function textaliveBannerFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  textaliveBanner.classList.remove('hidden');
+  const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
+    textaliveBanner.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
+}
+
+export function textaliveBannerFadeOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  const tween = new Tween({opacity: 1 }).to({opacity: 0}, duration).easing(easing).onUpdate(x => {
+    textaliveBanner.style.opacity = x.opacity.toString();
+  }).onComplete(() => {
     textaliveBanner.classList.add('hidden');
-  }});
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
 }
 
 // Loading wrapper fade functions
-export const loadingWrapperFadeIn = (duration: number = FADE_DURATION) => {
+export function loadingWrapperFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   loadingWrapper.classList.remove('hidden');
-  return tween(0, 1, duration, (x) => {
-    loadingWrapper.style.opacity = x.toString();
-  });
+  const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
+    loadingWrapper.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
 }
 
-export const loadingWrapperFadeOut = (duration: number = FADE_DURATION) => {
-  return tween(1, 0, duration, (x) => {
-    loadingWrapper.style.opacity = x.toString();
-  }, {onComplete: () => {
+export function loadingWrapperFadeOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  const tween = new Tween({opacity: 1 }).to({opacity: 0}, duration).easing(easing).onUpdate(x => {
+    loadingWrapper.style.opacity = x.opacity.toString();
+  }).onComplete(() => {
     loadingWrapper.classList.add('hidden');
-  }});
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
 }
 
 // Playing container fade functions
-export const playingContainerFadeIn = (duration: number = FADE_DURATION) => {
+export function playingContainerFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   playingContainer.classList.remove('hidden');
-  return tween(0, 1, duration, (x) => {
-    playingContainer.style.opacity = x.toString();
-  });
+  const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
+    playingContainer.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
 }
 
-export const playingContainerFadeOut = (duration: number = FADE_DURATION) => {
-  return tween(1, 0, duration, (x) => {
-    playingContainer.style.opacity = x.toString();
-  }, {onComplete: () => {
+export function playingContainerFadeOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  const tween = new Tween({opacity: 1 }).to({opacity: 0}, duration).easing(easing).onUpdate(x => {
+    playingContainer.style.opacity = x.opacity.toString();
+  }).onComplete(() => {
     playingContainer.classList.add('hidden');
-  }});
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
 }
 
 // Init container fade functions
-export const initContainerFadeIn = (duration: number = FADE_DURATION) => {
+export function initContainerFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   initContainer.classList.remove('hidden');
-  return tween(0, 1, duration, (x) => {
-    initContainer.style.opacity = x.toString();
-  });
+  const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
+    initContainer.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
 }
 
-export const initContainerFadeOut = (duration: number = FADE_DURATION) => {
-  return tween(1, 0, duration, (x) => {
-    initContainer.style.opacity = x.toString();
-  }, {onComplete: () => {
+export function initContainerFadeOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  const tween = new Tween({opacity: 1 }).to({opacity: 0}, duration).easing(easing).onUpdate(x => {
+    initContainer.style.opacity = x.opacity.toString();
+  }).onComplete(() => {
     initContainer.classList.add('hidden');
-  }});
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
 }
 
 // Credit container fade functions
-export const creditContainerFadeOut = (duration: number = FADE_DURATION) => {
-  return tween(1, 0, duration, (x) => {
-    creditContainer.style.opacity = x.toString();
-  }, {onComplete: () => {
+export function creditContainerFadeOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  const tween = new Tween({opacity: 1 }).to({opacity: 0}, duration).easing(easing).onUpdate(x => {
+    creditContainer.style.opacity = x.opacity.toString();
+  }).onComplete(() => {
     creditContainer.classList.add('hidden');
-  }});
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
 }
 
-export const creditContainerFadeIn = (duration: number = FADE_DURATION) => {
+export function creditContainerFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   creditContainer.classList.remove('hidden');
-  return tween(0, 1, duration, (x) => {
-    creditContainer.style.opacity = x.toString();
-  });
+  const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
+    creditContainer.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
 }
-
 
 // Shutter-like fade effect functions
-export const shutterIn = (duration: number = FADE_DURATION) => {
+export function shutterIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   // Get the viewport height
   const viewportHeight = window.innerHeight;
   // Calculate the target height for each trim (half of the viewport)
@@ -170,40 +201,21 @@ export const shutterIn = (duration: number = FADE_DURATION) => {
   const currentBottomHeight = parseInt(getComputedStyle(blackTrimBottom).height) || 25;
 
   // Animate the top trim height
-  const topTween = tween(
-    { height: currentTopHeight },
-    { height: targetHeight },
-    duration,
-    (value) => {
-      blackTrimTop.style.height = `${value.height}px`;
-    }
-  );
+  const topTween = new Tween({ height: currentTopHeight }).to({ height: targetHeight }, duration).easing(easing).onUpdate(x => {
+    blackTrimTop.style.height = `${x.height}px`;
+  }).start();
+  tweenGroup.add(topTween);
 
   // Animate the bottom trim height
-  const bottomTween = tween(
-    { height: currentBottomHeight },
-    { height: targetHeight },
-    duration,
-    (value) => {
-      blackTrimBottom.style.height = `${value.height}px`;
-    }
-  );
+  const bottomTween = new Tween({ height: currentBottomHeight }).to({ height: targetHeight }, duration).easing(easing).onUpdate(x => {
+    blackTrimBottom.style.height = `${x.height}px`;
+  }).start();
+  tweenGroup.add(bottomTween);
 
-  // Return a promise that resolves when both tweens complete
-  return {
-    promise: Promise.all([topTween.promise, bottomTween.promise]).then(() => {}),
-    cancel: () => {
-      topTween.cancel();
-      bottomTween.cancel();
-    },
-    complete: () => {
-      topTween.complete();
-      bottomTween.complete();
-    }
-  };
-};
+  return topTween;
+}
 
-export const shutterOut = (duration: number = FADE_DURATION) => {
+export function shutterOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   // Get the viewport height
   const viewportHeight = window.innerHeight;
 
@@ -212,41 +224,22 @@ export const shutterOut = (duration: number = FADE_DURATION) => {
   const currentBottomHeight = parseInt(getComputedStyle(blackTrimBottom).height) || viewportHeight / 2;
 
   // Animate the top trim height
-  const topTween = tween(
-    { height: currentTopHeight },
-    { height: SHUTTER_TOP_DEFAULT_HEIGHT },
-    duration,
-    (value) => {
-      blackTrimTop.style.height = `${value.height}px`;
-    }
-  );
+  const topTween = new Tween({ height: currentTopHeight }).to({ height: SHUTTER_TOP_DEFAULT_HEIGHT }, duration).easing(easing).onUpdate(x => {
+    blackTrimTop.style.height = `${x.height}px`;
+  }).start();
+  tweenGroup.add(topTween);
 
   // Animate the bottom trim height
-  const bottomTween = tween(
-    { height: currentBottomHeight },
-    { height: SHUTTER_BOTTOM_DEFAULT_HEIGHT },
-    duration,
-    (value) => {
-      blackTrimBottom.style.height = `${value.height}px`;
-    }
-  );
+  const bottomTween = new Tween({ height: currentBottomHeight }).to({ height: SHUTTER_BOTTOM_DEFAULT_HEIGHT }, duration).easing(easing).onUpdate(x => {
+    blackTrimBottom.style.height = `${x.height}px`;
+  }).start();
+  tweenGroup.add(bottomTween);
 
-  // Return a promise that resolves when both tweens complete
-  return {
-    promise: Promise.all([topTween.promise, bottomTween.promise]).then(() => {}),
-    cancel: () => {
-      topTween.cancel();
-      bottomTween.cancel();
-    },
-    complete: () => {
-      topTween.complete();
-      bottomTween.complete();
-    }
-  };
-};
+  return topTween;
+}
 
 // Shutter fade effect functions (combining shutter and fade)
-export const shutterFadeIn = (duration: number = FADE_DURATION) => {
+export function shutterFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   // Remove the 'hidden' class to make sure it's visible
   blackOverlay.classList.remove('hidden');
 
@@ -265,90 +258,79 @@ export const shutterFadeIn = (duration: number = FADE_DURATION) => {
   const currentBottomHeight = parseInt(getComputedStyle(blackTrimBottom).height) || SHUTTER_BOTTOM_DEFAULT_HEIGHT;
 
   // Animate the top trim height
-  const topTween = tween(
-    { height: currentTopHeight },
-    { height: targetHeight },
-    duration,
-    (value) => {
-      blackTrimTop.style.height = `${value.height}px`;
-    }
-  );
+  const topTween = new Tween({ height: currentTopHeight }).to({ height: targetHeight }, duration).easing(easing).onUpdate(x => {
+    blackTrimTop.style.height = `${x.height}px`;
+  }).start();
+  tweenGroup.add(topTween);
 
   // Animate the bottom trim height
-  const bottomTween = tween(currentBottomHeight,
-    targetHeight,
-    duration,
-    (value) => {
-      blackTrimBottom.style.height = `${value}px`;
-    }
-  );
+  const bottomTween = new Tween({ height: currentBottomHeight }).to({ height: targetHeight }, duration).easing(easing).onUpdate(x => {
+    blackTrimBottom.style.height = `${x.height}px`;
+  }).start();
+  tweenGroup.add(bottomTween);
 
   // Animate the black overlay opacity
-  const fadeTween = tween(
-    { opacity: 0 },
-    { opacity: 1 },
-    duration,
-    (value) => {
-      blackOverlay.style.opacity = value.opacity.toString();
-    }
-  );
+  const fadeTween = new Tween({ opacity: 0 }).to({ opacity: 1 }, duration).easing(easing).onUpdate(x => {
+    blackOverlay.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(fadeTween);
 
-  // Return a promise that resolves when all tweens complete
-  return {
-    promise: Promise.all([topTween.promise, bottomTween.promise, fadeTween.promise]).then(() => {}),
-    cancel: () => {
-      topTween.cancel();
-      bottomTween.cancel();
-      fadeTween.cancel();
-    },
-    complete: () => {
-      topTween.complete();
-      bottomTween.complete();
-      fadeTween.complete();
-    }
-  };
-};
+  return fadeTween;
+}
 
-export const shutterFadeOut = (duration: number = FADE_DURATION) => {
-  return tween(1, 0, duration, (x) => {
-      blackTrim.style.opacity = x.toString();
-  }, {onComplete: () => {
-      blackTrim.classList.add('hidden');
-  }});
-};
+export function shutterFadeOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  const tween = new Tween({ opacity: 1 }).to({ opacity: 0 }, duration).easing(easing).onUpdate(x => {
+    blackTrim.style.opacity = x.opacity.toString();
+  }).onComplete(() => {
+    blackTrim.classList.add('hidden');
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
+}
 
 // Custom color fade functions
-export const setCustomColor = (color: string): void => {
+export function setCustomColor(color: string): void {
   customColorOverlay.style.backgroundColor = color;
-};
+}
 
-export const customColorFadeIn = (duration: number = FADE_DURATION) => {
+export function customColorFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   customColorOverlay.classList.remove('hidden');
-  return tween(0, 1, duration, (x) => {
-    customColorOverlay.style.opacity = x.toString();
-  });
-};
+  const tween = new Tween({ opacity: 0 }).to({ opacity: 1 }, duration).easing(easing).onUpdate(x => {
+    customColorOverlay.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
+}
 
-export const customColorFadeOut = (duration: number = FADE_DURATION) => {
-  return tween(1, 0, duration, (x) => {
-    customColorOverlay.style.opacity = x.toString();
-  }, {onComplete: () => {
+export function customColorFadeOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  const tween = new Tween({ opacity: 1 }).to({ opacity: 0 }, duration).easing(easing).onUpdate(x => {
+    customColorOverlay.style.opacity = x.opacity.toString();
+  }).onComplete(() => {
     customColorOverlay.classList.add('hidden');
-  }});
-};
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
+}
 
 // Never end text fade functions
-export const neverEndTextFadeIn = (duration: number = FADE_DURATION) => {
+export function neverEndTextFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
   neverEndText.classList.remove('hidden');
-  return tween(0, 1, duration, (x) => {
-    neverEndText.style.opacity = x.toString();
-  });
-};
+  const tween = new Tween({ opacity: 0 }).to({ opacity: 1 }, duration).easing(easing).onUpdate(x => {
+    neverEndText.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
+}
 
-export const neverEndTextFadeOut = (duration: number = FADE_DURATION) => {
-  return tween(1, 0, duration, (x) => {
-    neverEndText.style.opacity = x.toString();
-  }, {onComplete: () => {
+export function neverEndTextFadeOut(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  const tween = new Tween({ opacity: 1 }).to({ opacity: 0 }, duration).easing(easing).onUpdate(x => {
+    neverEndText.style.opacity = x.opacity.toString();
+  }).onComplete(() => {
     neverEndText.classList.add('hidden');
-  }});
-};
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
+}
+
+// Export Easing for convenience
+export { Easing }

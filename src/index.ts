@@ -1,3 +1,5 @@
+import type { Tween } from "@tweenjs/tween.js/";
+
 import "~/lib/update";
 import "~/lib/babylon";
 import "~/lib/text-alive";
@@ -5,7 +7,10 @@ import "~/game";
 
 import {events as babylonEvents} from "~/lib/babylon/events.ts";
 import {events as textaliveEvents} from "~/lib/text-alive/events.ts";
-import {events as gameEvents} from "./game/events";
+import { delayForMilSeconds } from "~/lib/update";
+import { tweenGroup } from "./lib/update/cycle";
+import {player} from "~/lib/text-alive";
+import {events as gameEvents} from "~/game/events";
 import {
     creditContainerFadeIn,
     creditContainerFadeOut,
@@ -15,9 +20,6 @@ import {
     playingContainerFadeIn,
     textaliveBannerFadeOut
 } from "~/game/dom/fade";
-import {player} from "~/lib/text-alive";
-import { delayForMilSeconds } from "~/lib/update";
-import type { TweenControl } from "./lib/update/tween";
 
 let babylonLoaded = false;
 let textaliveLoaded = false;
@@ -36,18 +38,20 @@ const updateLoading = () => {
     loadingWrapperFadeOut(500);
     initContainerFadeIn(500);
     const initInput = document.getElementById("init-input");
+    const inputArea = document.getElementById("input-area");
 
-    if (!initInput) {
-        throw new Error("Init container not found");
+    if (!initInput || !inputArea) {
+        throw new Error("Init input or input area not found");
     }
+
     const cb = () => {
         if (isCredit) return;
         initInput.removeEventListener("pointerdown", cb);
-        window.addEventListener("keydown", cb);
+        inputArea.addEventListener("keydown", cb);
         gameEvents.emit("onGameStart");
     };
     initInput.addEventListener("pointerdown", cb);
-    window.addEventListener("keydown", cb);
+    inputArea.addEventListener("keydown", cb);
 }
 
 gameEvents.on("onGameStart", async () => {
@@ -68,10 +72,11 @@ if (!creditButton || !closeCreditButton) {
     throw new Error("Credit button not found");
 }
 
-let creditTween: TweenControl | null = null;
+let creditTween: Tween | null = null;
 creditButton.addEventListener("click", () => {
     if(creditTween) {
-        creditTween.complete();
+        creditTween.end();
+        tweenGroup.remove(creditTween);
         creditTween = null;
     }
     creditTween = creditContainerFadeIn(500);
@@ -79,7 +84,8 @@ creditButton.addEventListener("click", () => {
 });
 closeCreditButton.addEventListener("click", () => {
     if(creditTween) {
-        creditTween.complete();
+        creditTween.end();
+        tweenGroup.remove(creditTween);
         creditTween = null;
     }
     creditTween = creditContainerFadeOut(500);
