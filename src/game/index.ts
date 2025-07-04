@@ -283,7 +283,7 @@ const updateView = async (viewKey: string) => {
             switchCamera("free");
             const tween_c1_10 = new Tween({z: -4, y: 1.5}).to({z: -30, y:3}, 9000).start().onUpdate(pos => {
                 setFreePosition(-2.5, pos.y, pos.z, "free")
-            }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(tween_c1_01));
+            }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(tween_c1_10));
             tweenGroup.add(tween_c1_10);
             break;
         case "立ち尽くす街角": // ミク
@@ -292,7 +292,7 @@ const updateView = async (viewKey: string) => {
             switchCameraWithCrossFade("free2", 1000);
             const tween_v2_01 = new Tween({x: -1, z: -3}).to({x: 0.3, z: 0}, 18000).start().onUpdate(pos => {
                 setFreePosition(pos.x, 1, pos.z, "free2");
-            }).onComplete(() => tweenGroup.remove(tween_v1_01));
+            }).onComplete(() => tweenGroup.remove(tween_v2_01));
             tweenGroup.add(tween_v2_01);
             break;
         case "どれほど間違っても": // レン
@@ -322,7 +322,7 @@ const updateView = async (viewKey: string) => {
             setFreePosition(-1, 1.1, 0.8, "free2");
             const tween_v2_03 = new Tween({z: 0.8}).to({z: 1.8}, 6000).start().onUpdate(pos => {
                 setFreePosition(-1, 1, pos.z, "free2");
-            }).onComplete(() => tweenGroup.remove(tween_v1_03));
+            }).onComplete(() => tweenGroup.remove(tween_v2_03));
             tweenGroup.add(tween_v2_03);
             switchCameraWithCrossFade('free2', 1000);
             break;
@@ -355,7 +355,7 @@ const updateView = async (viewKey: string) => {
             switchCamera("free");
             const tween_c2_01 = new Tween({z: -3, y: 1}).to({z: -7, y:1.5}, 7000).start().onUpdate(pos => {
                 setFreePosition(-2.5, pos.y, pos.z, "free")
-            }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(tween_c1_01));
+            }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(tween_c2_01));
             tweenGroup.add(tween_c2_01);
             whiteFadeOut(500);
             break;
