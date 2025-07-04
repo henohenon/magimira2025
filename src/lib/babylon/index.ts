@@ -11,6 +11,7 @@ import { events } from "./events";
 import "./mdl";
 import "./camera";
 import "./light";
+import "./star-particle";
 
 
 const canvas = document.getElementById("babylon-canvas") as HTMLCanvasElement;
