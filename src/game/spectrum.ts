@@ -11,7 +11,7 @@ import {
 
 import {inputArea, positionSpectrum} from "./input.ts";
 
-const subscriptions: Subscription[] = [];
+const subscriptions = new Map<string, Subscription>();
 /**
  * Common function to enable spectrum frequency effect on click
  * @param spectrum The type of spectrum to enable
@@ -30,7 +30,7 @@ function enableSpectrum<T extends Spectrum>(
 ) {
     spectrum.setEnable(true);
 
-    const subscription = positionSpectrum.subscribe(e => {
+    return positionSpectrum.subscribe(e => {
         console.log(e);
         if (e.action === "start") {
             addFrequency(calculateRate(e), strength, range);
@@ -38,40 +38,46 @@ function enableSpectrum<T extends Spectrum>(
             addFrequency(calculateRate(e), -strength, range);
         }
     });
-
-    // Add the subscription to the array
-    subscriptions.push(subscription);
-
-    return subscription;
-};
+}
 
 export function enableCircleSpectrum(strength: number = 0.3, range: number = 2) {
     const circleSpectrum = spectrums["circle"] as CircleSpectrum;
+    const currentSubscription = subscriptions.get("circle");
+    if (currentSubscription) currentSubscription.unsubscribe();
 
-    return enableSpectrum(
+    const subscription = enableSpectrum(
         circleSpectrum,
         (e) => Math.atan2(e.y - inputArea.offsetHeight / 2, e.x - inputArea.offsetWidth / 2),
         (angle, strength, range) => circleSpectrum.addFrequencyByAngle(angle, strength, range),
         strength,
         range
     );
-};
+
+    subscriptions.set("circle", subscription);
+    return subscription;
+}
 
 export function enableVerticalSpectrum(strength: number = 0.3, range: number = 2) {
     const verticalSpectrum = spectrums["vertical"] as VerticalSpectrum;
+    const currentSubscription = subscriptions.get("vertical");
+    if (currentSubscription) currentSubscription.unsubscribe();
 
-    return enableSpectrum(
+    const subscription = enableSpectrum(
         verticalSpectrum,
         (e) => e.y / inputArea.offsetHeight,
         (rate, strength, range) => verticalSpectrum.addFrequencyByRate(rate, strength, range),
         strength,
         range
-    )
+    );
 
+    subscriptions.set("vertical", subscription);
+    return subscription;
 }
 
 export function enableHorizontalSpectrum(strength: number = 0.3, range: number = 2) {
     const horizontalSpectrum = spectrums["horizontal"] as HorizontalSpectrum;
+    const currentSubscription = subscriptions.get("horizontal");
+    if (currentSubscription) currentSubscription.unsubscribe();
 
     return enableSpectrum(
         horizontalSpectrum,
@@ -82,10 +88,24 @@ export function enableHorizontalSpectrum(strength: number = 0.3, range: number =
     )
 }
 
+export function disableSpectrum(spectrum: string) {
+    const spectrumInstance = spectrums[spectrum];
+    if (!spectrumInstance) {
+        throw new Error(`Spectrum ${spectrum} not found`);
+    }
+    spectrumInstance.setEnable(false);
+    const subscription = subscriptions.get(spectrum);
+    if (subscription) {
+        subscription.unsubscribe();
+        subscriptions.delete(spectrum);
+    }
+}
+
 export function disableAllSpectrum() {
-    for (const subscription of subscriptions) {
+    for (const subscription of Object.values(subscriptions)) {
         subscription.unsubscribe();
     }
+    subscriptions.clear();
     for (const spectrum of Object.values(spectrums)){
         spectrum.setEnable(false);
     }

@@ -4,20 +4,13 @@ import {drawGlitchEffects} from "./glitch";
 
 
 const canvas = document.getElementById('effects-canvas') as HTMLCanvasElement;
-if (!canvas) {
-    console.error("Canvas not found!");
-    throw new Error("Canvas not found");
-}
-console.log("Canvas found:", canvas);
+const inputArea = document.getElementById('input-area') as HTMLElement;
+if (!canvas || !inputArea) throw new Error("Canvas not found");
 const canvasContext = canvas.getContext('2d') as CanvasRenderingContext2D;
-console.log("Canvas context:", canvasContext);
-console.log("Canvas size:", canvas.width, canvas.height);
 
 const resizeCanvas = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    
-    console.log("Canvas resized to:", canvas.width, canvas.height);
+    canvas.width = inputArea.clientWidth;
+    canvas.height = inputArea.clientHeight;
 };
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);

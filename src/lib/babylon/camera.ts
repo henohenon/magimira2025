@@ -1,3 +1,4 @@
+import {Tween} from "@tweenjs/tween.js";
 import "@babylonjs/loaders";
 import {type Nullable} from "@babylonjs/core";
 import type {Scene} from "@babylonjs/core/scene";
@@ -6,12 +7,13 @@ import {FreeCamera} from "@babylonjs/core/Cameras/freeCamera";
 import {Quaternion, Vector3} from "@babylonjs/core/Maths/math.vector";
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
-import { PostProcess } from "@babylonjs/core/PostProcesses/postProcess";
-import { Effect, RenderTargetTexture } from "@babylonjs/core/Materials";
+import {PostProcess} from "@babylonjs/core/PostProcesses/postProcess";
+import {Effect, RenderTargetTexture} from "@babylonjs/core/Materials";
+
+import {tweenGroup} from "~/lib/update/cycle";
 
 import {degToRad, radToDeg} from ".";
 import {events} from "./events";
-import {tween, type TweenControl} from "~/lib/update/tween.ts";
 
 export type CameraType = "free" | "free2" | "arc" | "arc2";
 // カメラ管理
@@ -20,6 +22,12 @@ const cameras: Record<CameraType, Nullable<ArcRotateCamera | FreeCamera>> = {
 	"free2": null,
 	"arc": null,
 	"arc2": null
+}
+
+export function setCameraMinZ(minZ: number, cameraType: CameraType){
+    const camera = cameras[cameraType];
+    if (!camera) return;
+    camera.minZ = minZ;
 }
 // ArcRotateCamera specific functions
 export const addArcTargetPosition = (x: number, y: number, z: number, cameraType: "arc" | "arc2" = "arc"): void => {
@@ -185,7 +193,6 @@ events.on("onSceneDefinition", async ({ engine, scene }) => {
 
     _scene.activeCamera = cameras.free;
 
-
     // クロスフェード用
     Effect.ShadersStore["crossfadeFragmentShader"] = `
         varying vec2 vUV;
@@ -229,7 +236,7 @@ export const switchCamera = (key: CameraType) => {
 	_scene.activeCamera = cameras[key];
 }
 
-let crossFadeTween: TweenControl | null = null;
+let crossFadeTween: Tween | null = null;
 export const switchCameraWithCrossFade = async (key: CameraType, duration: number) => {
     const currentCamera = _scene.activeCamera;
     const nextCamera = cameras[key];
@@ -237,7 +244,8 @@ export const switchCameraWithCrossFade = async (key: CameraType, duration: numbe
 
     // Cancel any existing tween
     if (crossFadeTween) {
-        crossFadeTween.complete();
+        crossFadeTween.end();
+        tweenGroup.remove(crossFadeTween);
         crossFadeTween = null;
     }
 
@@ -246,20 +254,22 @@ export const switchCameraWithCrossFade = async (key: CameraType, duration: numbe
 
     nextCamera.attachPostProcess(crossPp);
 
-    crossFadeTween = tween(1, 0, duration, (value) => {
-        crossFadeRate = value;
-    });
-
     _scene.activeCamera = nextCamera;
+    crossFadeRate = 1;
+    crossFadeTween = new Tween({ fade: 1 }).to({ fade: 0 }, duration).onUpdate(x => {
+        crossFadeRate = x.fade;
+    }).start().onComplete(()=>{
+        if (!crossFadeTween) return;
+        tweenGroup.remove(crossFadeTween);
+        crossFadeTween = null;
+    });
+    tweenGroup.add(crossFadeTween);
 
 
-    // Wait for the tween to complete using the Promise
-    await crossFadeTween.promise;
 
     // After the tween completes
-    _scene.activeCamera.detachPostProcess(crossPp);
+    nextCamera.detachPostProcess(crossPp);
     _scene.customRenderTargets.pop();
-    crossRt.activeCamera = null;
     crossFadeTween = null;
 }
 

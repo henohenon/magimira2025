@@ -21,6 +21,7 @@
   "dependencies": {
     "@babylonjs/core": "^8.14.0",
     "@babylonjs/loaders": "^8.14.0",
+    "@tweenjs/tween.js": "^25.0.0",
     "mitt": "^3.0.1",
     "prismatix-input": "^0.1.13",
     "textalive-app-api": "^0.4.0"

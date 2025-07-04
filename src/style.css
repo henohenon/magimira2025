@@ -4,6 +4,28 @@
     @apply absolute top-0 left-0 m-0 inset-0 w-full h-full select-none;
 }
 
+.title-text{
+    @apply text-white text-4xl sm:text-7xl italic font-serif select-none;
+}
+
+#babylonjsLoadingDiv-0{
+    display: none!important;
+}
+.textalive-banner.hidden{
+    display: none!important;
+}
+
 #loading-wrapper{
     z-index: 10001;
+}
+
+#credit-button:hover, #close-credit-button:hover{
+    @apply border-white;
+}
+#credit-button:active, #close-credit-button:active{
+    @apply bg-white;
+}
+
+#orientation-warning{
+    z-index: 10002;
 }
