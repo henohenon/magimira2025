@@ -72,14 +72,16 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 	console.log(`Model loaded from ${sourcePath} with ${Object.keys(newMeshes).length} meshes and ${modelAnimGroups.length} animations`);
 }
 
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
 events.on("onSceneDefinition", async ({ scene }) => {
 	// Load both models and collect their animation groups
 	/* --- どっと式ミクさん --- */
-	await loadModel("/dotmiku.glb", scene);
-	await loadModel("/dotmiku-tanabata.glb", scene);
-	await loadModel("/room.glb", scene);
+	await loadModel(`${baseUrl}dotmiku.glb`, scene);
+	await loadModel(`${baseUrl}dotmiku-tanabata.glb`, scene);
 	// Load room model
-	await loadModel("/sky.glb", scene);
+	await loadModel(`${baseUrl}room.glb`, scene);
+	await loadModel(`${baseUrl}sky.glb`, scene);
 
 	setModelVisibility("dotmiku-tanabata", false);
 
