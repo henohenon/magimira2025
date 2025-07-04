@@ -360,20 +360,51 @@ const updateView = async (viewKey: string) => {
             whiteFadeOut(500);
             break;
         case "c2-奏でた今日が": // 全員
+            setArcTargetPosition(-2.5, 0.5, -0.5);
+            setArcSphericalCoordinates(-15, 90, 3);
+            setCameraMinZ(1.5, "arc");
+            switchCamera('arc');
+            const tween_2c_02 = new Tween({alpha: -15}).to({alpha: -180}, 4000).start().onUpdate(prop => {
+                setArcAlpha(prop.alpha);
+            }).onComplete(() => tweenGroup.remove(tween_2c_02));
+            tweenGroup.add(tween_2c_02);
             break;
         case "c2-僕らの道だ": // メイコ
             break;
         case "c2-ずっと手放したくないんだ": // リン
             break;
         case "c2-“アイ”": // リン
+            setFreeRotation(0, 90, 90);
+            setFreePosition(-2.5, 4.5, -0.5);
+            switchCamera("free");
+            const tween_2c_03 = new Tween({x: -2.5}).to({x: -1}, 1000).start().onUpdate(pos => {
+                setFreePosition(pos.x, 4.5, -0.5, "free")
+            }).onComplete(() => tweenGroup.remove(tween_2c_03));
+            tweenGroup.add(tween_2c_03);
             break;
         case "c2-いつだって願いを歌えば": // 全員
+            setFreeRotation(160, -5, -0.3, "free2");
+            setFreePosition(-1.9, 0.1, 2, "free2");
+            setCameraMinZ(0.1, "free2");
+            switchCamera("free2");
+            const tween_2c_04 = new Tween({y: 0.1, pitch: -5}).to({y: 0.3, pitch: -15}, 4000).start().onUpdate(props => {
+                setFreePosition(-1.9, props.y, 2, "free2");
+                setFreeRotation(160, props.pitch, -0.3, "free2");
+            }).onComplete(() => tweenGroup.remove(tween_2c_04));
+            tweenGroup.add(tween_2c_04);
             break;
         case "c2-君に会える": // カイト
             break;
         case "c2-最高のステージ": // ルカ
             break;
         case "c2-夢はもう譲れないんじゃない？": // レン
+            setFreeRotation(0, 0, 0);
+            setFreePosition(-2.5, 1.5, -4);
+            switchCamera("free");
+            const tween_2c_07 = new Tween({z: -4, y: 1.5}).to({z: -30, y:3}, 9000).start().onUpdate(pos => {
+                setFreePosition(-2.5, pos.y, pos.z, "free")
+            }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(tween_2c_07));
+            tweenGroup.add(tween_2c_07);
             break;
         case "零れたメモリを誘って": // ミク・カイト
             break;
