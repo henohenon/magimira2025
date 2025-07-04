@@ -1,4 +1,4 @@
-﻿import { Tween, Easing } from "@tweenjs/tween.js";
+import { Tween, Easing } from "@tweenjs/tween.js";
 
 import { tweenGroup } from "~/lib/update/cycle";
 

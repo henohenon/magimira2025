@@ -251,7 +251,7 @@ export const switchCameraWithCrossFade = async (key: CameraType, duration: numbe
 
     crossRt.activeCamera = currentCamera;
     _scene.customRenderTargets.push(crossRt);
-    
+
     nextCamera.attachPostProcess(crossPp);
 
     _scene.activeCamera = nextCamera;
@@ -267,14 +267,10 @@ export const switchCameraWithCrossFade = async (key: CameraType, duration: numbe
 
 
 
-    crossFadeTween.onComplete(() => {
-        // After the tween completes
-        _scene.activeCamera?.detachPostProcess(crossPp);
-        _scene.customRenderTargets.pop();
-        crossRt.activeCamera = null;
-        crossFadeTween = null;
-    });
-
+    // After the tween completes
+    nextCamera.detachPostProcess(crossPp);
+    _scene.customRenderTargets.pop();
+    crossFadeTween = null;
 }
 
 export const getActiveCameraType = (): CameraType => {

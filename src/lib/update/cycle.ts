@@ -13,7 +13,7 @@ events.on("onLoaded", () => {
     engine.runRenderLoop(() => {
         const currentTime = performance.now();
         const deltaTime = currentTime - lastTime;
-        
+
         let currentPosition = lastPosition;
         if (!isPause) {
             currentPosition = lastPosition + deltaTime;
@@ -23,7 +23,7 @@ events.on("onLoaded", () => {
 
         lastTime = currentTime;
         lastPosition = currentPosition;
-        
+
         scene.render();
     });
 });
