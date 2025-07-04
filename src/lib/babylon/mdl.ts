@@ -77,9 +77,9 @@ events.on("onSceneDefinition", async ({ scene }) => {
 	/* --- どっと式ミクさん --- */
 	await loadModel("/dotmiku.glb", scene);
 	await loadModel("/dotmiku-tanabata.glb", scene);
-
-	// Load room model
 	await loadModel("/room.glb", scene);
+	// Load room model
+	await loadModel("/sky.glb", scene);
 
 	setModelVisibility("dotmiku-tanabata", false);
 
