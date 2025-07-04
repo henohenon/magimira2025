@@ -23,6 +23,12 @@ const cameras: Record<CameraType, Nullable<ArcRotateCamera | FreeCamera>> = {
 	"arc": null,
 	"arc2": null
 }
+
+export function setCameraMinZ(minZ: number, cameraType: CameraType){
+    const camera = cameras[cameraType];
+    if (!camera) return;
+    camera.minZ = minZ;
+}
 // ArcRotateCamera specific functions
 export const addArcTargetPosition = (x: number, y: number, z: number, cameraType: "arc" | "arc2" = "arc"): void => {
 	const camera = cameras[cameraType];

@@ -47,6 +47,7 @@ type EasingFunction = (k: number) => number;
 
 // White fade in/out functions
 export function whiteFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  whiteOverlay.style.opacity = "0";
   whiteOverlay.classList.remove('hidden');
   const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
     whiteOverlay.style.opacity = x.opacity.toString();
@@ -71,6 +72,7 @@ export function setWhiteBlur(pixel: number) {
 
 // Black fade in/out functions
 export function blackFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  blackOverlay.style.opacity = "0";
   blackOverlay.classList.remove('hidden');
   const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
     blackOverlay.style.opacity = x.opacity.toString();
@@ -91,6 +93,7 @@ export function blackFadeOut(duration: number = FADE_DURATION, easing: EasingFun
 
 // TextAlive banner fade functions
 export function textaliveBannerFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  textaliveBanner.style.opacity = "0";
   textaliveBanner.classList.remove('hidden');
   const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
     textaliveBanner.style.opacity = x.opacity.toString();
@@ -111,6 +114,7 @@ export function textaliveBannerFadeOut(duration: number = FADE_DURATION, easing:
 
 // Loading wrapper fade functions
 export function loadingWrapperFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  loadingWrapper.style.opacity = "0";
   loadingWrapper.classList.remove('hidden');
   const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
     loadingWrapper.style.opacity = x.opacity.toString();
@@ -131,6 +135,7 @@ export function loadingWrapperFadeOut(duration: number = FADE_DURATION, easing: 
 
 // Playing container fade functions
 export function playingContainerFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  playingContainer.style.opacity = "0";
   playingContainer.classList.remove('hidden');
   const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
     playingContainer.style.opacity = x.opacity.toString();
@@ -151,6 +156,7 @@ export function playingContainerFadeOut(duration: number = FADE_DURATION, easing
 
 // Init container fade functions
 export function initContainerFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  initContainer.style.opacity = "0";
   initContainer.classList.remove('hidden');
   const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
     initContainer.style.opacity = x.opacity.toString();
@@ -181,6 +187,7 @@ export function creditContainerFadeOut(duration: number = FADE_DURATION, easing:
 }
 
 export function creditContainerFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  creditContainer.style.opacity = "0";
   creditContainer.classList.remove('hidden');
   const tween = new Tween({opacity: 0 }).to({opacity: 1}, duration).easing(easing).onUpdate(x => {
     creditContainer.style.opacity = x.opacity.toString();
@@ -240,13 +247,13 @@ export function shutterOut(duration: number = FADE_DURATION, easing: EasingFunct
 
 // Shutter fade effect functions (combining shutter and fade)
 export function shutterFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
-  // Remove the 'hidden' class to make sure it's visible
-  blackOverlay.classList.remove('hidden');
-
   // Start with the shutter at default position and black overlay transparent
   blackTrimTop.style.height = `${SHUTTER_TOP_DEFAULT_HEIGHT}px`;
   blackTrimBottom.style.height = `${SHUTTER_BOTTOM_DEFAULT_HEIGHT}px`;
   blackOverlay.style.opacity = '0';
+  // Remove the 'hidden' class to make sure it's visible
+  blackOverlay.classList.remove('hidden');
+
 
   // Get the viewport height
   const viewportHeight = window.innerHeight;
@@ -294,6 +301,7 @@ export function setCustomColor(color: string): void {
 }
 
 export function customColorFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  customColorOverlay.style.opacity = "0";
   customColorOverlay.classList.remove('hidden');
   const tween = new Tween({ opacity: 0 }).to({ opacity: 1 }, duration).easing(easing).onUpdate(x => {
     customColorOverlay.style.opacity = x.opacity.toString();
@@ -314,6 +322,7 @@ export function customColorFadeOut(duration: number = FADE_DURATION, easing: Eas
 
 // Never end text fade functions
 export function neverEndTextFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  neverEndText.style.opacity = "0";
   neverEndText.classList.remove('hidden');
   const tween = new Tween({ opacity: 0 }).to({ opacity: 1 }, duration).easing(easing).onUpdate(x => {
     neverEndText.style.opacity = x.opacity.toString();

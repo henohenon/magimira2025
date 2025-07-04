@@ -268,10 +268,6 @@
         <canvas id="babylon-canvas" class="max -z-10"></canvas>
         <canvas id="effects-canvas" class="max -z-9"></canvas>
         <div id="app" class="absolute inset-0 w-full h-full">
-            <div id="white-overlay" class="max bg-white hidden"></div>
-            <div id="black-overlay" class="max bg-black hidden"></div>
-            <div id="custom-color-overlay" class="max hidden"></div>
-
             <div id="init" class="relative flex h-full justify-center items-center flex-col hidden">
                 <div id="init-input" class="max"></div>
                 <h1 class="title-text">Listen with Miku</h1>
@@ -298,8 +294,12 @@
                         <h3 class="text-white mx-3 text-4xl" id="lyrics-text"></h3>
                     </div>
                 </div>
-                <h1 id="never-end-text" class="text-4xl italic absolute inset-0 flex items-center justify-center hidden">終わりなんてない</h1>
             </div>
+            <div id="white-overlay" class="max bg-white hidden"></div>
+            <div id="black-overlay" class="max bg-black hidden"></div>
+            <div id="custom-color-overlay" class="max hidden"></div>
+            <h1 id="never-end-text" class="text-4xl italic absolute inset-0 flex items-center justify-center hidden">終わりなんてない</h1>
+            
             <div id="loading-wrapper" class="max bg-white/15 backdrop-blur-sm flex flex-col justify-center items-center hide">
                 <h1 class="title-text">Listen with Miku</h1>
                 <div class="flex h-10 mt-5 select-none">
