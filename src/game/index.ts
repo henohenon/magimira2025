@@ -112,7 +112,7 @@ const updateView = async (viewKey: string) => {
         case "(Don’tyouknow？)": // カイト
             setFreeRotation(-135, 20, 0, "free2");
             setFreePosition(0.3, 1, 0, "free2");
-            const tween_v1_02 = new Tween({x: 0.3, z: 0}).to({x: -1, z: 1.5}, 9000).start().onUpdate(pos => {
+            const tween_v1_02 = new Tween({x: 0.3, z: 0}).to({x: -1, z: 1.5}, 10000).start().onUpdate(pos => {
                 setFreePosition(pos.x, 1, pos.z, "free2");
             }).onComplete(() => tweenGroup.remove(tween_v1_02));
             tweenGroup.add(tween_v1_02);
@@ -289,10 +289,10 @@ const updateView = async (viewKey: string) => {
             tweenGroup.add(tween_c1_10);
             break;
         case "立ち尽くす街角": // ミク
-            setFreeRotation(-45, 20, 0, "free2");
-            setFreePosition(-1, 1, -3, "free2");
+            setFreeRotation(45, 20, 0, "free2");
+            setFreePosition(-3.5, 1, -3, "free2");
             switchCameraWithCrossFade("free2", 1000);
-            const tween_v2_01 = new Tween({x: -1, z: -3}).to({x: 0.3, z: 0}, 18000).start().onUpdate(pos => {
+            const tween_v2_01 = new Tween({x: -3.5, z: -3}).to({x: -4.2, z: 0}, 18000).start().onUpdate(pos => {
                 setFreePosition(pos.x, 1, pos.z, "free2");
             }).onComplete(() => tweenGroup.remove(tween_v2_01));
             tweenGroup.add(tween_v2_01);
@@ -302,9 +302,10 @@ const updateView = async (viewKey: string) => {
         case "この灯火は何度だって輝く": // メイコ
             break;
         case "(宿すagainstgravity)": // カイト
-            setFreeRotation(-135, 20, 0);
-            setFreePosition(0.3, 1, 0);
-            const tween_v2_02 = new Tween({x: 0.3, z: 0}).to({x: -1, z: 1.5}, 9000).start().onUpdate(pos => {
+            setFreeRotation(135, 20, 0);
+            setFreePosition(-4.2, 1, 0);
+            setCameraMinZ(0.01, "free");
+            const tween_v2_02 = new Tween({x: -4.2, z: 0}).to({x: -2.9, z: 1.5}, 10000).start().onUpdate(pos => {
                 setFreePosition(pos.x, 1, pos.z);
             }).onComplete(() => tweenGroup.remove(tween_v2_02));
             tweenGroup.add(tween_v2_02);
