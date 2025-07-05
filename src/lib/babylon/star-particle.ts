@@ -4,13 +4,16 @@ import { ParticleSystem } from "@babylonjs/core/Particles/particleSystem";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { Color4 } from "@babylonjs/core/Maths/math.color";
+
+let particleSystem: ParticleSystem | null = null;
+
 events.on("onSceneDefinition", async ({ scene }) => {
 
     // Create a particle system
-    let particleSystem = new ParticleSystem("particles", 2000, scene);
+    particleSystem = new ParticleSystem("particles", 2000, scene);
 
     //Texture of each particle
-    particleSystem.particleTexture = new Texture("/flare.png", scene);
+    particleSystem.particleTexture = new Texture("/whitestar.png", scene);
 
     // Where the particles come from
     particleSystem.emitter = Vector3.Zero(); // the starting location
@@ -43,9 +46,13 @@ events.on("onSceneDefinition", async ({ scene }) => {
     particleSystem.maxEmitPower = 0;
     particleSystem.updateSpeed = 0.005;
 
-    // Start the particle system
-    particleSystem.start();
-
     return scene;
-}
-);
+});
+
+export function enableStarParticles() {
+        particleSystem?.start();
+    }
+
+export function disableStarParticles() {
+        particleSystem?.stop();
+    }

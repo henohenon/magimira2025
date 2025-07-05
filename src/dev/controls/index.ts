@@ -7,6 +7,7 @@ import "./models.ts";
 import "./update.ts";
 import "./glitch.ts";
 import "./fade.ts";
+import "./particles.ts";
 
 import type {Accordion} from "../web-components/accordion.ts";
 
