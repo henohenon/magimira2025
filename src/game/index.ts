@@ -128,10 +128,11 @@ const updateView = async (viewKey: string) => {
         case "もう全部奏でたいんだ": // リンルカ
             break;
         case "(Yeahdoit！)": // リン
-            setFreeRotation(80, 0, 0);
-            setFreePosition(-1, 1.1, 0.8);
-            const tween_v1_03 = new Tween({z: 0.8}).to({z: 1.8}, 6000).start().onUpdate(pos => {
-                setFreePosition(-1, 1, pos.z);
+            setFreeRotation(70, 5, 0);
+            setFreePosition(0.2, 0.78, 1.6);
+            setCameraMinZ(0.01, "free");
+            const tween_v1_03 = new Tween({z: 1.6}).to({z: 1.8}, 6000).start().onUpdate(pos => {
+                setFreePosition(0.2, 0.78, pos.z);
             }).onComplete(() => tweenGroup.remove(tween_v1_03));
             tweenGroup.add(tween_v1_03);
             switchCameraWithCrossFade('free', 1000);
@@ -149,11 +150,12 @@ const updateView = async (viewKey: string) => {
             tweenGroup.add(tween_v1_04);
             break;
         case "空回る今だって僕らの祈り毎秒更新": // カイト
-            setFreeRotation(-95, 0, 0 );
-            setFreePosition(-3, 0.5,-2);
+            setFreeRotation(70, 11, 0);
+            setFreePosition(-4, 1.6, 2.2);
+            setCameraMinZ(0.001, "free");
             switchCamera("free");
-            const tween_v1_05 = new Tween({z: -2}).to({z: -1.5}, 5000).start().onUpdate(pos => {
-                setFreePosition(-3, 0.5, pos.z, "free");
+            const tween_v1_05 = new Tween({x: -5}).to({x: -3.5}, 5000).start().onUpdate(pos => {
+                setFreePosition(pos.x, 1.6, 2.2);
             }).onComplete(() => tweenGroup.remove(tween_v1_05));
             tweenGroup.add(tween_v1_05);
             break;
@@ -318,30 +320,25 @@ const updateView = async (viewKey: string) => {
         case "消えない星を繋いでいたい": // ミク
             break;
         case "止め処なくbluff,bluff": // メイコ
-            setFreeRotation(80, 0, 0, "free2");
-            setFreePosition(-1, 1.1, 0.8, "free2");
-            const tween_v2_03 = new Tween({z: 0.8}).to({z: 1.8}, 6000).start().onUpdate(pos => {
-                setFreePosition(-1, 1, pos.z, "free2");
+            setFreeRotation(-90, 0, 0, "free2");
+            setFreePosition(-3.75, 0.1, 1.25, "free2");
+            setCameraMinZ(0.01, "free2");
+            const tween_v2_03 = new Tween({y: 0.1}).to({y: 1}, 10000).start().onUpdate(pos => {
+                setFreePosition(-3.75, pos.y, 1.25, "free2");
             }).onComplete(() => tweenGroup.remove(tween_v2_03));
             tweenGroup.add(tween_v2_03);
             switchCameraWithCrossFade('free2', 1000);
             break;
         case "言葉の飾り毎秒更新": // メイコ
-            setFreeRotation(-95, 0, 0);
-            setFreePosition(-3, 0.5,-2);
-            switchCamera("free");
-            const tween_v2_04 = new Tween({z: -2}).to({z: -1.5}, 5000).start().onUpdate(pos => {
-                setFreePosition(-3, 0.5, pos.z, "free");
-            }).onComplete(() => tweenGroup.remove(tween_v2_04));
-            tweenGroup.add(tween_v2_04);
             break;
         case "揺らぐ主役舞台は未知の最前線": // ルカ・カイト
-            setFreeRotation(0, 40, 0, "free2");
-            setFreePosition(-4, 2, 0.8, "free2");
+            setFreeRotation(-150, 20, 0, "free2");
+            setFreePosition(-0.5, 0.8, 0.8, "free2");
+            setCameraMinZ(0.001, "free2");
             switchCamera("free2");
-            const tween_v2_05 = new Tween({pitch: 40, y: 2, z: 0.8}).to({pitch: -10, y:0.8, z: 1.3}, 10000).start().onUpdate(props => {
-                setFreeRotation(0, props.pitch, 0, "free2");
-                setFreePosition(-4, props.y, props.z, "free2");
+            const tween_v2_05 = new Tween({pitch: 35, x: -0.35, y: 0.4, z: 0.5}).to({pitch: 20, x: -0.5, y:0.8, z: 0.8}, 10000).start().onUpdate(props => {
+                setFreeRotation(-150, props.pitch, 0, "free2");
+                setFreePosition(props.x, props.y, props.z, "free2");
             }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(tween_v2_05));
             tweenGroup.add(tween_v2_05);
             break;
