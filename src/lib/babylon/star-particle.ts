@@ -6,14 +6,14 @@ import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { Color4 } from "@babylonjs/core/Maths/math.color";
 
 let particleSystem: ParticleSystem | null = null;
-
+const baseUrl = import.meta.env.VITE_BASE_URL;
 events.on("onSceneDefinition", async ({ scene }) => {
 
     // Create a particle system
     particleSystem = new ParticleSystem("particles", 2000, scene);
 
     //Texture of each particle
-    particleSystem.particleTexture = new Texture("/whitestar.png", scene);
+    particleSystem.particleTexture = new Texture(`${baseUrl}whitestar.png`, scene);
 
     // Where the particles come from
     particleSystem.emitter = Vector3.Zero(); // the starting location
