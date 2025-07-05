@@ -10,7 +10,7 @@ import {
     switchCamera,
     switchCameraWithCrossFade
 } from "~/lib/babylon/camera";
-import {setModelRotation, setModelPosition} from "~/lib/babylon/mdl";
+import {setModelRotation, setModelPosition, setModelVisibility} from "~/lib/babylon/mdl";
 import {
     setLightDiffuse,
     setLightIntensity
@@ -38,6 +38,7 @@ import {
 import {disableAllRipple, enableCircleRipple} from "~/game/ripple.ts";
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { tweenGroup } from "~/lib/update/cycle.ts";
+import { enableStarParticles } from "~/lib/babylon/star-particle.ts";
 
 setLightingPreset("night");
 switchCamera("free");
@@ -71,6 +72,7 @@ audio.volume = 0.1;
 gameEvents.on("onLoaded", async ()=>{
     // setModelPosition("dotmiku", -2.5, 0 , -1);
     // setModelRotation("dotmiku", 0, 0, 0);
+    setModelVisibility("sky", false);
     setModelPosition("room", -2.1, 0 , 0);
     setModelRotation("room", 0, 0, 0);
     setFreePosition(-2.5, 1, -2);
@@ -409,11 +411,18 @@ const updateView = async (viewKey: string) => {
         case "Twilighttotellus": // ルカ・リン
             break;
         case "Starlighttotellus": // レン・メイコ
+            await delayForMilSeconds(3000);
+            whiteFadeIn(1000);
+            shutterFadeOut(1000);
             break;
-        case "lc-終わりなんてない": // 全員
+        case "lc-終わりなんて": // 全員
+            setModelVisibility("sky", true);
+            setModelVisibility("dotmiku-tanabata", true);
+            setModelVisibility("dotmiku", true);
+            enableStarParticles();
             neverEndTextFadeIn(0);
             break;
-        case "lc-この手掴めばまた始まるんだ": // ルカ
+        case "lc-ない": // 全員
             setArcTargetPosition(-2.5, 0.5, -0.5);
             setArcSphericalCoordinates(-15, 90, 3);
             setCameraMinZ(1.5, "arc");
@@ -421,7 +430,11 @@ const updateView = async (viewKey: string) => {
             const tween_lc_02 = new Tween({alpha: -15}).to({alpha: -180}, 4000).start().onUpdate(prop => {
                 setArcAlpha(prop.alpha);
             }).onComplete(() => tweenGroup.remove(tween_lc_02));
-            tweenGroup.add(tween_lc_02);
+            tweenGroup.add(tween_lc_02);            
+            whiteFadeOut(500);
+            neverEndTextFadeOut(500);
+            break;
+        case "lc-この手掴めばまた始まるんだ": // ルカ
             break;
         case "lc-グシャグシャのまま描いた": // ミク
             break;
