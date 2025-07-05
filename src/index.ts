@@ -47,7 +47,7 @@ const updateLoading = () => {
     const cb = () => {
         if (isCredit) return;
         initInput.removeEventListener("pointerdown", cb);
-        inputArea.addEventListener("keydown", cb);
+        inputArea.removeEventListener("keydown", cb);
         gameEvents.emit("onGameStart");
     };
     initInput.addEventListener("pointerdown", cb);
