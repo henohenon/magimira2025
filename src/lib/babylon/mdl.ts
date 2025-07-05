@@ -8,6 +8,10 @@ import type { Scene } from "@babylonjs/core/scene";
 import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 import {Quaternion, Vector3} from "@babylonjs/core/Maths/math.vector";
 import {degToRad, radToDeg} from ".";
+import { Color3 } from "@babylonjs/core/Maths/math.color";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
+import { GlowLayer } from "@babylonjs/core/Layers/glowLayer";
+import type { Mesh } from "@babylonjs/core/Meshes/mesh";
 
 // Store loaded model meshes by model name
 const modelMeshes: Record<string, Record<string, AbstractMesh>> = {};
@@ -41,23 +45,38 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 
 	// Store the new meshes for this model
 	const newMeshes: Record<string, AbstractMesh> = {};
+	const gl = new GlowLayer("glow", scene, {
+		mainTextureFixedSize: 256,
+		blurKernelSize: 64
+	});
+	gl.intensity = 0.2;
 
 	// Process materials for all meshes
 	for (let i = initialMeshCount; i < scene.meshes.length; i++) {
 		const mesh = scene.meshes[i];
 		newMeshes[mesh.name] = mesh;
-
-		const mat = mesh.material;
-		if (mat) {
-			// mat.backFaceCulling = false;
-			mat.needDepthPrePass = true;
-			mesh.material = mat;
-		}
-		// mesh.alwaysSelectAsActiveMesh = true;
-
 		if(mesh.name === "__root__") {
 			rootModels[modelName] = mesh;
 		}
+	}
+
+	for(const mesh of Object.values(newMeshes)){		
+		if(modelName.includes("miku")){
+			const mat = mesh.material;
+			if (mat) {
+				// mat.backFaceCulling = false;
+				mat.needDepthPrePass = true;
+				mesh.material = mat;
+			}
+			// mesh.alwaysSelectAsActiveMesh = true;
+		}else if(modelName.includes("hoshi")){
+			if(mesh.material){
+				const mat = mesh.material as StandardMaterial;
+				mat.emissiveColor = new Color3(0, 0.3, 0);
+				gl.addIncludedOnlyMesh(mesh as Mesh);
+			}
+		}
+
 	}
 
 	// Store meshes by model name
@@ -82,6 +101,7 @@ events.on("onSceneDefinition", async ({ scene }) => {
 	// Load room model
 	await loadModel(`${baseUrl}room.glb`, scene);
 	await loadModel(`${baseUrl}sky.glb`, scene);
+	await loadModel(`${baseUrl}hoshi-mk.glb`, scene);
 
 	setModelVisibility("dotmiku-tanabata", false);
 
