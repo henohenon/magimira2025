@@ -10,7 +10,7 @@ import {
     switchCamera,
     switchCameraWithCrossFade
 } from "~/lib/babylon/camera";
-import {setModelRotation, setModelPosition, setModelVisibility} from "~/lib/babylon/mdl";
+import {setModelRotation, setModelPosition, setModelVisibility, playAnimation} from "~/lib/babylon/mdl";
 import {
     setLightDiffuse,
     setLightIntensity
@@ -70,9 +70,11 @@ const audio = new Audio("/電気のスイッチを入れる.mp3");
 audio.volume = 0.1;
 
 gameEvents.on("onLoaded", async ()=>{
-    // setModelPosition("dotmiku", -2.5, 0 , -1);
-    // setModelRotation("dotmiku", 0, 0, 0);
+    setModelPosition("dotmiku", -2.5, -0.1 , -0.3);
+    setModelRotation("dotmiku", 0, 0, 0);
+    playAnimation("dotmiku", "座り");
     setModelVisibility("sky", false);
+    setModelVisibility("hoshi-mk", false);
     setModelPosition("room", -2.1, 0 , 0);
     setModelRotation("room", 0, 0, 0);
     setFreePosition(-2.5, 1, -2);

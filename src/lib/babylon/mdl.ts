@@ -13,6 +13,7 @@ import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { GlowLayer } from "@babylonjs/core/Layers/glowLayer";
 import type { Mesh } from "@babylonjs/core/Meshes/mesh";
 
+
 // Store loaded model meshes by model name
 const modelMeshes: Record<string, Record<string, AbstractMesh>> = {};
 // Store animation groups by model name
@@ -64,10 +65,12 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 		if(modelName.includes("miku")){
 			const mat = mesh.material;
 			if (mat) {
-				// mat.backFaceCulling = false;
 				mat.needDepthPrePass = true;
 				mesh.material = mat;
+				mesh.alwaysSelectAsActiveMesh = true;
 			}
+			console.log(mesh.name);
+
 			// mesh.alwaysSelectAsActiveMesh = true;
 		}else if(modelName.includes("hoshi")){
 			if(mesh.material){
@@ -164,7 +167,6 @@ export function setModelVisibility(modelName: string, visible: boolean): boolean
 	console.log(`Model "${modelName}" is now ${visible ? 'visible' : 'hidden'}.`);
 	return true;
 }
-
 /**
  * Show a model by making all its meshes visible
  * @param modelName Name of the model to show
