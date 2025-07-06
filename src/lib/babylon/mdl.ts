@@ -66,12 +66,10 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 			const mat = mesh.material;
 			if (mat) {
 				mat.needDepthPrePass = true;
+				mat.separateCullingPass = true;
 				mesh.material = mat;
 				mesh.alwaysSelectAsActiveMesh = true;
 			}
-			console.log(mesh.name);
-
-			// mesh.alwaysSelectAsActiveMesh = true;
 		}else if(modelName.includes("hoshi")){
 			if(mesh.material){
 				const mat = mesh.material as StandardMaterial;
