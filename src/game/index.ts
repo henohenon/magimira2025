@@ -10,7 +10,7 @@ import {
     switchCamera,
     switchCameraWithCrossFade
 } from "~/lib/babylon/camera";
-import {setModelRotation, setModelPosition, setModelVisibility, playAnimation} from "~/lib/babylon/mdl";
+import {setModelRotation, setModelPosition, setModelVisibility, playAnimation, setModelScale} from "~/lib/babylon/mdl";
 import {
     setLightDiffuse,
     setLightIntensity
@@ -22,6 +22,7 @@ import {events as gameEvents} from "./events";
 import {
     neverEndTextFadeIn,
     neverEndTextFadeOut,
+    shutterFadeIn,
     shutterFadeOut,
     shutterIn,
     shutterOut,
@@ -33,9 +34,12 @@ import "./update";
 import "./dom/bottom-lyrics.ts";
 import "./events";
 import {
-    disableAllSpectrum
+    disableAllSpectrum,
+    enableCircleSpectrum,
+    enableHorizontalSpectrum,
+    enableVerticalSpectrum
 } from "~/game/spectrum.ts";
-import {disableAllRipple, enableCircleRipple} from "~/game/ripple.ts";
+import {disableAllRipple, enableCircleRipple, enableSquareRipple} from "~/game/ripple.ts";
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { tweenGroup } from "~/lib/update/cycle.ts";
 import { enableStarParticles } from "~/lib/babylon/star-particle.ts";
@@ -70,14 +74,15 @@ const audio = new Audio("/電気のスイッチを入れる.mp3");
 audio.volume = 0.1;
 
 gameEvents.on("onLoaded", async ()=>{
-    setModelPosition("dotmiku", -2.5, -0.1 , -0.3);
-    setModelRotation("dotmiku", 0, 0, 0);
+    setModelPosition("dotmiku", -2.5, 0 , -0.3);
+    setModelRotation("dotmiku", 0, 180, 0);
+    setModelScale("dotmiku", 0.9, 0.9, 0.9);
     playAnimation("dotmiku", "座り");
     setModelVisibility("sky", false);
     setModelVisibility("hoshi-mk", false);
     setModelPosition("room", -2.1, 0 , 0);
     setModelRotation("room", 0, 0, 0);
-    setFreePosition(-2.5, 1, -2);
+    setFreePosition(-2.5, 0.8, -1.9);
     setFreeRotation(0, 25, 0);
     enableCircleRipple();
 
@@ -110,6 +115,8 @@ const updateView = async (viewKey: string) => {
             tweenGroup.add(tween_v1_01);
             break;
         case "街明かりが渦巻く躓くmymind": // ミク
+            disableAllRipple();
+            enableHorizontalSpectrum();
             break;
         case "再起動theothernight": // メイコ
             break;
@@ -121,6 +128,9 @@ const updateView = async (viewKey: string) => {
             }).onComplete(() => tweenGroup.remove(tween_v1_02));
             tweenGroup.add(tween_v1_02);
             shutterIn(500).onComplete(()=>{
+                disableAllSpectrum();
+                enableSquareRipple();
+
                 switchCamera("free2");
                 shutterOut(500);
             });
@@ -137,6 +147,8 @@ const updateView = async (viewKey: string) => {
             setCameraMinZ(0.01, "free");
             const tween_v1_03 = new Tween({z: 1.6}).to({z: 1.8}, 6000).start().onUpdate(pos => {
                 setFreePosition(0.2, 0.78, pos.z);
+                disableAllRipple();
+                enableVerticalSpectrum();
             }).onComplete(() => tweenGroup.remove(tween_v1_03));
             tweenGroup.add(tween_v1_03);
             switchCameraWithCrossFade('free', 1000);
@@ -164,6 +176,9 @@ const updateView = async (viewKey: string) => {
             tweenGroup.add(tween_v1_05);
             break;
         case "不安感だって攫っていく未来にrideon": // リンレン
+            disableAllSpectrum();
+            enableCircleSpectrum();
+
             setFreeRotation(0, 40, 0, "free2");
             setFreePosition(-4, 2, 0.8, "free2");
             switchCamera("free2");
@@ -181,6 +196,8 @@ const updateView = async (viewKey: string) => {
             neverEndTextFadeIn(0);
             break;
         case "c1-ない": // 全員
+            disableAllSpectrum();
+
             setFreeRotation(0, 0, 0 );
             setFreePosition(-2.5, 1, -3);
             switchCamera("free");
@@ -236,18 +253,27 @@ const updateView = async (viewKey: string) => {
             setFreePosition(1, 1, -7, "free2");
             setCameraMinZ(0.1, "free2");
             switchCamera("free2");
+            await delayForMilSeconds(5000);
+            shutterFadeIn(1000);
             break;
         case "c1-(鼓動)": // 全員
+            enableCircleRipple();
+
             setFreeRotation(43, -10, 4);
             setFreePosition(-4.8, 0.72, 2.6);
             setCameraMinZ(0.1, "free");
             switchCamera("free");
             break;
         case "c1-(心)": // 全員
+            disableAllRipple();
+            enableSquareRipple();
+
             setFreeRotation(-35, 18, 0.5);
             setFreePosition(-3.25, 1, 2.55);
             break;
         case "c1-(不可能を超えてゆけ)": // 全員
+            enableCircleRipple();
+
             setFreeRotation(70, 15, 0.5);
             setFreePosition(-1.3, 0.7, 0.8);
             const tween_c1_07 = new Tween({z: 0.8}).to({z: 1.3}, 3500).start().onUpdate(props => {
@@ -266,16 +292,23 @@ const updateView = async (viewKey: string) => {
             tweenGroup.add(tween_c1_08);
             break;
         case "c1-(踊る)": // 全員
+            disableAllRipple();
+            enableVerticalSpectrum();
+
             setFreeRotation(43, -10, 4);
             setFreePosition(-4.8, 0.72, 2.6);
             setCameraMinZ(0.1, "free");
             switchCamera("free");
             break;
         case "c1-(震える)": // 全員
+            enableHorizontalSpectrum();
+            
             setFreeRotation(-35, 18, 0.5);
             setFreePosition(-3.25, 1, 2.55);
             break;
         case "c1-(重なる想いだけ)": // 全員
+            enableCircleSpectrum();
+
             setFreeRotation(70, 15, 0.5);
             setFreePosition(-1.3, 0.7, 0.8);
             const tween_c1_09 = new Tween({z: 0.8}).to({z: 1.3}, 3500).start().onUpdate(props => {
@@ -293,6 +326,9 @@ const updateView = async (viewKey: string) => {
             tweenGroup.add(tween_c1_10);
             break;
         case "立ち尽くす街角": // ミク
+            disableAllSpectrum();
+            enableCircleRipple();
+
             setFreeRotation(45, 20, 0, "free2");
             setFreePosition(-3.5, 1, -3, "free2");
             switchCameraWithCrossFade("free2", 1000);
@@ -314,6 +350,9 @@ const updateView = async (viewKey: string) => {
             }).onComplete(() => tweenGroup.remove(tween_v2_02));
             tweenGroup.add(tween_v2_02);
             shutterIn(500).onComplete(()=>{
+                disableAllRipple();
+                enableSquareRipple();
+
                 switchCamera("free");
                 shutterOut(500);
             });
@@ -325,6 +364,9 @@ const updateView = async (viewKey: string) => {
         case "消えない星を繋いでいたい": // ミク
             break;
         case "止め処なくbluff,bluff": // メイコ
+            disableAllRipple();
+            enableHorizontalSpectrum();
+
             setFreeRotation(-90, 0, 0, "free2");
             setFreePosition(-3.75, 0.1, 1.25, "free2");
             setCameraMinZ(0.01, "free2");
@@ -337,6 +379,9 @@ const updateView = async (viewKey: string) => {
         case "言葉の飾り毎秒更新": // メイコ
             break;
         case "揺らぐ主役舞台は未知の最前線": // ルカ・カイト
+            disableAllSpectrum();
+            enableVerticalSpectrum();
+
             setFreeRotation(-150, 20, 0, "free2");
             setFreePosition(-0.5, 0.8, 0.8, "free2");
             setCameraMinZ(0.001, "free2");
@@ -347,11 +392,13 @@ const updateView = async (viewKey: string) => {
             }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(tween_v2_05));
             tweenGroup.add(tween_v2_05);
             break;
-        case "c2-Yeah!": // ルカ・カイト
+        case "c2-Yeah！": // ルカ・カイト
             whiteFadeIn(1000);
             shutterFadeOut(1000);
             break;
         case "c2-もう正解なんてない": // 全員
+            disableAllSpectrum();
+
             setFreeRotation(0, 0, 0 );
             setFreePosition(-2.5, 1, -3);
             switchCamera("free");
@@ -409,6 +456,8 @@ const updateView = async (viewKey: string) => {
             tweenGroup.add(tween_2c_07);
             break;
         case "零れたメモリを誘って": // ミク・カイト
+            shutterFadeIn(1000);
+            enableCircleRipple();
             break;
         case "Twilighttotellus": // ルカ・リン
             break;
@@ -418,6 +467,8 @@ const updateView = async (viewKey: string) => {
             shutterFadeOut(1000);
             break;
         case "lc-終わりなんて": // 全員
+            disableAllRipple();
+        
             setModelVisibility("sky", true);
             setModelVisibility("dotmiku-tanabata", true);
             setModelVisibility("dotmiku", true);
@@ -471,12 +522,16 @@ const updateView = async (viewKey: string) => {
             switchCamera("free2");
             break;
         case "lc-(鼓動)": // 全員
+            enableCircleRipple();
+
             setFreeRotation(43, -10, 4);
             setFreePosition(-4.8, 0.72, 2.6);
             setCameraMinZ(0.1, "free");
             switchCamera("free");
             break;
         case "lc-(心)": // 全員
+            enableSquareRipple();
+
             setFreeRotation(-35, 18, 0.5);
             setFreePosition(-3.25, 1, 2.55);
             break;
@@ -499,16 +554,23 @@ const updateView = async (viewKey: string) => {
             tweenGroup.add(tween_lc_08);
             break;
         case "lc-(踊る)": // 全員
+            disableAllRipple();
+            enableVerticalSpectrum();
+
             setFreeRotation(43, -10, 4);
             setFreePosition(-4.8, 0.72, 2.6);
             setCameraMinZ(0.1, "free");
             switchCamera("free");
             break;
         case "lc-(震える)": // 全員
+            enableHorizontalSpectrum();
+
             setFreeRotation(-35, 18, 0.5);
             setFreePosition(-3.25, 1, 2.55);
             break;
         case "lc-(重なる想いだけ)": // 全員
+            enableCircleSpectrum();
+
             setFreeRotation(70, 15, 0.5);
             setFreePosition(-1.3, 0.7, 0.8);
             const tween_lc_09 = new Tween({z: 0.8}).to({z: 1.3}, 3500).start().onUpdate(props => {
@@ -525,7 +587,12 @@ const updateView = async (viewKey: string) => {
             }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(tween_lc_10));
             tweenGroup.add(tween_lc_10);
             break;
-        case "咲かせた未来の先へ": // ミク
+        case "咲かせた未来のその先へ": // ミク
+            enableCircleRipple();
+            enableSquareRipple();
+            await delayForMilSeconds(10000);
+            disableAllRipple();
+            disableAllSpectrum();
             break;
     }
 }

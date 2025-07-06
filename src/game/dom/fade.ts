@@ -1,4 +1,4 @@
-import { Tween, Easing } from "@tweenjs/tween.js";
+﻿import { Tween, Easing } from "@tweenjs/tween.js";
 
 import { tweenGroup } from "~/lib/update/cycle";
 
@@ -247,38 +247,12 @@ export function shutterOut(duration: number = FADE_DURATION, easing: EasingFunct
 
 // Shutter fade effect functions (combining shutter and fade)
 export function shutterFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
-  // Start with the shutter at default position and black overlay transparent
-  blackTrimTop.style.height = `${SHUTTER_TOP_DEFAULT_HEIGHT}px`;
-  blackTrimBottom.style.height = `${SHUTTER_BOTTOM_DEFAULT_HEIGHT}px`;
-  blackOverlay.style.opacity = '0';
-  // Remove the 'hidden' class to make sure it's visible
-  blackOverlay.classList.remove('hidden');
-
-
-  // Get the viewport height
-  const viewportHeight = window.innerHeight;
-  // Calculate the target height for each trim (half of the viewport)
-  const targetHeight = viewportHeight / 2;
-
-  // Get the current heights
-  const currentTopHeight = parseInt(getComputedStyle(blackTrimTop).height) || SHUTTER_TOP_DEFAULT_HEIGHT;
-  const currentBottomHeight = parseInt(getComputedStyle(blackTrimBottom).height) || SHUTTER_BOTTOM_DEFAULT_HEIGHT;
-
-  // Animate the top trim height
-  const topTween = new Tween({ height: currentTopHeight }).to({ height: targetHeight }, duration).easing(easing).onUpdate(x => {
-    blackTrimTop.style.height = `${x.height}px`;
-  }).start();
-  tweenGroup.add(topTween);
-
-  // Animate the bottom trim height
-  const bottomTween = new Tween({ height: currentBottomHeight }).to({ height: targetHeight }, duration).easing(easing).onUpdate(x => {
-    blackTrimBottom.style.height = `${x.height}px`;
-  }).start();
-  tweenGroup.add(bottomTween);
+  blackTrim.style.opacity = '0';
+  blackTrim.classList.remove('hidden');
 
   // Animate the black overlay opacity
   const fadeTween = new Tween({ opacity: 0 }).to({ opacity: 1 }, duration).easing(easing).onUpdate(x => {
-    blackOverlay.style.opacity = x.opacity.toString();
+    blackTrim.style.opacity = x.opacity.toString();
   }).start();
   tweenGroup.add(fadeTween);
 

@@ -352,3 +352,16 @@ export function addModelRotation(modelName: string, x: number, y: number, z: num
 	console.log(`Model "${modelName}" rotation adjusted by: x=${x}, y=${y}, z=${z}`);
 	return true;
 }
+
+export function setModelScale(modelName: string, x: number, y: number, z: number) {
+	const mesh = rootModels[modelName];
+	if (!mesh || isNaN(x) || isNaN(y) || isNaN(z)) {
+		console.warn(`Invalid scale name or rotation values: ${modelName}, x=${x}, y=${y}, z=${z}`);
+		return false;
+	}
+
+	mesh.scaling = new Vector3(x, y, z);
+
+	console.log(`Model "${modelName}" scale adjusted by: x=${x}, y=${y}, z=${z}`);
+	return true;
+}
