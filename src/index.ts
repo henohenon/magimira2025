@@ -1,4 +1,5 @@
 import type { Tween } from "@tweenjs/tween.js/";
+import { Color3 } from "@babylonjs/core/Maths/math.color";
 
 import "~/lib/update";
 import "~/lib/babylon";
@@ -21,6 +22,26 @@ import {
     textaliveBannerFadeOut
 } from "~/game/dom/fade";
 
+
+export const templateColorCodes = {
+    "default": "#FFEAC7",
+    "MEIKO": "#dd111e",
+    "KAITO": "#1247a5",
+    "Miku": "#22c0ef",
+    "Rin": "#e66334",
+    "Ren": "#e68c19",
+    "Luka": "#dd448a",
+}
+export const templateColors = {
+    "default": Color3.FromHexString(templateColorCodes["default"]),
+    "MEIKO": Color3.FromHexString(templateColorCodes["MEIKO"]),
+    "KAITO": Color3.FromHexString(templateColorCodes["KAITO"]),
+    "Miku": Color3.FromHexString(templateColorCodes["Miku"]),
+    "Rin": Color3.FromHexString(templateColorCodes["Rin"]),
+    "Ren": Color3.FromHexString(templateColorCodes["Ren"]),
+    "Luka": Color3.FromHexString(templateColorCodes["Luka"]),
+}
+export type CharaNames = keyof typeof templateColors;
 let babylonLoaded = false;
 let textaliveLoaded = false;
 babylonEvents.on("onSceneLoaded", () => {

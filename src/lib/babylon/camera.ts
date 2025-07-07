@@ -24,6 +24,14 @@ const cameras: Record<CameraType, Nullable<ArcRotateCamera | FreeCamera>> = {
 	"arc2": null
 }
 
+export function getFreeCamera(cameraName: "free" | "free2"){
+    return cameras[cameraName] as FreeCamera;
+}
+
+export function getArcCamera(cameraName: "arc" | "arc2"){
+    return cameras[cameraName] as ArcRotateCamera;
+}
+
 export function setCameraMinZ(minZ: number, cameraType: CameraType){
     const camera = cameras[cameraType];
     if (!camera) return;

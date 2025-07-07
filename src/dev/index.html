@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../style.css" />
     <link rel="stylesheet" href="./style.css" />
     <script type="module" defer src="./web-components/index.ts"></script>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon" />
 </head>
 
 <body class="m-0 w-screen h-screen overflow-hidden flex bg-black">
@@ -316,9 +317,8 @@
             <div id="playing" class="max pointer-events-none hidden">
                 <div id="black-trim" class="max">
                     <div id="black-trim-top" class="absolute w-full bg-stone-900"></div>
-                    <div id="black-trim-bottom" class="absolute w-full bottom-0 bg-stone-900 flex justify-center items-center">
-                        <h3 class="text-white mx-3 text-4xl" id="lyrics-text"></h3>
-                    </div>
+<div id="black-trim-bottom" class="absolute w-full bottom-0 bg-stone-900 flex justify-center items-end">
+                  <h3 class="text-white mx-3 text-4xl"  style="height: 100px; line-height: 100px;" id="lyrics-text"></h3>                    </div>
                 </div>
             </div>
             <div id="white-overlay" class="max bg-white hidden"></div>

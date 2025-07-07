@@ -210,13 +210,13 @@ export function shutterIn(duration: number = FADE_DURATION, easing: EasingFuncti
   // Animate the top trim height
   const topTween = new Tween({ height: currentTopHeight }).to({ height: targetHeight }, duration).easing(easing).onUpdate(x => {
     blackTrimTop.style.height = `${x.height}px`;
-  }).start();
+  }).start().onComplete(() => tweenGroup.remove(topTween));
   tweenGroup.add(topTween);
 
   // Animate the bottom trim height
   const bottomTween = new Tween({ height: currentBottomHeight }).to({ height: targetHeight }, duration).easing(easing).onUpdate(x => {
     blackTrimBottom.style.height = `${x.height}px`;
-  }).start();
+  }).start().onComplete(() => tweenGroup.remove(bottomTween));
   tweenGroup.add(bottomTween);
 
   return topTween;

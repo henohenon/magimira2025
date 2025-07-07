@@ -13,6 +13,8 @@ import type { Mesh } from "@babylonjs/core/Meshes/mesh";
 import type { Nullable } from "@babylonjs/core/types";
 import { Material } from "@babylonjs/core/Materials/material";
 
+import { templateColors, type CharaNames } from "~/index.ts";
+
 import { events } from "./events";
 import {degToRad, radToDeg} from ".";
 
@@ -21,6 +23,9 @@ const modelMeshes: Record<string, Record<string, AbstractMesh>> = {};
 // Store animation groups by model name
 const modelAnimations: Record<string, Record<string, AnimationGroup>> = {};
 const rootModels: Record<string, AbstractMesh> = {};
+export const starModels: Record<string, AbstractMesh[]> = {};
+let lightGl: GlowLayer | undefined = undefined;
+let starGl: GlowLayer | undefined = undefined;
 
 /**
  * Load a model from the specified source path
@@ -48,11 +53,7 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 
 	// Store the new meshes for this model
 	const newMeshes: Record<string, AbstractMesh> = {};
-	const gl = new GlowLayer("glow", scene, {
-		mainTextureFixedSize: 128,
-		blurKernelSize: 24
-	});
-	gl.intensity = 0.2;
+
 
 	// Process materials for all meshes
 	for (let i = initialMeshCount; i < scene.meshes.length; i++) {
@@ -64,6 +65,7 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 		}
 	}
 
+	const starMats: Record<string, StandardMaterial> = {};
 	for(const mesh of Object.values(newMeshes)){
 		const mat = mesh.material;
 		if (mat) {
@@ -78,13 +80,26 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 				const mat = new StandardMaterial("glow-mat", scene);
 				mat.emissiveColor = mesh.name === "pc-display" ? new Color3(0.25, 0.25, 0.25) : new Color3(1, 1, 1);
 				mesh.material = mat;
-				gl.addIncludedOnlyMesh(mesh as Mesh);
-				gl.referenceMeshToUseItsOwnMaterial(mesh);
+				lightGl?.addIncludedOnlyMesh(mesh as Mesh);
+				lightGl?.referenceMeshToUseItsOwnMaterial(mesh);
 				continue;
 			}else if(mesh.name === "pc-display-open" || mesh.name === "pc-display-close"){
 				mat.transparencyMode = Material.MATERIAL_ALPHABLEND;
 				mat.needDepthPrePass = true;
-
+			}else if(mesh.name.includes("star_")){
+				const charaName = getCharaNameFromStarName(mesh.name) as CharaNames;
+				let mat = starMats[charaName];
+				if(!mat){
+					mat = new StandardMaterial(`glow-${charaName}-mat`, scene);
+					mat.emissiveColor = templateColors[charaName];
+					starMats[charaName] = mat;
+				}
+				mesh.material = mat;
+				starGl?.addIncludedOnlyMesh(mesh as Mesh);
+				starGl?.referenceMeshToUseItsOwnMaterial(mesh);
+				const starKind = getStarKindFromStarName(mesh.name);
+				starModels[starKind] = [...starModels[starKind] || [], mesh];
+				continue;
 			}
 			mesh.material = mat;
 		}
@@ -102,9 +117,45 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 	console.log(`Model loaded from ${sourcePath} with ${Object.keys(newMeshes).length} meshes and ${modelAnimGroups.length} animations`);
 }
 
+function getCharaNameFromStarName(starName: string): CharaNames {
+	if(starName.includes("_rin")){
+		return "Rin";
+	}else if(starName.includes("_ren")){
+		return "Ren";
+	}else if(starName.includes("_miku")){
+		return "Miku";
+	}else if(starName.includes("_kaito")){
+		return "KAITO";
+	}else if(starName.includes("_meiko")){
+		return "MEIKO";
+	}else if(starName.includes("_luka")){
+		return "Luka";
+	}
+	return "default";
+}
+
+function getStarKindFromStarName(starName: string): string {
+	if(starName.includes("_v1")){
+		return "verse1";
+	}
+	return "not found";
+}
+
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 events.on("onSceneDefinition", async ({ scene }) => {
+	lightGl = new GlowLayer("glow", scene, {
+		mainTextureFixedSize: 128,
+		blurKernelSize: 24
+	});
+	lightGl.intensity = 0.2;
+	starGl = new GlowLayer("glow", scene, {
+		mainTextureFixedSize: 512,
+		blurKernelSize: 24
+	});
+	starGl.intensity = 0.3;
+
+
 	// Load both models and collect their animation groups
 	/* --- どっと式ミクさん --- */
 	await loadModel(`${baseUrl}dotmiku.glb`, scene);

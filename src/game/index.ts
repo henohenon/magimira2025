@@ -1,9 +1,9 @@
 import { Easing, Tween } from "@tweenjs/tween.js";
-import { Color3 } from "@babylonjs/core/Maths/math.color";
 import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 import {Vector3} from "@babylonjs/core/Maths/math.vector";
 
 import {
+    getFreeCamera,
     setArcAlpha,
     setArcRadius,
     setArcSphericalCoordinates,
@@ -14,7 +14,7 @@ import {
     switchCamera,
     switchCameraWithCrossFade
 } from "~/lib/babylon/camera";
-import {setModelRotation, setModelVisibility, playAnimation, getRootMesh} from "~/lib/babylon/mdl";
+import {setModelRotation, setModelVisibility, playAnimation, getRootMesh, starModels} from "~/lib/babylon/mdl";
 import {
     getLightDiffuse,
     setLightDiffuse,
@@ -22,7 +22,8 @@ import {
 } from "~/lib/babylon/light";
 import { delayForMilSeconds } from "~/lib/update";
 import { tweenGroup } from "~/lib/update/cycle.ts";
-import { enableStarParticles } from "~/lib/babylon/star-particle.ts";
+import { disableStarParticles, enableStarParticles } from "~/lib/babylon/star-particle.ts";
+import { templateColors } from "~/index.ts";
 
 import { setLightingPreset } from "./light";
 import {events as gameEvents} from "./events";
@@ -50,37 +51,21 @@ import { disableAiCameraControl, disableArcCameraControl, enableAiCameraControl,
 import { enableDropStar } from "./drop-star.ts";
 import { scene } from "~/lib/babylon/index.ts";
 
-const templateColorCodes = {
-    "default": "#FFEAC7",
-    "MEIKO": "#dd111e",
-    "KAITO": "#1247a5",
-    "Miku": "#22c0ef",
-    "Rin": "#e66334",
-    "Ren": "#e68c19",
-    "Luka": "#dd448a",
-}
-const templateColors = {
-    "default": Color3.FromHexString(templateColorCodes["default"]),
-    "MEIKO": Color3.FromHexString(templateColorCodes["MEIKO"]),
-    "KAITO": Color3.FromHexString(templateColorCodes["KAITO"]),
-    "Miku": Color3.FromHexString(templateColorCodes["Miku"]),
-    "Rin": Color3.FromHexString(templateColorCodes["Rin"]),
-    "Ren": Color3.FromHexString(templateColorCodes["Ren"]),
-    "Luka": Color3.FromHexString(templateColorCodes["Luka"]),
-}
 
-const lightSwitch = new Audio("/電気のスイッチを入れる.mp3");
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
+const lightSwitch = new Audio(`${baseUrl}電気のスイッチを入れる.mp3`);
 lightSwitch.volume = 0.45;
-const street = new Audio("/閑静な住宅街1.mp3");
+const street = new Audio(`${baseUrl}閑静な住宅街1.mp3`);
 street.volume = 0.18;
 street.loop = true;
 street.addEventListener("canplaythrough", () => {
     console.log("can play");
     street.play();
 });
-const doorOpen = new Audio("/ドアを閉める1.mp3");
+const doorOpen = new Audio(`${baseUrl}ドアを閉める1.mp3`);
 doorOpen.volume = 0.15;
-const doorClose = new Audio("/ドアを閉める2.mp3");
+const doorClose = new Audio(`${baseUrl}ドアを閉める2.mp3`);
 doorClose.volume = 0.11;
 
 const audios = [
@@ -89,6 +74,11 @@ const audios = [
     doorOpen,
     doorClose,
 ];
+
+const free1 = getFreeCamera("free");
+const free2 = getFreeCamera("free2");
+// const arc2 = getArcCamera("arc");
+// const arc = getArcCamera("arc2");
 
 setFreePosition(0, 1.1, 2.1);
 setFreeRotation(180, 32, 0);
@@ -106,6 +96,7 @@ let tanabataModel: AbstractMesh | undefined = undefined;
 let skyModel: AbstractMesh | undefined = undefined;
 
 let skipOpening: () => void = () => {};
+let finishOpening = false;
 gameEvents.on("onLoaded", async ()=>{
     mikuModel = getRootMesh("dotmiku");
     roomModel = getRootMesh("room");
@@ -116,6 +107,9 @@ gameEvents.on("onLoaded", async ()=>{
     pcOpen.visibility = 0;
     pcClose.visibility = 1;
     pcDisplay.isVisible = false;
+    for(const star of Object.values(starModels).flat()){
+        star.setEnabled(false);
+    }
 
     roomModel.setEnabled(true);
 
@@ -168,7 +162,7 @@ gameEvents.on("onLoaded", async ()=>{
         await delayWithSkip(800);
         
         if(isStart) throw Error();
-        playAnimation("dotmiku", "歩き1");
+        playAnimation("dotmiku", "walk1");
         mikuModel.position = new Vector3(-0.5, 0, 0.5);
         setModelRotation(mikuModel, 0, -90, 0);
         miku_fadeIn.start();
@@ -183,7 +177,7 @@ gameEvents.on("onLoaded", async ()=>{
         mikuModelVisible = false;
         
         if(isStart) throw Error();
-        playAnimation("dotmiku", "歩き2");
+        playAnimation("dotmiku", "walk2");
         mikuModel.position = new Vector3(-0.07, 0, 0.5);
         setModelRotation(mikuModel, 0, -90, 0);
         miku_fadeIn.start();
@@ -211,7 +205,7 @@ gameEvents.on("onLoaded", async ()=>{
 
     mikuModel.position = Vector3.Zero();
     setModelRotation(mikuModel, 0, -180, 0);
-    playAnimation("dotmiku", "座り");
+    playAnimation("dotmiku", "sitdown");
     miku_fadeIn.start();
     await delayForMilSeconds(700);
     tweenGroup.remove(miku_fadeIn, miku_fadeOut);
@@ -228,14 +222,16 @@ gameEvents.on("onLoaded", async ()=>{
     tweenGroup.add(pcCloseFadeOut);
     await delayForMilSeconds(1500);
     pcDisplay.isVisible = true;
+    finishOpening = true;
 
     startAnimation();
 });
 
 let startListening = false;
 function startAnimation(){
-    if(!startListening) {
+    if(!startListening && finishOpening) {
         startListening = true;
+        playAnimation("dotmiku", "listen");
         return;
     }
 }
@@ -263,16 +259,25 @@ gameEvents.on("onKeyFrame", ({key}) => {
 const updateView = async (viewKey: string) => {
     switch(viewKey) {
         case "Sotellusストリートライト": // 全員
-            setFreeRotation(145, 15, 0, "free2");
-            setFreePosition(-5, 2, 5, "free2");
+            for(const star of starModels["verse1"]){
+                star.setEnabled(true);
+            }
+            setFreeRotation(-155, 10, 0, "free2");
+            setFreePosition(1.5, 1.1, 4, "free2");
+            free2.fov = 18;
             switchCamera("free2");
+            await delayForMilSeconds(2700);
+            for(const star of starModels["verse1"]){
+                star.setEnabled(false);
+            }
             break;
         case "揺らめく都市のmagic": // リン
-            setFreeRotation(-45, 20, 0);
-            setFreePosition(-1, 1, -3);
+            setFreeRotation(120, 20, 0);
+            setFreePosition(0.5, 0.8, 3.2);
             switchCamera("free");
-            const tween_v1_01 = new Tween({x: -1, z: -3}).to({x: 0.3, z: 0}, 18000).start().onUpdate(pos => {
-                setFreePosition(pos.x, 1, pos.z);
+            const tween_v1_01 = new Tween({x: 0.5, z: 3.2}).to({x: -2, z: 1}, 18000).start().onUpdate(pos => {
+                free1.position.x = pos.x;
+                free1.position.z = pos.z;
             }).onComplete(() => tweenGroup.remove(tween_v1_01));
             tweenGroup.add(tween_v1_01);
             break;
@@ -304,13 +309,14 @@ const updateView = async (viewKey: string) => {
         case "もう全部奏でたいんだ": // リンルカ
             break;
         case "(Yeahdoit！)": // リン
-            setFreeRotation(70, 5, 0);
-            setFreePosition(0.2, 0.78, 1.6);
+            disableAllRipple();
+            enableVerticalSpectrum();
+
+            setFreeRotation(-104, 0, 84);
+            free1.position = new Vector3(-2.8, 1, -1.8);
             setCameraMinZ(0.01, "free");
-            const tween_v1_03 = new Tween({z: 1.6}).to({z: 1.8}, 6000).start().onUpdate(pos => {
-                setFreePosition(0.2, 0.78, pos.z);
-                disableAllRipple();
-                enableVerticalSpectrum();
+            const tween_v1_03 = new Tween({z: -1.8}).to({z: -3.4}, 8000).start().onUpdate(pos => {
+                free1.position.z = pos.z;
             }).onComplete(() => tweenGroup.remove(tween_v1_03));
             tweenGroup.add(tween_v1_03);
             switchCameraWithCrossFade('free', 1000);
@@ -319,21 +325,22 @@ const updateView = async (viewKey: string) => {
             break;
         case "光差す道を目指して": // ミク
             setCameraMinZ(0.01, "free2");
-            setFreeRotation(-75, 50, 5, "free2");
-            setFreePosition(-4.38, 0.8, 2.2, "free2");
+            setFreeRotation(105, 47, 7, "free2");
+            setFreePosition(2.1, 1, -2.9, "free2");
             switchCamera("free2");
-            const tween_v1_04 = new Tween({z: 2.2}).to({z: 2.35}, 5000).start().onUpdate(pos => {
-                setFreePosition(-4.38, 0.8, pos.z, "free2");
+            const tween_v1_04 = new Tween({z: -2.9}).to({z: -2.6}, 5000).start().onUpdate(pos => {
+                free2.position.z = pos.z;
             }).onComplete(() => tweenGroup.remove(tween_v1_04));
             tweenGroup.add(tween_v1_04);
             break;
         case "空回る今だって僕らの祈り毎秒更新": // カイト
-            setFreeRotation(70, 11, 0);
-            setFreePosition(-4, 1.6, 2.2);
+            setFreeRotation(40, 11, 0);
+            setFreePosition(-2.65, 1.2, -3.3);
             setCameraMinZ(0.001, "free");
             switchCamera("free");
-            const tween_v1_05 = new Tween({x: -5}).to({x: -3.5}, 5000).start().onUpdate(pos => {
-                setFreePosition(pos.x, 1.6, 2.2);
+            const tween_v1_05 = new Tween({x: -2.65, z:-3.3}).to({x: -2.3, z:-4}, 5000).start().onUpdate(pos => {
+                free1.position.x = pos.x;
+                free1.position.z = pos.z;
             }).onComplete(() => tweenGroup.remove(tween_v1_05));
             tweenGroup.add(tween_v1_05);
             break;
@@ -341,12 +348,13 @@ const updateView = async (viewKey: string) => {
             disableAllSpectrum();
             enableCircleSpectrum();
 
-            setFreeRotation(0, 40, 0, "free2");
-            setFreePosition(-4, 2, 0.8, "free2");
+            setFreeRotation(180, 40, 0, "free2");
+            free2.position = new Vector3(1.7, 2, -2);
             switchCamera("free2");
-            const tween_v1_06 = new Tween({pitch: 40, y: 2, z: 0.8}).to({pitch: -10, y:0.8, z: 1.3}, 10000).start().onUpdate(props => {
-                setFreeRotation(0, props.pitch, 0, "free2");
-                setFreePosition(-4, props.y, props.z, "free2");
+            const tween_v1_06 = new Tween({pitch: 40, y: 2, z: -2}).to({pitch: -10, y:1, z: -2.5}, 10000).start().onUpdate(props => {
+                setFreeRotation(180, props.pitch, 0, "free2");
+                free2.position.y = props.y;
+                free2.position.z = props.z;
             }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(tween_v1_06));
             tweenGroup.add(tween_v1_06);
             break;
@@ -631,6 +639,7 @@ const updateView = async (viewKey: string) => {
             mikuModel?.setEnabled(false);
             tanabataModel = getRootMesh("dotmiku-tanabata");
             skyModel = getRootMesh("sky");
+            console.log(skyModel);
 
             skyModel?.setEnabled(true);
             tanabataModel?.setEnabled(true);
@@ -752,9 +761,12 @@ const updateView = async (viewKey: string) => {
         case "咲かせた未来のその先へ": // ミク
             enableCircleRipple();
             enableSquareRipple();
-            await delayForMilSeconds(10000);
+            await delayForMilSeconds(3000);
             disableAllRipple();
             disableAllSpectrum();
+            disableStarParticles();
+            skyModel?.setEnabled(true);
+            tanabataModel?.setEnabled(false);
             break;
     }
 }
