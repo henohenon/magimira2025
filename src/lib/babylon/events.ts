@@ -9,10 +9,6 @@ type Events = {
     },
     onSceneLoaded: undefined;
     onMdlAnimLoaded: {mdlName: string, animations: string[]};
-    onModelVisibilityChanged: {
-        modelName: string;
-        visible: boolean;
-    };
     onModelsLoaded: string[]; // Array of available model names
 }
 export const events: Emitter<Events> = mitt<Events>();

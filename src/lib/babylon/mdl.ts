@@ -1,19 +1,20 @@
 import "@babylonjs/loaders";
-import { AppendSceneAsync } from "@babylonjs/core/Loading/sceneLoader";
 import "@babylonjs/core/Loading/loadingScreen";
 import "@babylonjs/loaders/glTF";
-import { events } from "./events";
+import { AppendSceneAsync } from "@babylonjs/core/Loading/sceneLoader";
 import type { AnimationGroup } from "@babylonjs/core/Animations/animationGroup";
 import type { Scene } from "@babylonjs/core/scene";
 import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 import {Quaternion, Vector3} from "@babylonjs/core/Maths/math.vector";
-import {degToRad, radToDeg} from ".";
 import { Color3 } from "@babylonjs/core/Maths/math.color";
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { GlowLayer } from "@babylonjs/core/Layers/glowLayer";
 import type { Mesh } from "@babylonjs/core/Meshes/mesh";
 import type { Nullable } from "@babylonjs/core/types";
+import { Material } from "@babylonjs/core/Materials/material";
 
+import { events } from "./events";
+import {degToRad, radToDeg} from ".";
 
 // Store loaded model meshes by model name
 const modelMeshes: Record<string, Record<string, AbstractMesh>> = {};
@@ -48,8 +49,8 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 	// Store the new meshes for this model
 	const newMeshes: Record<string, AbstractMesh> = {};
 	const gl = new GlowLayer("glow", scene, {
-		mainTextureFixedSize: 256,
-		blurKernelSize: 64
+		mainTextureFixedSize: 128,
+		blurKernelSize: 24
 	});
 	gl.intensity = 0.2;
 
@@ -59,26 +60,34 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 		newMeshes[mesh.name] = mesh;
 		if(mesh.name === "__root__") {
 			rootModels[modelName] = mesh;
+			mesh.setEnabled(false);
 		}
 	}
 
-	for(const mesh of Object.values(newMeshes)){		
-		if(modelName.includes("miku")){
-			const mat = mesh.material;
-			if (mat) {
+	for(const mesh of Object.values(newMeshes)){
+		const mat = mesh.material;
+		if (mat) {
+			mat.backFaceCulling = true;
+			if(modelName.includes("miku")){
+				mat.transparencyMode = Material.MATERIAL_ALPHABLEND;
 				mat.needDepthPrePass = true;
 				mat.separateCullingPass = true;
-				mesh.material = mat;
 				mesh.alwaysSelectAsActiveMesh = true;
-			}
-		}else if(modelName.includes("hoshi")){
-			if(mesh.material){
-				const mat = mesh.material as StandardMaterial;
-				mat.emissiveColor = new Color3(0, 0.3, 0);
+			}else if(mesh.name === "pc-display" || mesh.name === "top-light"){
+				console.log(mesh);
+				const mat = new StandardMaterial("glow-mat", scene);
+				mat.emissiveColor = mesh.name === "pc-display" ? new Color3(0.25, 0.25, 0.25) : new Color3(1, 1, 1);
+				mesh.material = mat;
 				gl.addIncludedOnlyMesh(mesh as Mesh);
-			}
-		}
+				gl.referenceMeshToUseItsOwnMaterial(mesh);
+				continue;
+			}else if(mesh.name === "pc-display-open" || mesh.name === "pc-display-close"){
+				mat.transparencyMode = Material.MATERIAL_ALPHABLEND;
+				mat.needDepthPrePass = true;
 
+			}
+			mesh.material = mat;
+		}
 	}
 
 	// Store meshes by model name
@@ -99,19 +108,17 @@ events.on("onSceneDefinition", async ({ scene }) => {
 	// Load both models and collect their animation groups
 	/* --- どっと式ミクさん --- */
 	await loadModel(`${baseUrl}dotmiku.glb`, scene);
-	await loadModel(`${baseUrl}dotmiku-tanabata.glb`, scene);
-	// Load room model
+	// 部屋
 	await loadModel(`${baseUrl}room.glb`, scene);
-	await loadModel(`${baseUrl}sky.glb`, scene);
-	await loadModel(`${baseUrl}hoshi-mk.glb`, scene);
 
-	setModelVisibility("dotmiku-tanabata", false);
-
-	// Emit available model names
+	// 必要なモデルロードの終了
 	const modelNames = getModelNames();
 	events.emit("onModelsLoaded", modelNames);
-
-	console.log("All GLTF models loaded!");
+	
+	// あとから読み込む
+	await loadModel(`${baseUrl}sky.glb`, scene);
+	// await loadModel(`${baseUrl}hoshi-mk.glb`, scene);
+	await loadModel(`${baseUrl}dotmiku-tanabata.glb`, scene);
 });
 
 export const getAnimations = (mdlName: string) => {
@@ -156,38 +163,14 @@ function getMeshes(mdlName: string): AbstractMesh[] | undefined {
  * @param visible Whether the model should be visible (true) or hidden (false)
  * @returns true if model was found and visibility was set, false otherwise
  */
-export function setModelVisibility(modelName: string, visible: boolean): boolean {
+export function setModelVisibility(modelName: string, visibility: number): boolean {
 	const meshes = getMeshes(modelName);
 	if (!meshes) return false;
 
 	for (const mesh of meshes) {
-		mesh.isVisible = visible;
+		mesh.visibility = visibility;
 	}
-
-	// Emit event for visibility change
-	events.emit("onModelVisibilityChanged", { modelName, visible });
-
-	console.log(`Model "${modelName}" is now ${visible ? 'visible' : 'hidden'}.`);
 	return true;
-}
-/**
- * Show a model by making all its meshes visible
- * @param modelName Name of the model to show
- * @returns true if model was found and shown, false otherwise
- * @deprecated Use setModelVisibility(modelName, true) instead
- */
-export function showModel(modelName: string): boolean {
-	return setModelVisibility(modelName, true);
-}
-
-/**
- * Hide a model by making all its meshes invisible
- * @param modelName Name of the model to hide
- * @returns true if model was found and hidden, false otherwise
- * @deprecated Use setModelVisibility(modelName, false) instead
- */
-export function hideModel(modelName: string): boolean {
-	return setModelVisibility(modelName, false);
 }
 
 /**
@@ -195,14 +178,14 @@ export function hideModel(modelName: string): boolean {
  * @param modelName Name of the model to toggle
  * @returns true if model was found and toggled, false otherwise
  */
-export function toggleModelVisibility(modelName: string): boolean {
+export function toggleModelEnable(modelName: string): boolean {
 	// Check if model exists
 	const meshes = getMeshes(modelName);
 	if (!meshes) return false;
 
 	// Check current visibility and toggle it
-	const isCurrentlyVisible = isModelVisible(modelName);
-	return setModelVisibility(modelName, !isCurrentlyVisible);
+	const isCurrentlyVisible = isModelEnable(modelName);
+	return setModelVisibility(modelName, isCurrentlyVisible? 0 : 1);
 }
 
 /**
@@ -210,21 +193,19 @@ export function toggleModelVisibility(modelName: string): boolean {
  * @param modelName Name of the model to check
  * @returns true if model is visible, false if hidden or not found
  */
-export function isModelVisible(modelName: string): boolean {
-	const meshes = getMeshes(modelName);
-	if (!meshes) return false;
+export function isModelEnable(modelName: string): boolean {
+	const mesh = getRootMesh(modelName);
+	if (!mesh) return false;
 
 	// Use the first mesh to determine visibility
-	return meshes[0].isVisible;
+	return mesh.isEnabled();
 }
 
-/**
- * Check if a model is currently enabled (alias for isModelVisible)
- * @param modelName Name of the model to check
- * @returns true if model is enabled, false if disabled or not found
- */
-export function isModelEnabled(modelName: string): boolean {
-	return isModelVisible(modelName);
+export function setModelEnable(modelName: string, enabled: boolean): boolean {
+	const mesh = getRootMesh(modelName);
+	if (!mesh) return false;
+	mesh.setEnabled(enabled);
+	return true;
 }
 
 /**

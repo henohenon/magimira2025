@@ -59,7 +59,7 @@ gameEvents.on("onGameStart", async () => {
     textaliveBannerFadeOut();
     playingContainerFadeIn();
     creditContainerFadeOut();
-    await delayForMilSeconds(3000);
+    await delayForMilSeconds(1000);
 
     gameEvents.emit("onMusicStart");
     player.requestPlay();

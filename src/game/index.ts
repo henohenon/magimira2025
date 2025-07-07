@@ -16,6 +16,7 @@ import {
 } from "~/lib/babylon/camera";
 import {setModelRotation, setModelVisibility, playAnimation, getRootMesh} from "~/lib/babylon/mdl";
 import {
+    getLightDiffuse,
     setLightDiffuse,
     setLightIntensity
 } from "~/lib/babylon/light";
@@ -47,6 +48,7 @@ import {
 import {disableAllRipple, enableCircleRipple, enableSquareRipple} from "./ripple.ts";
 import { disableAiCameraControl, disableArcCameraControl, enableAiCameraControl, enableArcCameraControl } from "./camera.ts";
 import { enableDropStar } from "./drop-star.ts";
+import { scene } from "~/lib/babylon/index.ts";
 
 const templateColorCodes = {
     "default": "#FFEAC7",
@@ -67,41 +69,191 @@ const templateColors = {
     "Luka": Color3.FromHexString(templateColorCodes["Luka"]),
 }
 
-const audio = new Audio("/電気のスイッチを入れる.mp3");
-audio.volume = 0.1;
+const lightSwitch = new Audio("/電気のスイッチを入れる.mp3");
+lightSwitch.volume = 0.45;
+const street = new Audio("/閑静な住宅街1.mp3");
+street.volume = 0.18;
+street.loop = true;
+street.addEventListener("canplaythrough", () => {
+    console.log("can play");
+    street.play();
+});
+const doorOpen = new Audio("/ドアを閉める1.mp3");
+doorOpen.volume = 0.15;
+const doorClose = new Audio("/ドアを閉める2.mp3");
+doorClose.volume = 0.11;
 
+const audios = [
+    lightSwitch,
+    street,
+    doorOpen,
+    doorClose,
+];
 
 setFreePosition(0, 1.1, 2.1);
 setFreeRotation(180, 32, 0);
 switchCamera("free");
 setLightingPreset("night");
-setCameraMinZ(0.01, "free");
-setCameraMinZ(0.01, "free2");
+setCameraMinZ(0.001, "free");
+setCameraMinZ(0.001, "free2");
 
 disableAllSpectrum();
 disableAllRipple();
 
-let dotMikuRoot: AbstractMesh | undefined = undefined;
+let mikuModel: AbstractMesh | undefined = undefined;
+let roomModel: AbstractMesh | undefined = undefined;
+let tanabataModel: AbstractMesh | undefined = undefined;
+let skyModel: AbstractMesh | undefined = undefined;
 
+let skipOpening: () => void = () => {};
 gameEvents.on("onLoaded", async ()=>{
-    dotMikuRoot = getRootMesh("dotmiku");
+    mikuModel = getRootMesh("dotmiku");
+    roomModel = getRootMesh("room");
+    const pcOpen = scene.getMeshByName("pc-display-open");
+    const pcClose = scene.getMeshByName("pc-display-close");    
+    const pcDisplay = scene.getMeshByName("pc-display");
+    if(!pcOpen || !pcClose || !pcDisplay) throw Error("pc-display-open, pc-display, pc-display-close not found");
+    pcOpen.visibility = 0;
+    pcClose.visibility = 1;
+    pcDisplay.isVisible = false;
 
-    enableCircleRipple();    
-    await delayForMilSeconds(1000);
-    audio.play();
-    await delayForMilSeconds(500);
-    setLightDiffuse("hemispheric", templateColors["default"]);
-    setLightIntensity("hemispheric", 0.8);
-    await delayForMilSeconds(3000);
-    playAnimation("dotmiku", "歩き2");
-    dotMikuRoot.position = new Vector3(0.5, 0, 0.5);
-    setModelRotation(dotMikuRoot, 0, -90, 0);
-    dotMikuRoot.visibility = 1;
-    dotMikuRoot.position = Vector3.Zero();
-    setModelRotation(dotMikuRoot, 0, -180, 0);
+    roomModel.setEnabled(true);
+
+    const miku_fadeIn = new Tween({ visibility: 0 }).to({ visibility: 1 }, 300)
+    .onUpdate((e) => setModelVisibility("dotmiku", e.visibility))
+    const miku_fadeOut = new Tween({ visibility: 1 }).to({ visibility: 0 }, 300)
+    .onUpdate((e) => setModelVisibility("dotmiku", e.visibility))
+    tweenGroup.add(miku_fadeOut, miku_fadeIn);
+    
+    enableCircleRipple();
+
+    async function delayWithSkip(ms: number) {
+        return new Promise<void>(async (resolve, reject) => {
+            skipOpening = reject;
+            await delayForMilSeconds(ms);
+            skipOpening = () => {};
+            resolve();
+        });
+    }
+
+    let mikuModelVisible = false;
+    let isLight = false;
+    setModelVisibility("dotmiku", 0);
+    mikuModel.setEnabled(true);
+
+    try{
+        if(isStart) throw Error();
+        await delayWithSkip(1000);
+        if(isStart) throw Error();
+
+        doorOpen.play();
+        street.volume = 0.3;
+        const streetVolTween = new Tween({ volume: 0.3 }).to({ volume: 0.18 }, 2250).start()
+        .onUpdate((e) => street.volume = e.volume)
+        .onComplete(() => tweenGroup.remove(streetVolTween));
+        tweenGroup.add(streetVolTween);
+        if(isStart) throw Error();
+        await delayWithSkip(1500);
+        if(isStart) throw Error();
+
+        lightSwitch.play();
+        setLightDiffuse("hemispheric", templateColors["default"]);
+        setLightIntensity("hemispheric", 0.8);
+        isLight = true;
+        if(isStart) throw Error();
+        await delayWithSkip(2700);
+        if(isStart) throw Error();
+        doorClose.play();
+        if(isStart) throw Error();
+        await delayWithSkip(800);
+        
+        if(isStart) throw Error();
+        playAnimation("dotmiku", "歩き1");
+        mikuModel.position = new Vector3(-0.5, 0, 0.5);
+        setModelRotation(mikuModel, 0, -90, 0);
+        miku_fadeIn.start();
+        await delayForMilSeconds(300);
+        mikuModelVisible = true;
+        if(isStart) throw Error();
+        await delayWithSkip(1500);
+        
+        if(isStart) throw Error();
+        miku_fadeOut.start();
+        await delayForMilSeconds(300);
+        mikuModelVisible = false;
+        
+        if(isStart) throw Error();
+        playAnimation("dotmiku", "歩き2");
+        mikuModel.position = new Vector3(-0.07, 0, 0.5);
+        setModelRotation(mikuModel, 0, -90, 0);
+        miku_fadeIn.start();
+        await delayForMilSeconds(300);
+        mikuModelVisible = true;
+        if(isStart) throw Error();
+        await delayWithSkip(1200);
+    }catch(e){
+    }
+
+    if(mikuModelVisible){
+        miku_fadeOut.start();
+        await delayForMilSeconds(300);
+    }
+    if(!isLight){
+        const initLightTween = new Tween({ intensity: 0.08, color: getLightDiffuse("hemispheric")})
+        .to({ intensity: 0.8, color: templateColors["default"]}, 1000).start()
+        .onUpdate((e) => {
+            setLightIntensity("hemispheric", e.intensity);
+            setLightDiffuse("hemispheric", e.color);
+        })
+        .onComplete(() => tweenGroup.remove(initLightTween));
+        tweenGroup.add(initLightTween);
+    }
+
+    mikuModel.position = Vector3.Zero();
+    setModelRotation(mikuModel, 0, -180, 0);
     playAnimation("dotmiku", "座り");
+    miku_fadeIn.start();
+    await delayForMilSeconds(700);
+    tweenGroup.remove(miku_fadeIn, miku_fadeOut);
 
+    const pcOpenFadeIn = new Tween({ visibility: 0 }).to({ visibility: 1 }, 1500).start()
+    .onUpdate((e) => {
+        pcOpen.visibility = e.visibility;
+    })
+    .onComplete(() => tweenGroup.remove(pcOpenFadeIn));
+    tweenGroup.add(pcOpenFadeIn);
+    const pcCloseFadeOut = new Tween({ visibility: 1 }).to({ visibility: 0 }, 1500).start()
+    .onUpdate((e) => pcClose.visibility = e.visibility)
+    .onComplete(() => tweenGroup.remove(pcCloseFadeOut));
+    tweenGroup.add(pcCloseFadeOut);
+    await delayForMilSeconds(1500);
+    pcDisplay.isVisible = true;
+
+    startAnimation();
 });
+
+let startListening = false;
+function startAnimation(){
+    if(!startListening) {
+        startListening = true;
+        return;
+    }
+}
+
+let isStart = false;
+gameEvents.on("onGameStart", async () => {
+    for(const audio of audios) {
+        audio.pause();
+        audio.volume = 0;
+        audio.src = "";
+        audio.load();
+    }
+    isStart = true;
+    skipOpening();
+
+    startAnimation();
+});
+
 
 // Listen for key frame events
 gameEvents.on("onKeyFrame", ({key}) => {
@@ -476,9 +628,12 @@ const updateView = async (viewKey: string) => {
         case "lc-終わりなんて": // 全員
             disableAllRipple();
         
-            setModelVisibility("sky", true);
-            setModelVisibility("dotmiku-tanabata", true);
-            setModelVisibility("dotmiku", true);
+            mikuModel?.setEnabled(false);
+            tanabataModel = getRootMesh("dotmiku-tanabata");
+            skyModel = getRootMesh("sky");
+
+            skyModel?.setEnabled(true);
+            tanabataModel?.setEnabled(true);
             enableStarParticles();
             neverEndTextFadeIn(0);
             break;

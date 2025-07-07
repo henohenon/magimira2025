@@ -5,12 +5,12 @@ import {
     getAnimations,
     getModelPosition,
     getModelRotation,
-    isModelVisible,
+    isModelEnable,
     playAnimation,
     setModelRotation,
-    setModelVisibility,
     setModelPosition,
-    getRootMesh
+    getRootMesh,
+    setModelEnable
 } from "~/lib/babylon/mdl";
 
 import type {ToggleSwitch} from "../web-components/toggle-switch";
@@ -35,7 +35,7 @@ export function updateModelInfo() {
             setRotationInputs[modelName].value3 = rotation.z;
         }
 
-        toggleSwitches[modelName].checked = isModelVisible(modelName);
+        toggleSwitches[modelName].checked = isModelEnable(modelName);
     }
 }
 
@@ -66,7 +66,8 @@ babylonEvents.on("onModelsLoaded", (modelNames) => {
 
 
         toggleSwitch.subscribe((checked) => {
-            setModelVisibility(modelName, checked);
+            setModelEnable(modelName, checked);
+            console.log(modelName, checked?1:0)
         });
 
         addPositionButton.addEventListener("click", () => {
