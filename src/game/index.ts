@@ -1,7 +1,11 @@
+import { Easing, Tween } from "@tweenjs/tween.js";
 import { Color3 } from "@babylonjs/core/Maths/math.color";
+import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
+import {Vector3} from "@babylonjs/core/Maths/math.vector";
 
 import {
     setArcAlpha,
+    setArcRadius,
     setArcSphericalCoordinates,
     setArcTargetPosition,
     setCameraMinZ,
@@ -10,12 +14,14 @@ import {
     switchCamera,
     switchCameraWithCrossFade
 } from "~/lib/babylon/camera";
-import {setModelRotation, setModelPosition, setModelVisibility, playAnimation, setModelScale} from "~/lib/babylon/mdl";
+import {setModelRotation, setModelVisibility, playAnimation, getRootMesh} from "~/lib/babylon/mdl";
 import {
     setLightDiffuse,
     setLightIntensity
 } from "~/lib/babylon/light";
 import { delayForMilSeconds } from "~/lib/update";
+import { tweenGroup } from "~/lib/update/cycle.ts";
+import { enableStarParticles } from "~/lib/babylon/star-particle.ts";
 
 import { setLightingPreset } from "./light";
 import {events as gameEvents} from "./events";
@@ -29,7 +35,6 @@ import {
     whiteFadeIn,
     whiteFadeOut
 } from "./dom/fade.ts";
-
 import "./update";
 import "./dom/bottom-lyrics.ts";
 import "./events";
@@ -38,18 +43,10 @@ import {
     enableCircleSpectrum,
     enableHorizontalSpectrum,
     enableVerticalSpectrum
-} from "~/game/spectrum.ts";
-import {disableAllRipple, enableCircleRipple, enableSquareRipple} from "~/game/ripple.ts";
-import { Easing, Tween } from "@tweenjs/tween.js";
-import { tweenGroup } from "~/lib/update/cycle.ts";
-import { enableStarParticles } from "~/lib/babylon/star-particle.ts";
-
-setLightingPreset("night");
-switchCamera("free");
-setFreePosition(-2.5, 1.5, -8);
-setFreeRotation(0, 0, 0);
-disableAllSpectrum();
-disableAllRipple();
+} from "./spectrum.ts";
+import {disableAllRipple, enableCircleRipple, enableSquareRipple} from "./ripple.ts";
+import { disableAiCameraControl, disableArcCameraControl, enableAiCameraControl, enableArcCameraControl } from "./camera.ts";
+import { enableDropStar } from "./drop-star.ts";
 
 const templateColorCodes = {
     "default": "#FFEAC7",
@@ -73,24 +70,37 @@ const templateColors = {
 const audio = new Audio("/電気のスイッチを入れる.mp3");
 audio.volume = 0.1;
 
-gameEvents.on("onLoaded", async ()=>{
-    setModelPosition("dotmiku", -2.5, 0 , -0.3);
-    setModelRotation("dotmiku", 0, 180, 0);
-    setModelScale("dotmiku", 0.9, 0.9, 0.9);
-    playAnimation("dotmiku", "座り");
-    setModelVisibility("sky", false);
-    setModelVisibility("hoshi-mk", false);
-    setModelPosition("room", -2.1, 0 , 0);
-    setModelRotation("room", 0, 0, 0);
-    setFreePosition(-2.5, 0.8, -1.9);
-    setFreeRotation(0, 25, 0);
-    enableCircleRipple();
 
+setFreePosition(0, 1.1, 2.1);
+setFreeRotation(180, 32, 0);
+switchCamera("free");
+setLightingPreset("night");
+setCameraMinZ(0.01, "free");
+setCameraMinZ(0.01, "free2");
+
+disableAllSpectrum();
+disableAllRipple();
+
+let dotMikuRoot: AbstractMesh | undefined = undefined;
+
+gameEvents.on("onLoaded", async ()=>{
+    dotMikuRoot = getRootMesh("dotmiku");
+
+    enableCircleRipple();    
     await delayForMilSeconds(1000);
     audio.play();
     await delayForMilSeconds(500);
     setLightDiffuse("hemispheric", templateColors["default"]);
     setLightIntensity("hemispheric", 0.8);
+    await delayForMilSeconds(3000);
+    playAnimation("dotmiku", "歩き2");
+    dotMikuRoot.position = new Vector3(0.5, 0, 0.5);
+    setModelRotation(dotMikuRoot, 0, -90, 0);
+    dotMikuRoot.visibility = 1;
+    dotMikuRoot.position = Vector3.Zero();
+    setModelRotation(dotMikuRoot, 0, -180, 0);
+    playAnimation("dotmiku", "座り");
+
 });
 
 // Listen for key frame events
@@ -197,12 +207,13 @@ const updateView = async (viewKey: string) => {
             break;
         case "c1-ない": // 全員
             disableAllSpectrum();
+            enableArcCameraControl();
 
-            setFreeRotation(0, 0, 0 );
-            setFreePosition(-2.5, 1, -3);
-            switchCamera("free");
-            const tween_c1_01 = new Tween({z: -3, y: 1}).to({z: -7, y:1.5}, 7000).start().onUpdate(pos => {
-                setFreePosition(-2.5, pos.y, pos.z, "free")
+            setArcTargetPosition(-2.5, 0.5, -0.5);
+            setArcSphericalCoordinates(-90, 80, 2)
+            switchCamera("arc");
+            const tween_c1_01 = new Tween({radius: 2}).to({radius: 8}, 9000).start().onUpdate(pos => {
+                setArcRadius(pos.radius);
             }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(tween_c1_01));
             tweenGroup.add(tween_c1_01);
             whiteFadeOut(500);
@@ -211,36 +222,32 @@ const updateView = async (viewKey: string) => {
         case "c1-この手掴めば": // 全員
         break;
         case "c1-また始まるんだ": // ルカ
-            setArcTargetPosition(-2.5, 0.5, -0.5);
-            setArcSphericalCoordinates(-15, 90, 3);
-            setCameraMinZ(1.5, "arc");
-            switchCamera('arc');
-            const tween_c1_02 = new Tween({alpha: -15}).to({alpha: -180}, 4000).start().onUpdate(prop => {
-                setArcAlpha(prop.alpha);
-            }).onComplete(() => tweenGroup.remove(tween_c1_02));
-            tweenGroup.add(tween_c1_02);
         break;
         case "c1-グシャグシャのまま描いた": // ミク
-        break;
-        case "c1-“アイ”": // ミク
-            setFreeRotation(0, 90, 90);
-            setFreePosition(-2.5, 4.5, -0.5);
+            disableArcCameraControl();
+            enableAiCameraControl();
+
+            setFreeRotation(180, 0, 0);
+            setFreePosition(-2.5, 0.5, 3);
             switchCamera("free");
-            const tween_c1_03 = new Tween({x: -2.5}).to({x: -1}, 1000).start().onUpdate(pos => {
-                setFreePosition(pos.x, 4.5, -0.5, "free")
-            }).onComplete(() => tweenGroup.remove(tween_c1_03));
-            tweenGroup.add(tween_c1_03);
+            break;
+        case "c1-“アイ”": // ミク
             break;
         case "c1-It'sallright！": // 全員
-            setFreeRotation(160, -5, -0.3, "free2");
-            setFreePosition(-1.9, 0.1, 2, "free2");
+            disableAiCameraControl();
+
+            enableDropStar();
+
+            setFreeRotation(0, -10, 0, "free2");
+            setFreePosition(-2.5, 1.5, -5, "free2");
             setCameraMinZ(0.1, "free2");
             switchCamera("free2");
+            /*
             const tween_c1_04 = new Tween({y: 0.1, pitch: -5}).to({y: 0.3, pitch: -15}, 4000).start().onUpdate(props => {
                 setFreePosition(-1.9, props.y, 2, "free2");
                 setFreeRotation(160, props.pitch, -0.3, "free2");
             }).onComplete(() => tweenGroup.remove(tween_c1_04));
-            tweenGroup.add(tween_c1_04);
+            tweenGroup.add(tween_c1_04);*/
             break;
         case "c1-灯した歌は": // 全員
             break;

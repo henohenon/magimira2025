@@ -12,6 +12,7 @@ import { Color3 } from "@babylonjs/core/Maths/math.color";
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { GlowLayer } from "@babylonjs/core/Layers/glowLayer";
 import type { Mesh } from "@babylonjs/core/Meshes/mesh";
+import type { Nullable } from "@babylonjs/core/types";
 
 
 // Store loaded model meshes by model name
@@ -134,6 +135,10 @@ export function playAnimation(mdl: string, animation: string) {
  */
 export function getModelNames(): string[] {
 	return Object.keys(modelMeshes);
+}
+
+export function getRootMesh(mdlName: string){
+	return rootModels[mdlName];
 }
 
 function getMeshes(mdlName: string): AbstractMesh[] | undefined {
@@ -285,7 +290,6 @@ export function setModelPosition(modelName: string, x: number, y: number, z: num
 	}
 	mesh.position.set(x, y, z);
 
-	console.log(`Model "${modelName}" position set to: x=${x}, y=${y}, z=${z}`);
 	return true;
 }
 
@@ -318,17 +322,8 @@ export function addPosition(modelName: string, x: number, y: number, z: number):
  * @param z Rotation around Z axis (in radians)
  * @returns true if model was found and rotated, false otherwise
  */
-export function setModelRotation(modelName: string, x: number, y: number, z: number): boolean {
-	const mesh = rootModels[modelName];
-	if (!mesh || isNaN(x) || isNaN(y) || isNaN(z)) {
-		console.warn(`Invalid model name or rotation values: ${modelName}, x=${x}, y=${y}, z=${z}`);
-		return false;
-	}
-
+export function setModelRotation(mesh: AbstractMesh, x: number, y: number, z: number) {
 	mesh.rotationQuaternion = Quaternion.RotationYawPitchRoll(degToRad(y), degToRad(x), degToRad(z));
-
-	console.log(`Model "${modelName}" rotation set to: x=${x}, y=${y}, z=${z}`);
-	return true;
 }
 
 /**
@@ -364,4 +359,32 @@ export function setModelScale(modelName: string, x: number, y: number, z: number
 
 	console.log(`Model "${modelName}" scale adjusted by: x=${x}, y=${y}, z=${z}`);
 	return true;
+}
+
+function copyChildMeshes(parentMesh: AbstractMesh, createNewName: (currentName: string) => string) {
+	for (const child of parentMesh.getChildMeshes()) {
+		const newName = createNewName(child.name);
+		const cloned = (child as Mesh).createInstance(newName);
+		cloned.visibility = 1;
+		cloned.parent = parentMesh;
+	}
+}
+
+export function copyModel(modelName: string, addName: string) {
+	function createNewName(currentName: string) {
+		return `${currentName}_${addName}`;
+	}
+
+	const rootMesh = rootModels[modelName] as Nullable<Mesh>;
+	if (!rootMesh) {
+		console.error(`${modelName} mesh was not found`);
+		return null;
+	}
+
+	const rootName = createNewName(rootMesh.name);
+	const newRoot = rootMesh.createInstance(rootName);
+	rootModels[rootName] = newRoot;
+
+	copyChildMeshes(rootMesh, createNewName);
+	return rootName;
 }

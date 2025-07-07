@@ -9,7 +9,8 @@ import {
     playAnimation,
     setModelRotation,
     setModelVisibility,
-    setModelPosition
+    setModelPosition,
+    getRootMesh
 } from "~/lib/babylon/mdl";
 
 import type {ToggleSwitch} from "../web-components/toggle-switch";
@@ -81,7 +82,8 @@ babylonEvents.on("onModelsLoaded", (modelNames) => {
         });
 
         setRotationInput.subscribe((value1, value2, value3) => {
-            setModelRotation(modelName, value1, value2, value3);
+            const mesh = getRootMesh(modelName);
+            setModelRotation(mesh, value1, value2, value3);
         });
 
         if(!modelName.includes("miku")) continue;

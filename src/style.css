@@ -5,7 +5,7 @@
 }
 
 .title-text{
-    @apply text-white text-4xl sm:text-7xl italic font-serif select-none;
+    @apply text-white text-5xl sm:text-7xl italic font-serif select-none;
 }
 
 #babylonjsLoadingDiv-0{
@@ -19,10 +19,14 @@
     z-index: 10001;
 }
 
-#credit-button:hover, #close-credit-button:hover{
+.event-button{
+    @apply w-20 sm:w-30 px-4 text-white text-2xl flex items-center justify-center border border-transparent cursor-pointer;
+    transition: border-color 500ms;
+}
+.event-button:hover{
     @apply border-white;
 }
-#credit-button:active, #close-credit-button:active{
+.event-button:active{
     @apply bg-white;
 }
 
