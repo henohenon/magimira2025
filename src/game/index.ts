@@ -434,7 +434,7 @@ const updateView = async (viewKey: string) => {
             setFreeRotation(180, -20, 0, "free2");
             
             await delayForMilSeconds(1000);
-            const c1SouTween = new Tween({y: 0.5}).to({y: 2.8}, 2000).start().onUpdate(e =>
+            const c1SouTween = new Tween({y: 0.5}).to({y: 3.5}, 4000).start().onUpdate(e =>
                 free2.position.y = e.y
             ).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(c1SouTween));
             tweenGroup.add(c1SouTween);
@@ -622,7 +622,8 @@ const updateView = async (viewKey: string) => {
             playAnimation("dotmiku", "stand");
             break;
         case "c2-奏でた今日が": // 全員
-            playAnimation("dotmiku", "stand-to-grab");
+            console.log("grab");
+            playAnimation("dotmiku", "grab-hand");
             break;
         case "c2-僕らの道だ": // メイコ
             playAnimation("dotmiku", "grab-to-heart");
@@ -637,7 +638,8 @@ const updateView = async (viewKey: string) => {
             switchCamera("free");
             break;
         case "c2-“アイ”": // リン
-            await delayForMilSeconds(1000);
+            await delayForMilSeconds(250);
+            tanabataModel = getRootMesh("dotmiku-tanabata");
             mikuModel?.setEnabled(false);
             tanabataModel?.setEnabled(true);
             break;
@@ -649,7 +651,7 @@ const updateView = async (viewKey: string) => {
             enableDropStar();
 
             setFreeRotation(180, 0, 0, "free2");
-            setFreePosition(0.5, 1.3, 0.5, "free2");
+            setFreePosition(0.5, 1.3, 1, "free2");
             setCameraMinZ(0.1, "free2");
             switchCamera("free2");
             break;
@@ -673,13 +675,14 @@ const updateView = async (viewKey: string) => {
             setFreePosition(0, 0.5, 7, "free2");
             setFreeRotation(180, -20, 0, "free2");
             
-            const c2SouTween = new Tween({y: 0.5}).to({y: 2.8}, 3000).start().onUpdate(e =>
+            await delayForMilSeconds(1000);
+            const c2SouTween = new Tween({y: 0.5}).to({y: 4.5}, 6000).start().onUpdate(e =>
                 free2.position.y = e.y
             ).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(c2SouTween));
             tweenGroup.add(c2SouTween);
             break;
         case "零れたメモリを誘って": // ミク・カイト
-            const c2KoboretaTween = new Tween({visibility: 1}).to({visibility: 0}, 3000).onUpdate(p => {
+            const c2KoboretaTween = new Tween({visibility: 1}).to({visibility: 0}, 5000).onUpdate(p => {
                 setModelVisibility("room", p.visibility);
             }).start().onComplete(
                 () => tweenGroup.remove(c2KoboretaTween)
@@ -690,7 +693,7 @@ const updateView = async (viewKey: string) => {
             setFreePosition(0, 1, -3);
             setFreeRotation(0, -20, 0);
             switchCameraWithCrossFade("free", 1000);
-            const c2KoboretaTween2 = new Tween({y: 1}).to({y: 2.5}, 20000).start().onUpdate(props => {
+            const c2KoboretaTween2 = new Tween({y: 1}).to({y: 2.5}, 12000).start().onUpdate(props => {
                 free1.position.y = props.y;
             }).start().onComplete(
                 () => tweenGroup.remove(c2KoboretaTween2)
@@ -707,10 +710,8 @@ const updateView = async (viewKey: string) => {
             break;
         case "lc-終わりなんて": // 全員
         //         disableAllRipple();
-            neverEndTextFadeIn(0);
         
             mikuModel?.setEnabled(false);
-            tanabataModel = getRootMesh("dotmiku-tanabata");
             skyModel = getRootMesh("sky");
             setModelVisibility("room", 1);
 
@@ -784,7 +785,8 @@ const updateView = async (viewKey: string) => {
             setFreePosition(0, 0.5, 7, "free2");
             setFreeRotation(180, -20, 0, "free2");
             
-            const lcSouTween = new Tween({y: 0.5}).to({y: 2.8}, 3000).start().onUpdate(e =>
+            await delayForMilSeconds(1000);
+            const lcSouTween = new Tween({y: 0.5}).to({y: 3.5}, 4000).start().onUpdate(e =>
                 free2.position.y = e.y
             ).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(lcSouTween));
             tweenGroup.add(lcSouTween);
@@ -813,13 +815,13 @@ const updateView = async (viewKey: string) => {
         case "lc-(不可能を超えてゆけ)": // 全員
             enableCircleRipple();
 
-            const lcHukanouTween = new Tween({z: 0.8}).to({z: 1.3}, 1250).start().onUpdate(e =>
+            const lcHukanouTween = new Tween({z: 0.8}).to({z: 1.3}, 3000).start().onUpdate(e =>
                 free1.position.z = e.z
             ).onComplete(() => tweenGroup.remove(lcHukanouTween));
             tweenGroup.add(lcHukanouTween);
             break;
         case "lc-曖昧な夢さえも抱いて": // メイコ
-            playAnimation("dotmiku", "sleep");
+            playAnimation("dotmiku-tanabata", "sleep");
             if(tanabataModel) {
                 tanabataModel.position.z = 0.3;
                 tanabataModel.position.x = -0.05;
@@ -827,7 +829,7 @@ const updateView = async (viewKey: string) => {
             setFreeRotation(180, 90, 0, "free2");
             setFreePosition(-0.1, 3, -0.1, "free2");
             switchCamera("free2");
-            const tween_lc_08 = new Tween({y: 3}).to({y: 4.5}, 6000).start().onUpdate(props => {
+            const tween_lc_08 = new Tween({y: 3}).to({y: 4.5}, 8000).start().onUpdate(props => {
                 free2.position.y = props.y;
             }).onComplete(() => tweenGroup.remove(tween_lc_08));
             tweenGroup.add(tween_lc_08);
@@ -841,7 +843,7 @@ const updateView = async (viewKey: string) => {
             setFreePosition(2.3, 2, 3);
             setCameraMinZ(0.1, "free");
             switchCamera("free");
-            const lcOdoruTween = new Tween({z: 3}).to({z:  5}, 1500).start().onUpdate(props => {
+            const lcOdoruTween = new Tween({z: 3}).to({z: 0}, 1000).start().onUpdate(props => {
                 free1.position.z = props.z;
             }).onComplete(() => tweenGroup.remove(lcOdoruTween));
             tweenGroup.add(lcOdoruTween);
@@ -862,8 +864,8 @@ const updateView = async (viewKey: string) => {
             enableCircleSpectrum();
 
             setFreeRotation(-150, 0, 0);
-            setFreePosition(-1.5, 1, -1);
-            const tween_lc_09 = new Tween({z: -1}).to({z: -1.5}, 3500).start().onUpdate(props => {
+            setFreePosition(-1.5, 1, -0.4);
+            const tween_lc_09 = new Tween({z: -0.4}).to({z: -1.5}, 5500).start().onUpdate(props => {
                 free1.position.z = props.z;
             }).onComplete(() => tweenGroup.remove(tween_lc_09));
             tweenGroup.add(tween_lc_09);
@@ -880,6 +882,10 @@ const updateView = async (viewKey: string) => {
         case "咲かせた未来のその先へ": // ミク
             enableCircleRipple();
             enableSquareRipple();
+            const lastTween = new Tween({range: 25}).to({range: 200}, 5000).start().onUpdate(prop => {
+                setArcRadius(prop.range);
+            }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(lastTween));
+            tweenGroup.add(lastTween);
             await delayForMilSeconds(5000);
             disableAllRipple();
             disableAllSpectrum();
