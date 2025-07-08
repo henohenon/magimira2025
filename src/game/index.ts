@@ -862,7 +862,7 @@ const updateView = async (viewKey: string) => {
             const lcFlyStarTween = new Tween({y: 0.7}).to({y: 10}, 2000).start().onUpdate(e =>{
                 for(const star of flyList){
                     console.log(star.name);
-                    if(star.name=="___root___"){
+                    if(star.name=="__root__"){
                         star.position.y = e.y -0.7;
                     }else{
                         star.position.y = e.y;
