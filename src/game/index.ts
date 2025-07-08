@@ -14,7 +14,7 @@ import {
     switchCamera,
     switchCameraWithCrossFade
 } from "~/lib/babylon/camera";
-import {setModelRotation, setModelVisibility, playAnimation, getRootMesh, starModels} from "~/lib/babylon/mdl";
+import {setModelRotation, setModelVisibility, playAnimation, getRootMesh, starModels, wallModels} from "~/lib/babylon/mdl";
 import {
     getLightDiffuse,
     setLightDiffuse,
@@ -270,9 +270,17 @@ const updateView = async (viewKey: string) => {
             free2.fov = Math.PI / 4;
             switchCamera("free2");
             await delayForMilSeconds(2700);
-            for(const star of starModels["verse1"]){
-                star.setEnabled(false);
-            }
+            const initStarTween = new Tween({visibility: 1}).to({visibility: 0}, 1000).start().onUpdate(e =>{
+                for(const star of starModels["verse1"]){
+                    star.visibility = e.visibility;
+                }
+            }).onComplete(() => {
+                tweenGroup.remove(initStarTween)
+                for(const star of starModels["verse1"]){
+                    star.setEnabled(false);
+                }
+            });
+            tweenGroup.add(initStarTween);
             break;
         case "揺らめく都市のmagic": // リン
             setFreeRotation(120, 20, 0);
@@ -366,6 +374,9 @@ const updateView = async (viewKey: string) => {
             shutterFadeOut(1000);
             break;
         case "c1-終わりなんて": // 全員
+            for(const star of starModels["chorus1"]){
+                star.setEnabled(true);
+            }
             neverEndTextFadeIn(0);
             break;
         case "c1-ない": // 全員
@@ -385,6 +396,18 @@ const updateView = async (viewKey: string) => {
             playAnimation("dotmiku", "stand");
             break;
         case "c1-この手掴めば": // 全員
+            const c1StarTween = new Tween({visibility: 1}).to({visibility: 0}, 1000).start().onUpdate(e =>{
+                for(const star of starModels["chorus1"]){
+                    star.visibility = e.visibility;
+                }
+            }).onComplete(() => {
+                tweenGroup.remove(c1StarTween)
+                for(const star of starModels["chorus1"]){
+                    star.setEnabled(false);
+                }
+            });
+            tweenGroup.add(c1StarTween);
+
             playAnimation("dotmiku", "grab-hand");
         break;
         case "c1-また始まるんだ": // ルカ
@@ -429,11 +452,25 @@ const updateView = async (viewKey: string) => {
             playAnimation("dotmiku", "stand-to-face-raise");
             break;
         case "c1-そう、一人じゃないから": // リン
+            for(const star of starModels["chorus2"]){
+                star.setEnabled(true);
+            }
             playAnimation("dotmiku", "face-raise-to-one-hand-raise");
             setFreePosition(0, 0.5, 7, "free2");
             setFreeRotation(180, -20, 0, "free2");
             
             await delayForMilSeconds(1000);
+            const c1FlyStarTween = new Tween({y: 0.7}).to({y: 10}, 2000).start().onUpdate(e =>{
+                for(const star of starModels["chorus2"]){
+                    star.position.y = e.y;
+                }
+            }).onComplete(() => {
+                tweenGroup.remove(c1FlyStarTween)
+                for(const star of starModels["chorus2"]){
+                    star.setEnabled(false);
+                }
+            });
+            tweenGroup.add(c1FlyStarTween);
             const c1SouTween = new Tween({y: 0.5}).to({y: 3.5}, 4000).start().onUpdate(e =>
                 free2.position.y = e.y
             ).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(c1SouTween));
@@ -552,8 +589,8 @@ const updateView = async (viewKey: string) => {
             break;
         case "(宿すagainstgravity)": // カイト
             setFreeRotation(135, 20, 0);
-            setFreePosition(-0.5, 1, 0);
-            const tween_v2_02 = new Tween({x: -0.5, z: 0}).to({x: 0.8, z: 1.5}, 10000).start().onUpdate(pos => {
+            setFreePosition(-0.7, 1, 0);
+            const tween_v2_02 = new Tween({x: -0.7, z: 0}).to({x: 0.6, z: 1.5}, 10000).start().onUpdate(pos => {
                 setFreePosition(pos.x, 1, pos.z);
             }).onComplete(() => tweenGroup.remove(tween_v2_02));
             tweenGroup.add(tween_v2_02);
@@ -638,7 +675,7 @@ const updateView = async (viewKey: string) => {
             switchCamera("free");
             break;
         case "c2-“アイ”": // リン
-            await delayForMilSeconds(250);
+        await delayForMilSeconds(250);
             tanabataModel = getRootMesh("dotmiku-tanabata");
             mikuModel?.setEnabled(false);
             tanabataModel?.setEnabled(true);
@@ -671,11 +708,26 @@ const updateView = async (viewKey: string) => {
             playAnimation("dotmiku", "stand-to-face-raise");
             break;
         case "c2-夢はもう譲れないんじゃない？": // レン
+            for(const star of starModels["chorus2"]){
+                star.setEnabled(true);
+            }
+            
             playAnimation("dotmiku", "face-raise-to-one-hand-raise");
             setFreePosition(0, 0.5, 7, "free2");
             setFreeRotation(180, -20, 0, "free2");
             
             await delayForMilSeconds(1000);
+            const c2FlyStarTween = new Tween({y: 0.7}).to({y: 10}, 2000).start().onUpdate(e =>{
+                for(const star of starModels["chorus2"]){
+                    star.position.y = e.y;
+                }
+            }).onComplete(() => {
+                tweenGroup.remove(c2FlyStarTween)
+                for(const star of starModels["chorus2"]){
+                    star.setEnabled(false);
+                }
+            });
+            tweenGroup.add(c2FlyStarTween);
             const c2SouTween = new Tween({y: 0.5}).to({y: 4.5}, 6000).start().onUpdate(e =>
                 free2.position.y = e.y
             ).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(c2SouTween));
@@ -710,10 +762,16 @@ const updateView = async (viewKey: string) => {
             break;
         case "lc-終わりなんて": // 全員
         //         disableAllRipple();
-        
+        //         enableSquareRipple();
+            for(const star of starModels["chorus1"]){
+                star.setEnabled(true);
+            }
             mikuModel?.setEnabled(false);
             skyModel = getRootMesh("sky");
             setModelVisibility("room", 1);
+            for(const wall of wallModels){
+                wall.isVisible = false;   
+            }
 
             skyModel?.setEnabled(true);
             tanabataModel?.setEnabled(true);
@@ -737,6 +795,17 @@ const updateView = async (viewKey: string) => {
             playAnimation("dotmiku-tanabata", "stand");
             break;
         case "lc-この手掴めば": // 全員
+            const lcStarTween = new Tween({visibility: 1}).to({visibility: 0}, 1000).start().onUpdate(e =>{
+                for(const star of starModels["chorus1"]){
+                    star.visibility = e.visibility;
+                }
+            }).onComplete(() => {
+                tweenGroup.remove(lcStarTween)
+                for(const star of starModels["chorus1"]){
+                    star.setEnabled(false);
+                }
+            });
+            tweenGroup.add(lcStarTween);
             playAnimation("dotmiku-tanabata", "grab-hand");
         break;
         case "lc-また始まるんだ": // ルカ
@@ -781,11 +850,31 @@ const updateView = async (viewKey: string) => {
             playAnimation("dotmiku-tanabata", "stand-to-face-raise");
             break;
         case "lc-そう、一人じゃないから": // リン
+            for(const star of starModels["chorus2"]){
+                star.setEnabled(true);
+            }
             playAnimation("dotmiku-tanabata", "face-raise-to-one-hand-raise");
             setFreePosition(0, 0.5, 7, "free2");
             setFreeRotation(180, -20, 0, "free2");
             
             await delayForMilSeconds(1000);
+            const flyList = [...starModels["chorus2"], getRootMesh("dotmiku-tanabata")]
+            const lcFlyStarTween = new Tween({y: 0.7}).to({y: 10}, 2000).start().onUpdate(e =>{
+                for(const star of flyList){
+                    console.log(star.name);
+                    if(star.name=="___root___"){
+                        star.position.y = e.y -0.7;
+                    }else{
+                        star.position.y = e.y;
+                    }
+                }
+            }).onComplete(() => {
+                tweenGroup.remove(lcFlyStarTween)
+                for(const star of flyList){
+                    star.setEnabled(false);
+                }
+            });
+            tweenGroup.add(lcFlyStarTween);
             const lcSouTween = new Tween({y: 0.5}).to({y: 3.5}, 4000).start().onUpdate(e =>
                 free2.position.y = e.y
             ).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(lcSouTween));
@@ -887,6 +976,13 @@ const updateView = async (viewKey: string) => {
             }).easing(Easing.Quintic.Out).onComplete(() => tweenGroup.remove(lastTween));
             tweenGroup.add(lastTween);
             await delayForMilSeconds(5000);
+            const miraiTween = new Tween({visibility: 1}).to({visibility: 0}, 1000).onUpdate(p => {
+                setModelVisibility("room", p.visibility);
+            }).start().onComplete(
+                () => tweenGroup.remove(miraiTween)
+            );
+            tweenGroup.add(miraiTween);
+            shutterFadeOut(1000);
             disableAllRipple();
             disableAllSpectrum();
             disableStarParticles();

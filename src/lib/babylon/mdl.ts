@@ -24,6 +24,8 @@ const modelMeshes: Record<string, Record<string, AbstractMesh>> = {};
 const modelAnimations: Record<string, Record<string, AnimationGroup>> = {};
 const rootModels: Record<string, AbstractMesh> = {};
 export const starModels: Record<string, AbstractMesh[]> = {};
+export const wallModels: AbstractMesh[] = [];
+
 let lightGl: GlowLayer | undefined = undefined;
 let starGl: GlowLayer | undefined = undefined;
 
@@ -82,6 +84,9 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 				mesh.material = mat;
 				lightGl?.addIncludedOnlyMesh(mesh as Mesh);
 				lightGl?.referenceMeshToUseItsOwnMaterial(mesh);
+				if(mesh.name === "top-light"){
+					wallModels.push(mesh);
+				}
 				continue;
 			}else if(mesh.name === "pc-display-open" || mesh.name === "pc-display-close"){
 				mat.transparencyMode = Material.MATERIAL_ALPHABLEND;
@@ -100,6 +105,8 @@ export async function loadModel(sourcePath: string, scene: Scene) {
 				const starKind = getStarKindFromStarName(mesh.name);
 				starModels[starKind] = [...starModels[starKind] || [], mesh];
 				continue;
+			}else if(mesh.name.includes("wall")){
+				wallModels.push(mesh);
 			}
 			mesh.material = mat;
 		}
@@ -137,6 +144,10 @@ function getCharaNameFromStarName(starName: string): CharaNames {
 function getStarKindFromStarName(starName: string): string {
 	if(starName.includes("_v1")){
 		return "verse1";
+	}else if(starName.includes("_c1")){
+		return "chorus1";
+	}else if(starName.includes("_c2")){
+		return "chorus2";
 	}
 	return "not found";
 }
