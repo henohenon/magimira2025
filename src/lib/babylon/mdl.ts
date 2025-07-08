@@ -164,6 +164,7 @@ events.on("onSceneDefinition", async ({ scene }) => {
 
 	// 必要なモデルロードの終了
 	const modelNames = getModelNames();
+	console.log(modelNames, rootModels);
 	events.emit("onModelsLoaded", modelNames);
 	
 	// あとから読み込む
@@ -176,9 +177,11 @@ export const getAnimations = (mdlName: string) => {
 	return modelAnimations[mdlName];
 }
 
-export function playAnimation(mdl: string, animation: string) {
-	const animGroup = modelAnimations[mdl][animation]
+export function playAnimation(mdl: string, animation: string, speedRatio = 1) {
+	const animGroup = modelAnimations[mdl][animation];
+	console.log(modelAnimations);
 	if (animGroup) {
+		animGroup.speedRatio = speedRatio;
 		console.log(`Playing animation: ${animation}`);
 		animGroup.reset();
 		animGroup.play(false);

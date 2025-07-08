@@ -23,12 +23,12 @@ export function disableArcCameraControl(){
 }
 
 let aiSubscription: Subscription | undefined = undefined;
-export function enableAiCameraControl(cameraType: "free" | "free2" = "free"){
+export function enableAiCameraControl(direction = 1, cameraType: "free" | "free2" = "free"){
     aiSubscription?.unsubscribe();
     let nextAngle = 3.25;
     aiSubscription = positionRipple.subscribe(e => {
         if(e.action == "start"){
-            addFreePosition(0, 0, -0.1, cameraType);
+            addFreePosition(0, 0, 0.1 * direction, cameraType);
             addFreeRotation(0, 0, nextAngle, cameraType);
             nextAngle = nextAngle > 0 ? -7.5 : 7.5;
         }

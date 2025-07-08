@@ -15,6 +15,7 @@ const blackTrim = document.getElementById("black-trim") as HTMLElement;
 const blackTrimTop = document.getElementById("black-trim-top") as HTMLElement;
 const blackTrimBottom = document.getElementById("black-trim-bottom") as HTMLElement;
 const neverEndText = document.getElementById("never-end-text") as HTMLElement;
+const endWrapper = document.getElementById("end") as HTMLElement;
 
 if (!whiteOverlay || !blackOverlay || !customColorOverlay) {
   throw new Error("Fade overlay elements not found in the DOM");
@@ -31,6 +32,11 @@ if (!blackTrim || !blackTrimTop || !blackTrimBottom) {
 if (!neverEndText) {
   throw new Error("Never end text element not found");
 }
+
+if (!endWrapper) {
+  throw new Error("endWrapper element not found");
+}
+
 
 // Default heights from the original CSS
 const SHUTTER_TOP_DEFAULT_HEIGHT = 60;
@@ -315,5 +321,13 @@ export function neverEndTextFadeOut(duration: number = FADE_DURATION, easing: Ea
   return tween;
 }
 
-// Export Easing for convenience
-export { Easing }
+export function endWrapperFadeIn(duration: number = FADE_DURATION, easing: EasingFunction = Easing.Linear.None) {
+  endWrapper.style.opacity = "0";
+  endWrapper.classList.remove('hidden');
+  const tween = new Tween({ opacity: 0 }).to({ opacity: 1 }, duration).easing(easing).onUpdate(x => {
+    endWrapper.style.opacity = x.opacity.toString();
+  }).start();
+  tweenGroup.add(tween);
+  return tween;
+}
+
